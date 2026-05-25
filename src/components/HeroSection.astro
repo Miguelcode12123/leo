@@ -1,0 +1,359 @@
+---
+/**
+ * HeroSection.astro — Leo's Beautiful Gardens
+ *
+ * Scroll-driven clip-path reveal hero.
+ *
+ * On load   : The background image appears behind a rectangular "window"
+ *             (clip-path: inset(initialClipPercentage%)), the rest of the
+ *             sticky container showing the warm cream page background.
+ *             Headline and copy sit at the bottom in deep forest-green ink.
+ *
+ * On scroll : Framer Motion's DOM scroll() API drives three simultaneous
+ *             transforms:
+ *               1. clip-path inset shrinks → 0% (window opens to full screen)
+ *               2. background-size 170% → 100% (image zooms out as it reveals)
+ *               3. Gradient overlay fades in for text legibility
+ *             Text colour transitions from forest-green (#2E4628) on cream
+ *             to cream (#F7F4EC) on the darkened full-bleed image.
+ *
+ * Props
+ * ─────
+ *   scrollHeight          Extra scroll room in px (default 1500)
+ *   desktopImage          URL string — pass `import.src` from parent
+ *   mobileImage           URL string — pass `import.src` from parent
+ *   initialClipPercentage Starting inset % on all sides (default 25)
+ *   finalClipPercentage   Ending inset % (default 0 = full viewport)
+ *
+ * Nav offset
+ * ──────────
+ * The wrapper uses a negative top margin equal to the nav height so the
+ * sticky hero fills 100vh from y = 0 on initial load.
+ * Mobile nav = 5 rem (80 px) | Desktop expanded nav = 6.5 rem (104 px).
+ * Nav z-index 50 renders above hero z-index 1 — no z-index conflicts.
+ */
+
+interface Props {
+  scrollHeight?: number;
+  desktopImage: string;
+  mobileImage: string;
+  initialClipPercentage?: number;
+  finalClipPercentage?: number;
+}
+
+const {
+  scrollHeight          = 1500,
+  desktopImage,
+  mobileImage,
+  initialClipPercentage = 25,
+  finalClipPercentage   = 0,
+} = Astro.props;
+---
+
+<!-- ─── Scroll-room wrapper ──────────────────────────────────────────────────
+     Negative margin pulls the wrapper up behind the sticky nav so the hero
+     fills the full viewport from the very first frame.
+     CSS vars carry the image URLs into the <style> block below.
+──────────────────────────────────────────────────────────────────────────── -->
+<div
+  id="hero-wrapper"
+  class="-mt-[5rem] lg:-mt-[6.5rem]"
+  data-initial-clip={initialClipPercentage}
+  data-final-clip={finalClipPercentage}
+  style={`
+    height: calc(${scrollHeight}px + 100vh);
+    --hero-desktop: url('${desktopImage}');
+    --hero-mobile:  url('${mobileImage}');
+  `}
+>
+
+  <!-- ─── Sticky hero ─────────────────────────────────────────────────────────
+       bg-background (cream #F7F4EC) shows around the clipped image at progress=0.
+       z-index 1 sits below the nav (z-50) but above normal document flow.
+  ──────────────────────────────────────────────────────────────────────────── -->
+  <div
+    id="hero-sticky"
+    class="sticky top-0 h-screen w-full overflow-hidden bg-background"
+    style="z-index: 1;"
+  >
+
+    <!-- ── 1. Background image layer ────────────────────────────────────────
+         clip-path and background-size are the two scroll-animated properties.
+         will-change promotes the element to its own GPU composite layer.
+    ──────────────────────────────────────────────────────────────────────── -->
+    <div
+      id="hero-bg"
+      class="absolute inset-0"
+      aria-hidden="true"
+      style={`
+        background-position: center center;
+        background-repeat:   no-repeat;
+        background-size:     170%;
+        clip-path:           inset(${initialClipPercentage}%);
+        will-change:         clip-path, background-size;
+      `}
+    ></div>
+
+    <!-- ── 2. Gradient overlay ───────────────────────────────────────────────
+         Forest-green toned (not black) per constraint §6.
+         opacity starts at 0 and is driven to 1 by the scroll callback.
+         Positioned OUTSIDE the clip so the gradient always covers the
+         bottom edge as the image expands — critical for text legibility.
+    ──────────────────────────────────────────────────────────────────────── -->
+    <div
+      id="hero-overlay"
+      class="absolute inset-0 pointer-events-none"
+      aria-hidden="true"
+      style="
+        background: linear-gradient(
+          to top,
+          rgba(26, 42, 23, 0.86) 0%,
+          rgba(26, 42, 23, 0.32) 40%,
+          rgba(26, 42, 23, 0.00) 100%
+        );
+        opacity: 0;
+        will-change: opacity;
+      "
+    ></div>
+
+    <!-- ── 3. Hero content ───────────────────────────────────────────────────
+         Anchored to the bottom-left. Text colour is set inline (driven by
+         JS) starting at forest-green and transitioning to cream on scroll.
+         z-index 10 keeps content above overlay and bg layers.
+    ──────────────────────────────────────────────────────────────────────── -->
+    <div class="absolute inset-0 flex flex-col justify-end" style="z-index: 10;">
+      <div
+        class="max-w-container mx-auto w-full
+               px-8 sm:px-12 md:px-16 xl:px-20
+               pb-16 md:pb-20 lg:pb-24"
+      >
+
+        <!-- Eyebrow label — Mulish small-caps, tight tracking -->
+        <p
+          id="hero-eyebrow"
+          class="hero-el font-body font-semibold
+                 text-[0.72rem] tracking-[0.26em] uppercase mb-4"
+          style="color: #2E4628;"
+        >
+          Melbourne &nbsp;·&nbsp; Garden Care Since 2021
+        </p>
+
+        <!-- Primary headline — Fraunces, fluid size, max 14 chars wide -->
+        <h1
+          id="hero-headline"
+          class="hero-el font-display font-normal
+                 leading-[1.02] tracking-[-0.02em] mb-5"
+          style="font-size: clamp(2.6rem, 5.5vw, 4.5rem);
+                 color: #2E4628;
+                 max-width: 14ch;"
+        >
+          Your garden, in&nbsp;the<br />
+          hands&nbsp;it&nbsp;deserves.
+        </h1>
+
+        <!-- Italian heritage signature — Fraunces italic only, per §4 -->
+        <p
+          id="hero-tagline"
+          class="hero-el font-display italic tracking-[0.02em] mb-10"
+          style="font-size: 1.1rem; color: #2E4628;"
+          lang="it"
+          title="Grown with care"
+        >
+          Coltivato con cura.
+        </p>
+
+      </div>
+    </div>
+
+    <!-- ── 4. Scroll cue — animated vertical line (no icon, per §2) ─────────
+         Hidden on mobile where the scroll journey is brief.
+         Color driven by JS (matches text colour transition).
+    ──────────────────────────────────────────────────────────────────────── -->
+    <div
+      id="hero-scroll-cue"
+      class="hero-el absolute bottom-8 right-8 md:right-12
+             hidden md:flex flex-col items-center gap-2"
+      aria-hidden="true"
+      style="z-index: 10; color: #2E4628;"
+    >
+      <span class="font-body text-[0.6rem] tracking-[0.26em] uppercase select-none">
+        Scroll
+      </span>
+      <div class="scroll-cue-line w-px h-10 bg-current"></div>
+    </div>
+
+  </div><!-- /hero-sticky -->
+</div><!-- /hero-wrapper -->
+
+
+<style>
+  /* ── Background images: mobile portrait first, override at md ──────── */
+  #hero-bg {
+    background-image: var(--hero-mobile);
+  }
+  @media (min-width: 768px) {
+    #hero-bg {
+      background-image: var(--hero-desktop);
+    }
+  }
+
+  /* ── Entrance: all hero-el elements start invisible ────────────────── */
+  /* JS adds the transition and animated values after the stagger delay. */
+  .hero-el {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  /* ── Scroll cue: slow breathing pulse on the vertical line ─────────── */
+  .scroll-cue-line {
+    transform-origin: top center;
+    animation: heroCueBreathe 2.6s ease-in-out infinite;
+  }
+  @keyframes heroCueBreathe {
+    0%, 100% { opacity: 0.30; transform: scaleY(0.70); }
+    55%       { opacity: 1.00; transform: scaleY(1.00); }
+  }
+
+  /* ── Prefers-reduced-motion: remove all animation ──────────────────── */
+  @media (prefers-reduced-motion: reduce) {
+    .hero-el {
+      opacity: 1;
+      transform: none;
+    }
+    .scroll-cue-line {
+      animation: none;
+      opacity: 0.5;
+    }
+  }
+</style>
+
+
+<script>
+  /**
+   * HeroSection animation driver
+   *
+   * Two independent systems:
+   *   A. Entrance  — staggered fade-up on page load (setTimeout + CSS transition)
+   *   B. Scroll    — framer-motion/dom scroll() drives clip-path, bg-size,
+   *                  overlay opacity, and text colour in a single rAF callback
+   */
+  import { scroll } from 'framer-motion/dom';
+
+  /* ── Element refs ─────────────────────────────────────────────────────── */
+  const wrapper   = document.getElementById('hero-wrapper')    as HTMLElement | null;
+  const bg        = document.getElementById('hero-bg')         as HTMLElement | null;
+  const overlay   = document.getElementById('hero-overlay')    as HTMLElement | null;
+  const eyebrow   = document.getElementById('hero-eyebrow')    as HTMLElement | null;
+  const headline  = document.getElementById('hero-headline')   as HTMLElement | null;
+  const tagline   = document.getElementById('hero-tagline')    as HTMLElement | null;
+  const scrollCue = document.getElementById('hero-scroll-cue') as HTMLElement | null;
+
+  /* Guard — bail if critical elements are missing (e.g. SSR-only render) */
+  if (!wrapper || !bg) {
+    console.warn('[HeroSection] Required elements not found — animations skipped.');
+  } else {
+
+    /* ── Config from data attributes ──────────────────────────────────── */
+    const initialClip = parseFloat(wrapper.dataset.initialClip ?? '25');
+    const finalClip   = parseFloat(wrapper.dataset.finalClip   ?? '0');
+
+    /* ── Utility helpers ──────────────────────────────────────────────── */
+    const lerp  = (a: number, b: number, t: number): number =>
+      a + (b - a) * t;
+
+    const clamp = (v: number, lo: number, hi: number): number =>
+      Math.max(lo, Math.min(hi, v));
+
+    /**
+     * Interpolate between forest-green #2E4628 and cream #F7F4EC.
+     * t = 0 → deep forest green; t = 1 → warm cream.
+     */
+    const DARK_GREEN: [number, number, number] = [46,  70,  40 ];
+    const CREAM:      [number, number, number] = [247, 244, 236];
+
+    function lerpRgb(t: number): string {
+      const s = clamp(t, 0, 1);
+      const r = Math.round(DARK_GREEN[0] + (CREAM[0] - DARK_GREEN[0]) * s);
+      const g = Math.round(DARK_GREEN[1] + (CREAM[1] - DARK_GREEN[1]) * s);
+      const b = Math.round(DARK_GREEN[2] + (CREAM[2] - DARK_GREEN[2]) * s);
+      return `rgb(${r},${g},${b})`;
+    }
+
+    /* ── A. Entrance animation ────────────────────────────────────────────
+       Staggered fade-up on page load, independent of scroll position.
+       Each element transitions from opacity:0/translateY(18px) to
+       opacity:1/translateY(0) with increasing delays.
+    ─────────────────────────────────────────────────────────────────────── */
+    const prefersReduced = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches;
+
+    if (!prefersReduced) {
+      const entranceEls: { id: string; delay: number }[] = [
+        { id: 'hero-eyebrow',    delay: 240 },
+        { id: 'hero-headline',   delay: 380 },
+        { id: 'hero-tagline',    delay: 530 },
+        { id: 'hero-scroll-cue', delay: 680 },
+      ];
+
+      entranceEls.forEach(({ id, delay }) => {
+        const el = document.getElementById(id) as HTMLElement | null;
+        if (!el) return;
+        setTimeout(() => {
+          el.style.transition = 'opacity 750ms ease-out, transform 750ms ease-out';
+          el.style.opacity    = '1';
+          el.style.transform  = 'translateY(0)';
+        }, delay);
+      });
+    }
+    // reduced-motion: CSS rule sets .hero-el to opacity:1/transform:none already
+
+    /* ── B. Scroll-driven animation ───────────────────────────────────────
+       framer-motion/dom scroll() tracks the wrapper element's progress
+       through the viewport using offset ["start start", "end end"]:
+
+         progress = 0  when wrapper top  = viewport top    (no scroll)
+         progress = 1  when wrapper bottom = viewport bottom
+
+       Wrapper height = scrollHeight + 100vh.
+       Total scroll distance for 0→1 = (scrollHeight + 100vh) − 100vh
+                                      = scrollHeight px  ✓
+
+       Four values are updated per frame:
+         1. clip-path   — window opens from initialClip% inset to finalClip%
+         2. bg-size     — image zooms out from 170% to 100% as window opens
+         3. overlay     — dark gradient fades in for text legibility
+         4. text colour — forest-green fades to cream
+    ─────────────────────────────────────────────────────────────────────── */
+    scroll(
+      (progress: number) => {
+
+        /* 1. Clip-path — the core window-reveal effect */
+        const clip = lerp(initialClip, finalClip, progress);
+        bg.style.clipPath = `inset(${clip.toFixed(3)}%)`;
+
+        /* 2. Background-size — subtle zoom-out accompanies the clip opening */
+        const size = lerp(170, 100, progress);
+        bg.style.backgroundSize = `${size.toFixed(2)}%`;
+
+        /* 3. Overlay — forest-green gradient fades in; completes at ~85% scroll */
+        if (overlay) {
+          overlay.style.opacity = String(clamp(progress / 0.85, 0, 1).toFixed(3));
+        }
+
+        /* 4. Text colour — transitions from ink to cream over first 55% of scroll
+              so text is fully cream well before the image reaches full bleed.    */
+        const colorT = clamp(progress / 0.55, 0, 1);
+        const color  = lerpRgb(colorT);
+
+        ([eyebrow, headline, tagline, scrollCue] as Array<HTMLElement | null>)
+          .forEach(el => { if (el) el.style.color = color; });
+      },
+      {
+        target: wrapper,
+        offset: ['start start', 'end end'],
+      }
+    );
+
+  } /* end null-guard */
+</script>

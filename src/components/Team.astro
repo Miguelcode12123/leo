@@ -1,0 +1,150 @@
+---
+/**
+ * Team.astro — "The People Behind the Gardens"
+ *
+ * Full redesign: cinematic three-panel editorial layout on bg-primary-900
+ * (deep forest green). No vest photo, no generic person icons.
+ * Uses the group crew photo (img_12) as a dominant panoramic top image,
+ * with img_31 and img_32 below as portrait-style team moments.
+ *
+ * Deliberately different from the two-column HeritageStory section above —
+ * that section is warm cream; this section is deep green with a dramatic,
+ * magazine-editorial feel.
+ */
+import { Image } from 'astro:assets';
+import img12 from '../assets/images/img_12.jpg';   // Four-person crew group portrait
+import img31 from '../assets/images/img_31.jpg';   // New team image 1
+import img32 from '../assets/images/img_32.jpg';   // New team image 2
+---
+
+<section
+  id="team"
+  class="bg-primary-900 overflow-hidden"
+  aria-labelledby="team-heading"
+>
+
+  <!-- ── Panoramic group photo — full-width cinematic banner ────────────── -->
+  <div class="team-reveal relative overflow-hidden" style="height: clamp(300px, 52vh, 560px);">
+    <Image
+      src={img12}
+      alt="The Leo's Beautiful Gardens crew — four team members smiling together in branded navy polo shirts in a lush garden"
+      width={1600}
+      height={800}
+      quality={90}
+      class="w-full h-full object-cover object-[center_35%] transition-transform duration-1000 hover:scale-[1.02] motion-reduce:transition-none"
+      loading="lazy"
+    />
+    <!-- Top-to-transparent dark overlay to blend with section above -->
+    <div class="absolute inset-0 bg-gradient-to-b from-primary-900/30 via-transparent to-primary-900/70" aria-hidden="true"></div>
+
+    <!-- Floating headline overlay on the photo — editorial magazine style -->
+    <div class="absolute bottom-0 left-0 right-0 px-8 md:px-14 pb-8 md:pb-12">
+      <p class="font-display font-normal text-[0.65rem] tracking-[0.28em] uppercase text-secondary-400 mb-3 team-reveal" style="transition-delay: 100ms">
+        The Team
+      </p>
+      <h2
+        id="team-heading"
+        class="font-display text-heading-xl md:text-display-lg text-surface leading-tight max-w-2xl team-reveal"
+        style="transition-delay: 200ms"
+      >
+        A small team that<br class="hidden sm:block" /> genuinely cares.
+      </h2>
+    </div>
+  </div>
+
+  <!-- ── Text + two team photos grid ───────────────────────────────────── -->
+  <div class="max-w-container mx-auto px-6 md:px-10 py-14 md:py-20">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10 items-start">
+
+      <!-- Left: description text -->
+      <div class="md:col-span-4 space-y-5 team-reveal" style="transition-delay: 80ms">
+        <p class="font-body text-body-lg text-secondary-200 leading-[1.7]">
+          We're a close-knit, fully-equipped crew who turn up reliably, work
+          with real skill, and treat your garden — and your home — with respect.
+        </p>
+        <p class="font-body text-body-md text-secondary-400 leading-[1.7]">
+          The same friendly faces, every visit. We notice when your camellias
+          need attention, we remember the names of your trees, and we take pride
+          in leaving every garden better than we found it.
+        </p>
+
+        <!-- CTA -->
+        <div class="pt-2">
+          <a
+            href="#contact"
+            class="inline-flex items-center gap-2 font-display font-normal text-[0.7rem] tracking-[0.18em] uppercase text-accent hover:text-accent-400 transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 rounded-sm group"
+          >
+            Book a consultation
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="transition-transform duration-200 group-hover:translate-x-1 motion-reduce:transition-none">
+              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Right: two portrait photos side-by-side (img_31, img_32) -->
+      <div class="md:col-span-8 grid grid-cols-2 gap-4 md:gap-5 items-end">
+
+        <!-- img_31 — slightly taller (elevated) -->
+        <div
+          class="team-reveal aspect-[3/4] rounded-brand-lg overflow-hidden shadow-brand-lg -mt-0 md:-mt-8"
+          style="transition-delay: 160ms"
+        >
+          <Image
+            src={img31}
+            alt="Leo's Beautiful Gardens team member at work in a garden"
+            width={600}
+            height={800}
+            quality={88}
+            class="w-full h-full object-cover transition-transform duration-700 hover:scale-[1.04] motion-reduce:transition-none"
+            loading="lazy"
+          />
+        </div>
+
+        <!-- img_32 — standard height, slight margin top for staggered look -->
+        <div
+          class="team-reveal aspect-[3/4] rounded-brand-lg overflow-hidden shadow-brand-lg mt-6 md:mt-12"
+          style="transition-delay: 260ms"
+        >
+          <Image
+            src={img32}
+            alt="Leo's Beautiful Gardens team caring for an established garden"
+            width={600}
+            height={800}
+            quality={88}
+            class="w-full h-full object-cover transition-transform duration-700 hover:scale-[1.04] motion-reduce:transition-none"
+            loading="lazy"
+          />
+        </div>
+
+      </div>
+
+    </div><!-- /grid -->
+  </div>
+
+</section>
+
+
+<script>
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!prefersReduced) {
+    const io = new IntersectionObserver(
+      entries => entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target as HTMLElement;
+          const delay = el.style.transitionDelay || '0ms';
+          el.style.transition = `opacity 700ms ease-out ${delay}, transform 700ms ease-out ${delay}`;
+          el.style.opacity   = '1';
+          el.style.transform = 'translateY(0)';
+          io.unobserve(el);
+        }
+      }),
+      { threshold: 0.12 }
+    );
+    document.querySelectorAll<HTMLElement>('.team-reveal').forEach(el => {
+      el.style.opacity   = '0';
+      el.style.transform = 'translateY(20px)';
+      io.observe(el);
+    });
+  }
+</script>

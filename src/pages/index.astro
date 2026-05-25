@@ -1,0 +1,45 @@
+---
+import Layout        from '../layouts/Layout.astro';
+import Nav           from '../components/Nav.astro';
+import HeroSection   from '../components/HeroSection.astro';
+import Services      from '../components/Services.astro';
+import BeforeAfter   from '../components/BeforeAfter.astro';
+import HeritageStory from '../components/HeritageStory.astro';
+import Gallery       from '../components/Gallery.astro';
+import Team          from '../components/Team.astro';
+import ContactCta    from '../components/ContactCta.astro';
+import Footer        from '../components/Footer.astro';
+
+// Hero images — .src gives the Vite-processed URL for CSS background-image
+import heroDesktop from '../assets/images/hero.jpg';
+import heroMobile  from '../assets/images/img_17.jpg';  // portrait crop for mobile
+---
+
+<Layout
+  title="Leo's Beautiful Gardens | Premium Garden Care Melbourne"
+  description="Expert, design-led garden care across Melbourne — pruning, hedging, planting & renewal by a fourth-generation gardening family. Free quotes."
+>
+  <!--
+    Nav is rendered BEFORE the hero wrapper in the DOM.
+    HeroSection compensates with a negative top margin (-mt-[5rem] lg:-mt-[6.5rem])
+    so the sticky hero fills 100 vh from y = 0 on initial page load.
+    Nav z-index (50) renders above hero z-index (1) — no conflicts.
+  -->
+  <Nav transparent={true} />
+
+  <HeroSection
+    desktopImage={heroDesktop.src}
+    mobileImage={heroMobile.src}
+    scrollHeight={1500}
+    initialClipPercentage={25}
+    finalClipPercentage={0}
+  />
+
+  <HeritageStory />
+  <Services />
+  <BeforeAfter />
+  <Gallery />
+  <Team />
+  <ContactCta />
+  <Footer />
+</Layout>

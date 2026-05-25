@@ -1,0 +1,236 @@
+---
+/**
+ * BeforeAfter.astro — "The Difference" / Transformation Showcase
+ *
+ * Redesigned for professionalism and creativity:
+ * - Section has its own bg-primary band with cream accents (distinct atmosphere)
+ * - Aspect ratio adjusted to avoid excessive zoom on the transformation photos
+ * - Better slider design with larger handle and more elegant labels
+ * - Alternating caption alignment for visual rhythm
+ * - Improved typography treatment throughout
+ */
+import { Image } from 'astro:assets';
+import img26 from '../assets/images/img_26.jpg';
+import img27 from '../assets/images/img_27.jpg';
+import img28 from '../assets/images/img_28.jpg';
+import img29 from '../assets/images/img_29.jpg';
+
+const pairs = [
+  {
+    id:      'pair-a',
+    label:   'Heritage Courtyard',
+    before:  { src: img26, alt: 'Before: tired heritage back courtyard with patchy dirt, exposed weed-mat, weeds, and leggy standard trees' },
+    after:   { src: img27, alt: 'After: same courtyard transformed — fresh lush lawn, neatly lifted canopy trees, crisp clipped hedge, and a clean brick path' },
+    caption: 'A tired heritage courtyard, brought back to life — fresh lawn, lifted canopies and a considered finish.',
+    align:   'left',
+  },
+  {
+    id:      'pair-b',
+    label:   'New-Build Front Garden',
+    before:  { src: img28, alt: 'Before: bare graded dirt at a new brick townhouse front yard, timber garden-bed edging framed out' },
+    after:   { src: img29, alt: 'After: same townhouse yard finished — laid green lawn, fresh mulched beds with young plants and feature maples' },
+    caption: 'From bare ground to a crisp, established front garden — turf laid and beds planted for instant kerb appeal.',
+    align:   'right',
+  },
+];
+---
+
+<section
+  id="transformations"
+  class="py-20 md:py-section bg-primary"
+  aria-labelledby="ba-heading"
+>
+  <div class="max-w-container mx-auto px-6 md:px-10">
+
+    <!-- Section header — cream on green -->
+    <div class="max-w-2xl mb-14 md:mb-18 ba-reveal">
+      <p class="font-display font-normal text-[0.68rem] tracking-[0.28em] uppercase text-secondary-400 mb-4">
+        The Difference
+      </p>
+      <h2 id="ba-heading" class="font-display text-heading-xl md:text-display-lg text-surface leading-tight mb-4">
+        See the transformation.
+      </h2>
+      <p class="font-body text-body-lg text-secondary-300 leading-relaxed max-w-lg">
+        Real Melbourne gardens, before and after our team got to work.
+        Drag the handle to reveal the change.
+      </p>
+    </div>
+
+    <!-- Before/After pairs -->
+    <div class="space-y-12 md:space-y-16">
+      {pairs.map((pair, pi) => (
+        <div class="ba-reveal" style={`transition-delay: ${pi * 100}ms`}>
+
+          <!-- Label pill -->
+          <p class="font-display font-normal text-[0.65rem] tracking-[0.2em] uppercase text-secondary-400 mb-3 md:mb-4">
+            {pair.label}
+          </p>
+
+          <!-- Slider wrapper
+               Aspect ratio: [3/2] on mobile, [16/10] on desktop.
+               This is less aggressive than [16/9] and reduces the
+               "over-zoomed" feeling on these real phone-photo pairs. -->
+          <div
+            class="ba-slider relative rounded-brand-lg overflow-hidden shadow-brand-lg aspect-[4/3] md:aspect-[16/10] cursor-col-resize select-none ring-1 ring-white/10"
+            data-id={pair.id}
+            role="img"
+            aria-label={`Before and after transformation — ${pair.label}: ${pair.caption}`}
+          >
+            <!-- AFTER image (base layer) -->
+            <Image
+              src={pair.after.src}
+              alt={pair.after.alt}
+              width={1400}
+              height={875}
+              quality={90}
+              class="absolute inset-0 w-full h-full object-cover object-center"
+              loading="lazy"
+            />
+
+            <!-- BEFORE image (clipped by handle position) -->
+            <div class="ba-before-clip absolute inset-0 overflow-hidden" style="width: 50%">
+              <Image
+                src={pair.before.src}
+                alt={pair.before.alt}
+                width={1400}
+                height={875}
+                quality={90}
+                class="absolute inset-0 w-full h-full object-cover object-center"
+                style="min-width: var(--ba-full-width, 100vw)"
+                loading="lazy"
+              />
+            </div>
+
+            <!-- Before / After label pills — refined cream design -->
+            <span class="absolute top-5 left-5 bg-primary-900/75 backdrop-blur-sm text-surface font-display font-normal text-[0.6rem] tracking-[0.2em] uppercase rounded-pill px-3.5 py-1.5 pointer-events-none z-10" aria-hidden="true">Before</span>
+            <span class="absolute top-5 right-5 bg-accent/85 backdrop-blur-sm text-surface font-display font-normal text-[0.6rem] tracking-[0.2em] uppercase rounded-pill px-3.5 py-1.5 pointer-events-none z-10" aria-hidden="true">After</span>
+
+            <!-- Divider line + redesigned handle -->
+            <div class="ba-divider absolute inset-y-0 z-20 flex items-center pointer-events-none" style="left: 50%">
+              <!-- Vertical line -->
+              <div class="w-[2px] h-full bg-surface/70 shadow-[0_0_8px_rgba(255,255,255,0.3)]"></div>
+              <!-- Handle button — larger, more elegant -->
+              <button
+                class="ba-handle absolute -translate-x-1/2 w-12 h-12 rounded-full bg-surface shadow-brand-lg border border-border flex items-center justify-center pointer-events-auto focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 transition-transform duration-200 hover:scale-110 active:scale-95 motion-reduce:transition-none"
+                aria-label="Drag to compare before and after transformation"
+                type="button"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2E4628" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="m9 18-6-6 6-6"/><path d="m15 6 6 6-6 6"/>
+                </svg>
+              </button>
+            </div>
+
+          </div><!-- /slider wrapper -->
+
+          <!-- Caption -->
+          <p class={`font-body text-body-sm text-secondary-300 mt-4 max-w-xl ${pair.align === 'right' ? 'md:ml-auto md:text-right' : ''}`}>
+            {pair.caption}
+          </p>
+
+        </div>
+      ))}
+    </div>
+
+    <!-- CTA -->
+    <div class="text-center mt-16 md:mt-20 ba-reveal" style="transition-delay: 200ms">
+      <p class="font-body text-body-md text-secondary-300 mb-5">Ready to transform your garden?</p>
+      <a
+        href="#contact"
+        class="inline-flex items-center gap-2 rounded-pill bg-accent text-surface px-8 py-3.5 font-display font-normal text-[0.72rem] tracking-[0.15em] uppercase hover:bg-accent-600 transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 cursor-pointer"
+      >
+        Request a free site visit
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+        </svg>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+
+<script>
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ─── Before/After drag slider ─────────────────────────────────────────────
+  document.querySelectorAll<HTMLElement>('.ba-slider').forEach(slider => {
+    const beforeClip = slider.querySelector<HTMLElement>('.ba-before-clip');
+    const divider    = slider.querySelector<HTMLElement>('.ba-divider');
+    if (!beforeClip || !divider) return;
+
+    function update(pct: number) {
+      const clamped = Math.max(3, Math.min(97, pct));
+      beforeClip!.style.width = `${clamped}%`;
+      divider!.style.left     = `${clamped}%`;
+      // Keep before image full width so it doesn't compress
+      const fullW = slider.offsetWidth;
+      (beforeClip.querySelector('img') as HTMLElement | null)?.style.setProperty('min-width', `${fullW}px`);
+    }
+
+    update(50);
+    let dragging = false;
+
+    function getPct(clientX: number) {
+      const rect = slider.getBoundingClientRect();
+      return ((clientX - rect.left) / rect.width) * 100;
+    }
+
+    slider.addEventListener('pointerdown', (e: PointerEvent) => {
+      dragging = true;
+      slider.setPointerCapture(e.pointerId);
+      update(getPct(e.clientX));
+    });
+    slider.addEventListener('pointermove', (e: PointerEvent) => {
+      if (dragging) update(getPct(e.clientX));
+    });
+    slider.addEventListener('pointerup',     () => { dragging = false; });
+    slider.addEventListener('pointercancel', () => { dragging = false; });
+
+    // Keyboard on handle
+    const handle = slider.querySelector<HTMLButtonElement>('.ba-handle');
+    handle?.addEventListener('keydown', (e: KeyboardEvent) => {
+      const cur = parseFloat(divider!.style.left) || 50;
+      if (e.key === 'ArrowLeft')  { e.preventDefault(); update(cur - 4); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); update(cur + 4); }
+    });
+
+    // Mobile nudge hint
+    if (!prefersReduced && window.innerWidth < 768) {
+      let p = 50;
+      const nudge = () => {
+        p -= 2.5;
+        update(p);
+        if (p > 32) requestAnimationFrame(nudge);
+        else setTimeout(() => {
+          let r = 32;
+          const restore = () => { r += 2; update(r); if (r < 50) requestAnimationFrame(restore); };
+          requestAnimationFrame(restore);
+        }, 250);
+      };
+      setTimeout(nudge, 900);
+    }
+  });
+
+  // ─── Scroll reveal ────────────────────────────────────────────────────────
+  if (!prefersReduced) {
+    const io = new IntersectionObserver(
+      entries => entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target as HTMLElement;
+          const delay = el.style.transitionDelay || '0ms';
+          el.style.transition = `opacity 700ms ease-out ${delay}, transform 700ms ease-out ${delay}`;
+          el.style.opacity    = '1';
+          el.style.transform  = 'translateY(0)';
+          io.unobserve(el);
+        }
+      }),
+      { threshold: 0.1 }
+    );
+    document.querySelectorAll<HTMLElement>('.ba-reveal').forEach(el => {
+      el.style.opacity   = '0';
+      el.style.transform = 'translateY(20px)';
+      io.observe(el);
+    });
+  }
+</script>

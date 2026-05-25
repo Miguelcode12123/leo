@@ -1,0 +1,7 @@
+[    1510ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:4322/favicon.png:0
+[   80742ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:4322/gallery:0
+[   80752ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:4322/favicon.ico:0
+[  128319ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:4322/services#planting:0
+[  161491ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:4322/about:0
+[  167601ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:4322/about:0
+[  211406ms] [INFO] Launched external handler for 'mailto:bookings@leosgardens.com.au'. @ http://localhost:4322/#contact:0

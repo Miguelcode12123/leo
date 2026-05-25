@@ -1,0 +1,263 @@
+---
+/**
+ * HeritageStory.astro — Leo's Beautiful Gardens
+ *
+ * Full-viewport editorial split.
+ * After the cinematic hero, this is the intimate, grounding moment —
+ * the garden opened up; now Leonardo steps forward.
+ *
+ * Layout
+ * ──────
+ * Left  : img_23 (Leonardo portrait) bleeds from the absolute left viewport
+ *         edge to ~45% width. No border-radius, no shadow, no frame.
+ *         The photograph acts as architecture, not decoration.
+ * Right : Cream text column. Vertically centred. Generous padding.
+ *
+ * Animation
+ * ─────────
+ * IntersectionObserver only — no framer-motion (that belongs to the hero).
+ * Image: scale(0.97) + opacity → visible on enter, 800ms ease-out.
+ * Text lines: staggered translateY(24px) + opacity via CSS --stagger variable.
+ *
+ * CTA style
+ * ─────────
+ * "Read our story →" mirrors the nav's "Book a Consultation →" exactly —
+ * same font, same weight, same arrow slide + scaleX underline on hover.
+ * Deliberate continuity signal between the two components.
+ */
+
+import { Image } from 'astro:assets';
+import img23 from '../assets/images/img_23.jpg';
+---
+
+<section
+  id="heritage"
+  aria-labelledby="heritage-heading"
+  class="bg-background overflow-hidden"
+>
+  <!--
+    Full-width flex — NO max-w-container wrapping this element.
+    Image bleeds from the absolute left edge of the viewport.
+  -->
+  <div class="flex flex-col lg:flex-row lg:min-h-screen">
+
+    <!-- ── LEFT: Portrait — bleeds from viewport left edge ──────────────── -->
+    <div
+      class="heritage-image
+             relative overflow-hidden flex-shrink-0
+             w-full lg:w-[45%] xl:w-[42%]
+             h-[65vw] min-h-[400px] lg:h-auto"
+    >
+      <Image
+        src={img23}
+        alt="Leonardo, founder of Leo's Beautiful Gardens, beneath autumn vine foliage on a stone path"
+        width={900}
+        height={1200}
+        quality={90}
+        densities={[1, 2]}
+        class="absolute inset-0 w-full h-full object-cover object-center"
+        loading="lazy"
+      />
+    </div>
+
+    <!-- ── RIGHT: Text column ────────────────────────────────────────────── -->
+    <div
+      class="flex-1 flex items-center bg-background
+             px-8 sm:px-12 lg:px-16 xl:px-24
+             py-20 lg:py-28"
+    >
+      <div class="heritage-text w-full" style="max-width: 32rem;">
+
+        <!-- Eyebrow — Fraunces italic, reserved for Italian/heritage phrases only -->
+        <p
+          class="heritage-line font-display italic text-secondary
+                 text-[0.95rem] tracking-[0.02em] mb-6"
+          lang="it"
+          style="--stagger: 0ms;"
+        >
+          Coltivato con cura.
+        </p>
+
+        <!-- Headline -->
+        <h2
+          id="heritage-heading"
+          class="heritage-line font-display font-normal text-primary
+                 leading-[1.06] tracking-[-0.015em] mb-8"
+          style="font-size: clamp(2.25rem, 3.2vw, 3rem); --stagger: 110ms;"
+        >
+          Four generations<br class="hidden sm:block" /> of craft.
+        </h2>
+
+        <!-- Body paragraphs — flattened, no wrapper div, for clean stagger -->
+        <p
+          class="heritage-line font-body text-[1.0625rem] leading-[1.75] text-text-base mb-5"
+          style="--stagger: 220ms;"
+        >
+          Leonardo grew up among the olive groves of southern Sicily, where his
+          grandfather Rosario taught him to tend a garden the way a family tends
+          a name — with patience, specificity, and a long view of what you're
+          actually building.
+        </p>
+
+        <p
+          class="heritage-line font-body text-[1.0625rem] leading-[1.75] text-text-base mb-5"
+          style="--stagger: 320ms;"
+        >
+          Those same groves still produce the family's olive oil,&nbsp;<em
+            class="font-display italic">Olio&nbsp;Qucco</em>.
+          When Leonardo came to Melbourne, he brought Rosario's approach with
+          him: no shortcuts, no generic solutions, every garden understood on
+          its own terms.
+        </p>
+
+        <p
+          class="heritage-line font-body text-[1.0625rem] leading-[1.75] text-text-base mb-10"
+          style="--stagger: 420ms;"
+        >
+          Leo's Beautiful Gardens serves Melbourne's finest residential
+          estates — not because of scale, but because of what
+          fourth-generation craft looks like up close.
+        </p>
+
+        <!-- Rule -->
+        <div
+          class="heritage-line w-10 h-px bg-border mb-8"
+          aria-hidden="true"
+          style="--stagger: 510ms;"
+        ></div>
+
+        <!-- CTA — exact same pattern as nav "Book a Consultation →" -->
+        <a
+          href="/about"
+          class="heritage-line
+                 inline-flex items-center gap-2.5 relative group/story
+                 font-body font-medium text-[0.82rem] tracking-[0.04em]
+                 text-primary hover:text-accent
+                 cursor-pointer
+                 focus-visible:outline-2 focus-visible:outline-accent
+                 focus-visible:outline-offset-4"
+          style="--stagger: 590ms;"
+        >
+          Read our story
+          <!-- Arrow slides right 3px on hover -->
+          <span
+            class="inline-block transition-transform duration-700 ease-out
+                   group-hover/story:translate-x-[3px]
+                   motion-reduce:transition-none"
+            aria-hidden="true"
+          >→</span>
+          <!-- 1px underline grows left→right on hover — matches nav CTA -->
+          <span
+            class="absolute inset-x-0 bottom-[-3px] h-px bg-current
+                   scale-x-0 origin-left
+                   group-hover/story:scale-x-100
+                   transition-transform duration-700 ease-out
+                   motion-reduce:transition-none"
+            aria-hidden="true"
+          ></span>
+        </a>
+
+      </div><!-- /heritage-text -->
+    </div><!-- /text column -->
+
+  </div>
+</section>
+
+
+<style>
+  /* ── Image: scale + fade reveal ─────────────────────────────────────────── */
+  .heritage-image {
+    opacity: 0;
+    transform: scale(0.97);
+    transition: opacity 800ms ease-out, transform 800ms ease-out;
+  }
+  .heritage-image.is-visible {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* ── Text lines: staggered fade-up via CSS --stagger custom property ─────
+     Each .heritage-line carries its own --stagger delay set via inline style.
+     The transition fires when .is-visible is added to the parent .heritage-text.
+  ─────────────────────────────────────────────────────────────────────────── */
+  .heritage-line {
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+      opacity   700ms ease-out var(--stagger, 0ms),
+      transform 700ms ease-out var(--stagger, 0ms),
+      color     400ms ease-out; /* for CTA hover — doesn't affect other lines */
+  }
+  .heritage-text.is-visible .heritage-line {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ── Reduced motion ──────────────────────────────────────────────────────── */
+  @media (prefers-reduced-motion: reduce) {
+    .heritage-image,
+    .heritage-line {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+</style>
+
+
+<script>
+  /**
+   * HeritageStory — IntersectionObserver reveals.
+   *
+   * Two observers so image and text fire independently:
+   *   • Image fires first (threshold 0.12)
+   *   • Text fires with a 150ms offset after it enters the viewport,
+   *     giving the stagger a natural lead-in after the photo settles.
+   *
+   * Once visible, each observer disconnects — no need to re-fire.
+   */
+
+  const prefersReduced = window.matchMedia(
+    '(prefers-reduced-motion: reduce)'
+  ).matches;
+
+  const imageEl = document.querySelector<HTMLElement>('.heritage-image');
+  const textEl  = document.querySelector<HTMLElement>('.heritage-text');
+
+  if (!prefersReduced) {
+
+    /* ── Image observer ─────────────────────────────────────────────────── */
+    const imgObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            imgObserver.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+    );
+
+    /* ── Text observer — 150ms delay after entering viewport ───────────── */
+    const txtObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setTimeout(() => textEl?.classList.add('is-visible'), 150);
+            txtObserver.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
+    );
+
+    if (imageEl) imgObserver.observe(imageEl);
+    if (textEl)  txtObserver.observe(textEl);
+
+  } else {
+    /* Reduced motion: make everything immediately visible */
+    imageEl?.classList.add('is-visible');
+    textEl?.classList.add('is-visible');
+  }
+</script>

@@ -1,0 +1,57 @@
+[ 2417422ms] TypeError: Cannot read properties of null (reading 'addEventListener')
+    at http://localhost:4321/src/components/Gallery.astro?astro&type=script&index=0&lang.ts:50:9
+[ 2432389ms] TypeError: Cannot read properties of null (reading 'addEventListener')
+    at http://localhost:4321/src/components/Gallery.astro?astro&type=script&index=0&lang.ts:50:9
+[ 2432548ms] TypeError: Cannot read properties of null (reading 'addEventListener')
+    at http://localhost:4321/src/components/Gallery.astro?astro&type=script&index=0&lang.ts:50:9
+[ 2432673ms] TypeError: Cannot read properties of null (reading 'addEventListener')
+    at http://localhost:4321/src/components/Gallery.astro?astro&type=script&index=0&lang.ts:50:9
+[ 2432854ms] TypeError: Cannot read properties of null (reading 'addEventListener')
+    at http://localhost:4321/src/components/Gallery.astro?astro&type=script&index=0&lang.ts:50:9
+[ 2432976ms] TypeError: Cannot read properties of null (reading 'addEventListener')
+    at http://localhost:4321/src/components/Gallery.astro?astro&type=script&index=0&lang.ts:50:9
+[ 2433119ms] TypeError: Cannot read properties of null (reading 'addEventListener')
+    at http://localhost:4321/src/components/Gallery.astro?astro&type=script&index=0&lang.ts:50:9
+[ 2433356ms] TypeError: Cannot read properties of null (reading 'addEventListener')
+    at http://localhost:4321/src/components/Gallery.astro?astro&type=script&index=0&lang.ts:50:9
+[ 2433496ms] TypeError: Cannot read properties of null (reading 'addEventListener')
+    at http://localhost:4321/src/components/Gallery.astro?astro&type=script&index=0&lang.ts:50:9
+[ 2433659ms] TypeError: Cannot read properties of null (reading 'addEventListener')
+    at http://localhost:4321/src/components/Gallery.astro?astro&type=script&index=0&lang.ts:50:9
+[ 2433827ms] TypeError: Cannot read properties of null (reading 'addEventListener')
+    at http://localhost:4321/src/components/Gallery.astro?astro&type=script&index=0&lang.ts:50:9
+[ 2433978ms] TypeError: Cannot read properties of null (reading 'addEventListener')
+    at http://localhost:4321/src/components/Gallery.astro?astro&type=script&index=0&lang.ts:50:9
+[ 2434161ms] TypeError: Cannot read properties of null (reading 'addEventListener')
+    at http://localhost:4321/src/components/Gallery.astro?astro&type=script&index=0&lang.ts:50:9
+[ 2434287ms] TypeError: Cannot read properties of null (reading 'addEventListener')
+    at http://localhost:4321/src/components/Gallery.astro?astro&type=script&index=0&lang.ts:50:9
+[ 2434428ms] TypeError: Cannot read properties of null (reading 'addEventListener')
+    at http://localhost:4321/src/components/Gallery.astro?astro&type=script&index=0&lang.ts:50:9
+[ 2434664ms] TypeError: Cannot read properties of null (reading 'addEventListener')
+    at http://localhost:4321/src/components/Gallery.astro?astro&type=script&index=0&lang.ts:50:9
+[ 2434803ms] TypeError: Cannot read properties of null (reading 'addEventListener')
+    at http://localhost:4321/src/components/Gallery.astro?astro&type=script&index=0&lang.ts:50:9
+[ 2434966ms] TypeError: Cannot read properties of null (reading 'addEventListener')
+    at http://localhost:4321/src/components/Gallery.astro?astro&type=script&index=0&lang.ts:50:9
+[ 2435134ms] TypeError: Cannot read properties of null (reading 'addEventListener')
+    at http://localhost:4321/src/components/Gallery.astro?astro&type=script&index=0&lang.ts:50:9
+[ 2435292ms] TypeError: Cannot read properties of null (reading 'addEventListener')
+    at http://localhost:4321/src/components/Gallery.astro?astro&type=script&index=0&lang.ts:50:9
+[ 2435465ms] TypeError: Cannot read properties of null (reading 'addEventListener')
+    at http://localhost:4321/src/components/Gallery.astro?astro&type=script&index=0&lang.ts:50:9
+[ 2435595ms] TypeError: Cannot read properties of null (reading 'addEventListener')
+    at http://localhost:4321/src/components/Gallery.astro?astro&type=script&index=0&lang.ts:50:9
+[ 2435738ms] TypeError: Cannot read properties of null (reading 'addEventListener')
+    at http://localhost:4321/src/components/Gallery.astro?astro&type=script&index=0&lang.ts:50:9
+[ 2435976ms] TypeError: Cannot read properties of null (reading 'addEventListener')
+    at http://localhost:4321/src/components/Gallery.astro?astro&type=script&index=0&lang.ts:50:9
+[ 2436219ms] TypeError: Cannot read properties of null (reading 'addEventListener')
+    at http://localhost:4321/src/components/Gallery.astro?astro&type=script&index=0&lang.ts:50:9
+[ 2436353ms] TypeError: Cannot read properties of null (reading 'addEventListener')
+    at http://localhost:4321/src/components/Gallery.astro?astro&type=script&index=0&lang.ts:50:9
+[ 2436525ms] TypeError: Cannot read properties of null (reading 'addEventListener')
+    at http://localhost:4321/src/components/Gallery.astro?astro&type=script&index=0&lang.ts:50:9
+[ 2928109ms] ReferenceError: cta is not defined
+    at syncScrollState (http://localhost:4321/src/components/Nav.astro?astro&type=script&index=0&lang.ts:14:3)
+    at http://localhost:4321/src/components/Nav.astro?astro&type=script&index=0&lang.ts:24:1

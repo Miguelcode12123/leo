@@ -1,0 +1,43 @@
+---
+import Layout      from '../layouts/Layout.astro';
+import Nav         from '../components/Nav.astro';
+import Gallery     from '../components/Gallery.astro';
+import BeforeAfter from '../components/BeforeAfter.astro';
+import ContactCta  from '../components/ContactCta.astro';
+import Footer      from '../components/Footer.astro';
+import { Image }   from 'astro:assets';
+import img13       from '../assets/images/img_13.jpg';
+---
+
+<Layout
+  title="Garden Gallery | Leo's Beautiful Gardens"
+  description="Browse our portfolio of Melbourne's finest gardens — estate lawns, sculpted topiary, heritage courtyards, and before/after transformations by Leo's Beautiful Gardens."
+>
+  <Nav transparent={false} />
+
+  <!-- Page hero -->
+  <div class="relative py-24 md:py-32 bg-primary overflow-hidden">
+    <Image
+      src={img13}
+      alt="Romantic heritage courtyard with wrought-iron bench and ivy-arched doorway"
+      width={1920}
+      height={600}
+      class="absolute inset-0 w-full h-full object-cover opacity-25"
+      loading="eager"
+    />
+    <div class="relative max-w-container mx-auto px-6 md:px-10 text-center">
+      <p class="font-body text-label text-secondary-400 tracking-widest uppercase mb-4">Our portfolio</p>
+      <h1 class="font-display text-display-lg text-surface max-w-2xl mx-auto">
+        Gardens we have the joy of tending.
+      </h1>
+      <p class="font-body text-body-lg text-secondary-200 max-w-xl mx-auto mt-5">
+        A glimpse of the established Melbourne gardens in our care — estate lawns, sculpted hedges, heritage courtyards and seasonal transformations.
+      </p>
+    </div>
+  </div>
+
+  <Gallery />
+  <BeforeAfter />
+  <ContactCta />
+  <Footer />
+</Layout>

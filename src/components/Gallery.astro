@@ -1,0 +1,282 @@
+---
+/**
+ * Gallery.astro — Editorial Bento Grid
+ *
+ * Replaces the standard masonry with a curated CSS-grid bento layout.
+ * Varied tile sizes communicate editorial intentionality — this is a
+ * portfolio, not a thumbnail dump.
+ *
+ * Desktop 12-column grid, 5 rows of varied heights:
+ *  Row 1–2: img_8 (wide, 7 cols) | img_17 (tall portrait, 5 cols, 2 rows)
+ *  Row 3:   img_13 (4 cols)      | img_19 (4 cols) | img_21 (4 cols)
+ *  Row 4–5: img_22 (5 cols)      | img_20 (4 cols) | img_7 (tall, 3 cols, 2 rows)
+ *  Row 5:   img_16 (3 cols)      | img_10 (6 cols) | (img_7 continues)
+ */
+import { Image } from 'astro:assets';
+
+import img8  from '../assets/images/img_8.jpg';
+import img17 from '../assets/images/img_17.jpg';
+import img13 from '../assets/images/img_13.jpg';
+import img19 from '../assets/images/img_19.jpg';
+import img21 from '../assets/images/img_21.jpg';
+import img22 from '../assets/images/img_22.jpg';
+import img20 from '../assets/images/img_20.jpg';
+import img7  from '../assets/images/img_7.jpg';
+import img16 from '../assets/images/img_16.jpg';
+import img10 from '../assets/images/img_10.jpg';
+
+// Each tile carries: src, alt, CSS classes for grid placement + sizing
+const tiles = [
+  // Row 1–2: dominant landscape + tall portrait
+  {
+    src: img8,  alt: 'Manicured box-hedge parterre garden in front of a grand classical Melbourne mansion',
+    grid: 'col-span-2 md:col-span-7 md:row-span-2',
+    aspect: 'aspect-[4/3] md:aspect-auto md:h-full',
+    obj: 'object-center',
+  },
+  {
+    src: img17, alt: 'Team member on a tall ladder pruning a sculpted olive-tree dome against a brilliant blue sky',
+    grid: 'col-span-2 md:col-span-5 md:row-span-2',
+    aspect: 'aspect-[3/4] md:aspect-auto md:h-full',
+    obj: 'object-center',
+  },
+  // Row 3: three equal-width tiles
+  {
+    src: img13, alt: 'Romantic courtyard — wrought-iron bench, ferns in aged pots, stone chequerboard paving, ivy-arched doorway',
+    grid: 'col-span-2 md:col-span-4',
+    aspect: 'aspect-[4/3]',
+    obj: 'object-center',
+  },
+  {
+    src: img19, alt: "Team member tending a sculpted topiary ball in a French urn, pool and formal garden behind",
+    grid: 'col-span-2 md:col-span-4',
+    aspect: 'aspect-[4/3]',
+    obj: 'object-center',
+  },
+  {
+    src: img21, alt: 'View through a classical arch onto a topiary garden — ornate Victorian tiled floor in foreground',
+    grid: 'col-span-2 md:col-span-4',
+    aspect: 'aspect-[4/3]',
+    obj: 'object-center',
+  },
+  // Row 4–5: two-row tall tile + landscape + small
+  {
+    src: img22, alt: 'Row of aged French urns with clipped topiary and box hedging beside a stone-slab-and-pebble path',
+    grid: 'col-span-2 md:col-span-5 md:row-span-2',
+    aspect: 'aspect-[4/3] md:aspect-auto md:h-full',
+    obj: 'object-center',
+  },
+  {
+    src: img20, alt: 'Wisteria climbing a rendered period home beside clipped box hedging and a gravel path — pristine kerb appeal',
+    grid: 'col-span-2 md:col-span-4',
+    aspect: 'aspect-[4/3]',
+    obj: 'object-center',
+  },
+  {
+    src: img7,  alt: 'Lush vertical garden path — potted topiary, fig tree, stone pavers and blue sky',
+    grid: 'col-span-2 md:col-span-3 md:row-span-2',
+    aspect: 'aspect-[3/4] md:aspect-auto md:h-full',
+    obj: 'object-center',
+  },
+  {
+    src: img16, alt: 'Two crew members working a courtyard — one on a ladder pruning a Japanese maple, one carrying a large shrub',
+    grid: 'col-span-2 md:col-span-5',
+    aspect: 'aspect-[16/9] md:aspect-[4/3]',
+    obj: 'object-center',
+  },
+  {
+    src: img10, alt: 'Team member in branded workwear running a STIHL trimmer down a formal hedge by a classical column',
+    grid: 'col-span-2 md:col-span-4',
+    aspect: 'aspect-[4/3]',
+    obj: 'object-center',
+  },
+];
+---
+
+<section
+  id="gallery"
+  class="py-20 md:py-section bg-background"
+  aria-labelledby="gallery-heading"
+>
+  <div class="max-w-container mx-auto px-6 md:px-10">
+
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10 gallery-reveal">
+      <div>
+        <p class="font-display font-normal text-[0.68rem] tracking-[0.28em] uppercase text-text-muted mb-4">
+          Our Work
+        </p>
+        <h2 id="gallery-heading" class="font-display text-heading-xl text-text-base leading-tight">
+          Gardens we have<br class="hidden md:block" /> the joy of tending.
+        </h2>
+        <p class="font-body text-body-md text-text-muted mt-2 max-w-md">
+          A glimpse of the established Melbourne gardens in our care.
+        </p>
+      </div>
+      <a
+        href="https://www.instagram.com/leos_beautiful_gardens/"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="flex-shrink-0 inline-flex items-center gap-2 font-display font-normal text-[0.68rem] tracking-[0.18em] uppercase text-accent hover:text-accent-600 transition-colors duration-200 motion-reduce:transition-none cursor-pointer focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 rounded-sm"
+        aria-label="See more of our work on Instagram (opens in new tab)"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
+          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+          <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
+        </svg>
+        See more on Instagram
+      </a>
+    </div>
+
+    <!-- ── Bento editorial grid ─────────────────────────────────────────── -->
+    <!-- Mobile: 2-column auto masonry; Desktop: 12-column bento grid -->
+    <div
+      class="grid grid-cols-2 md:grid-cols-12 gap-3 md:gap-4 md:[grid-auto-rows:220px]"
+    >
+      {tiles.map((tile, i) => (
+        <button
+          class={`gallery-tile gallery-reveal rounded-brand overflow-hidden shadow-brand cursor-pointer focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 group relative ${tile.grid}`}
+          style={`transition-delay: ${Math.min(i * 55, 380)}ms`}
+          data-index={i}
+          aria-label={`View full size: ${tile.alt}`}
+          type="button"
+        >
+          <!-- Natural aspect ratio on mobile, full-height grid cell on desktop -->
+          <div class={`w-full overflow-hidden ${tile.aspect} md:aspect-auto md:h-full`}>
+            <Image
+              src={tile.src}
+              alt={tile.alt}
+              width={900}
+              height={700}
+              quality={85}
+              class={`w-full h-full object-cover ${tile.obj} transition-all duration-600 group-hover:scale-[1.05] group-hover:brightness-105 motion-reduce:transition-none`}
+              loading="lazy"
+            />
+          </div>
+
+          <!-- Caption hover overlay -->
+          <div class="absolute inset-0 bg-primary/0 group-hover:bg-primary/40 transition-colors duration-400 flex items-end p-4 pointer-events-none" aria-hidden="true">
+            <p class="font-display font-normal text-[0.6rem] tracking-[0.2em] uppercase text-surface/0 group-hover:text-surface/90 transition-all duration-300 translate-y-2 group-hover:translate-y-0 leading-snug max-w-[90%]">
+              {tile.alt.split(' — ')[0].split(',').slice(0,2).join(',')}
+            </p>
+          </div>
+        </button>
+      ))}
+    </div>
+
+  </div>
+</section>
+
+
+<!-- Lightbox overlay -->
+<div
+  id="lightbox"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Image viewer"
+  aria-hidden="true"
+  class="fixed inset-0 z-[200] bg-primary-900/96 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 motion-reduce:transition-none p-4 md:p-8"
+>
+  <!-- Close button -->
+  <button
+    id="lightbox-close"
+    type="button"
+    aria-label="Close image viewer"
+    class="absolute top-5 right-5 w-11 h-11 flex items-center justify-center text-surface rounded-brand hover:bg-white/10 transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 cursor-pointer z-10"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+    </svg>
+  </button>
+
+  <!-- Prev / Next navigation -->
+  <button id="lb-prev" type="button" aria-label="Previous image" class="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center text-surface/60 hover:text-surface transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 cursor-pointer z-10">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+  </button>
+  <button id="lb-next" type="button" aria-label="Next image" class="absolute right-14 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center text-surface/60 hover:text-surface transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 cursor-pointer z-10">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+  </button>
+
+  <!-- Image -->
+  <img
+    id="lightbox-img"
+    src=""
+    alt=""
+    class="max-w-full max-h-[88vh] rounded-brand shadow-brand-lg object-contain"
+    style="min-width: 0"
+  />
+</div>
+
+
+<script>
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ─── Scroll reveal ─────────────────────────────────────────────────────────
+  if (!prefersReduced) {
+    const io = new IntersectionObserver(
+      entries => entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target as HTMLElement;
+          const delay = el.style.transitionDelay || '0ms';
+          el.style.transition = `opacity 650ms ease-out ${delay}, transform 650ms ease-out ${delay}`;
+          el.style.opacity   = '1';
+          el.style.transform = 'translateY(0)';
+          io.unobserve(el);
+        }
+      }),
+      { threshold: 0.06 }
+    );
+    document.querySelectorAll<HTMLElement>('.gallery-reveal').forEach(el => {
+      el.style.opacity   = '0';
+      el.style.transform = 'translateY(18px)';
+      io.observe(el);
+    });
+  }
+
+  // ─── Lightbox with prev/next navigation ───────────────────────────────────
+  const lightbox = document.getElementById('lightbox')!;
+  const lbImg    = document.getElementById('lightbox-img') as HTMLImageElement;
+  const lbClose  = document.getElementById('lightbox-close')!;
+  const lbPrev   = document.getElementById('lb-prev')!;
+  const lbNext   = document.getElementById('lb-next')!;
+  const tiles    = Array.from(document.querySelectorAll<HTMLButtonElement>('.gallery-tile'));
+
+  let currentIndex = 0;
+
+  function showImage(index: number) {
+    currentIndex = (index + tiles.length) % tiles.length;
+    const img = tiles[currentIndex].querySelector('img')!;
+    lbImg.src = img.src;
+    lbImg.alt = img.alt;
+  }
+
+  function openLightbox(index: number) {
+    showImage(index);
+    lightbox.style.opacity        = '1';
+    lightbox.style.pointerEvents  = 'auto';
+    lightbox.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow  = 'hidden';
+    lbClose.focus();
+  }
+
+  function closeLightbox() {
+    lightbox.style.opacity        = '0';
+    lightbox.style.pointerEvents  = 'none';
+    lightbox.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow  = '';
+  }
+
+  tiles.forEach((btn, i) => btn.addEventListener('click', () => openLightbox(i)));
+  lbClose.addEventListener('click', closeLightbox);
+  lbPrev.addEventListener('click', () => showImage(currentIndex - 1));
+  lbNext.addEventListener('click', () => showImage(currentIndex + 1));
+
+  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+  document.addEventListener('keydown', (e) => {
+    if (lightbox.getAttribute('aria-hidden') !== 'false') return;
+    if (e.key === 'Escape')     closeLightbox();
+    if (e.key === 'ArrowLeft')  showImage(currentIndex - 1);
+    if (e.key === 'ArrowRight') showImage(currentIndex + 1);
+  });
+</script>

@@ -1,0 +1,203 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Leo's Beautiful Gardens — return to home page" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img "Leo's Beautiful Gardens round emblem — cream running gardener on forest green" [ref=e5]
+      - navigation "Primary navigation" [ref=e6]:
+        - link "Home" [ref=e7] [cursor=pointer]:
+          - /url: /
+        - link "Services" [ref=e8] [cursor=pointer]:
+          - /url: /services
+        - link "Gallery" [ref=e9] [cursor=pointer]:
+          - /url: /gallery
+        - link "About" [ref=e10] [cursor=pointer]:
+          - /url: /about
+        - link "Contact" [ref=e11] [cursor=pointer]:
+          - /url: /contact
+      - generic [ref=e12]:
+        - link "Call us on 0449 915 712" [ref=e13] [cursor=pointer]:
+          - /url: tel:+61449915712
+          - text: 0449 915 712
+        - link "Get a Free Quote" [ref=e14] [cursor=pointer]:
+          - /url: "#contact"
+  - generic [ref=e15]:
+    - img "Leo's Beautiful Gardens branded white work ute parked at an ivy-clad heritage building — a real, trusted operation" [ref=e16]
+    - generic [ref=e17]:
+      - paragraph [ref=e18]: Get in touch
+      - heading "Let's talk about your garden." [level=1] [ref=e19]
+      - paragraph [ref=e20]: Free quotes, no obligation. We service Armadale, Toorak, Malvern, Brighton, Hawthorn and all of Melbourne's inner south-east, plus the Mornington Peninsula.
+      - generic [ref=e21]:
+        - link "Call us on 0449 915 712" [ref=e22] [cursor=pointer]:
+          - /url: tel:+61449915712
+          - img [ref=e23]
+          - text: Call 0449 915 712
+        - link "Send a message" [ref=e25] [cursor=pointer]:
+          - /url: "#contact"
+  - region "Service areas" [ref=e26]:
+    - generic [ref=e27]:
+      - paragraph [ref=e28]: Where we work
+      - heading "Service areas" [level=2] [ref=e29]
+      - paragraph [ref=e30]: We're based in Melbourne and service the inner south-east and the Mornington Peninsula. Not sure if you're in our area? Just ask — we'll let you know.
+      - generic [ref=e31]:
+        - generic [ref=e32]: Armadale
+        - generic [ref=e33]: Toorak
+        - generic [ref=e34]: Malvern
+        - generic [ref=e35]: South Yarra
+        - generic [ref=e36]: Prahran
+        - generic [ref=e37]: Brighton
+        - generic [ref=e38]: Hawthorn
+        - generic [ref=e39]: Camberwell
+        - generic [ref=e40]: Kew
+        - generic [ref=e41]: Canterbury
+        - generic [ref=e42]: Balwyn
+        - generic [ref=e43]: Caulfield
+        - generic [ref=e44]: Glen Iris
+        - generic [ref=e45]: Mornington Peninsula
+        - generic [ref=e46]: Mt Eliza
+        - generic [ref=e47]: Frankston
+  - img "Romantic heritage courtyard garden — wrought-iron bench, ferns in aged pots, stone chequerboard paving and an ivy-arched doorway" [ref=e49]
+  - region "Let's grow something beautiful together." [ref=e51]:
+    - generic [ref=e53]:
+      - generic [ref=e54]:
+        - paragraph [ref=e55]: Get in touch
+        - heading "Let's grow something beautiful together." [level=2] [ref=e56]
+        - paragraph [ref=e57]: Tell us a little about your garden and we'll be in touch to arrange a free, no-obligation quote.
+        - generic [ref=e58]:
+          - link "Call us on 0449 915 712" [ref=e59] [cursor=pointer]:
+            - /url: tel:+61449915712
+            - img [ref=e61]
+            - generic [ref=e63]:
+              - paragraph [ref=e64]: 0449 915 712
+              - paragraph [ref=e65]: Call or text anytime
+          - link "Email us at bookings@leosgardens.com.au" [ref=e66] [cursor=pointer]:
+            - /url: mailto:bookings@leosgardens.com.au
+            - img [ref=e68]
+            - generic [ref=e71]:
+              - paragraph [ref=e72]: bookings@leosgardens.com.au
+              - paragraph [ref=e73]: We reply within one business day
+          - generic [ref=e74]:
+            - img [ref=e76]
+            - generic [ref=e79]:
+              - paragraph [ref=e80]: Armadale · Toorak · Malvern · Brighton · Hawthorn
+              - paragraph [ref=e81]: All Melbourne inner south-east & Mornington Peninsula
+          - generic [ref=e82]:
+            - img [ref=e84]
+            - generic [ref=e87]:
+              - paragraph [ref=e88]: Mon – Sat, 7 am – 5 pm
+              - paragraph [ref=e89]: Free quotes — no obligation
+      - generic [ref=e91]:
+        - heading "Request a free quote" [level=3] [ref=e92]
+        - generic [ref=e93]:
+          - generic [ref=e94]:
+            - generic [ref=e95]: First name
+            - textbox "First name" [ref=e96]:
+              - /placeholder: Your first name
+          - generic [ref=e97]:
+            - generic [ref=e98]: Email *
+            - textbox "Email required" [ref=e99]:
+              - /placeholder: your@email.com
+          - generic [ref=e100]:
+            - generic [ref=e101]: Phone
+            - textbox "Phone" [ref=e102]:
+              - /placeholder: 0400 000 000
+          - generic [ref=e103]:
+            - generic [ref=e104]: Suburb
+            - textbox "Suburb" [ref=e105]:
+              - /placeholder: e.g. Armadale
+          - generic [ref=e106]:
+            - generic [ref=e107]: About your garden
+            - textbox "About your garden" [ref=e108]:
+              - /placeholder: Tell us a little about your garden and what you're looking for…
+          - button "Request my free quote" [ref=e109] [cursor=pointer]
+          - paragraph [ref=e110]: No obligation. We'll be in touch within one business day.
+  - contentinfo "Site footer" [ref=e111]:
+    - generic [ref=e113]:
+      - generic [ref=e114]:
+        - link "Leo's Beautiful Gardens — return to home page" [ref=e115] [cursor=pointer]:
+          - /url: /
+          - img "Leo's Beautiful Gardens round emblem — cream running gardener on forest green" [ref=e116]
+        - paragraph [ref=e117]:
+          - text: Garden care as craft.
+          - text: Melbourne.
+        - img "Leo's Beautiful Gardens — Since 2021, Victoria — credential crest" [ref=e118]
+      - navigation "Quick links" [ref=e119]:
+        - paragraph [ref=e120]: Navigate
+        - list [ref=e121]:
+          - listitem [ref=e122]:
+            - link "Home" [ref=e123] [cursor=pointer]:
+              - /url: /
+          - listitem [ref=e124]:
+            - link "Services" [ref=e125] [cursor=pointer]:
+              - /url: /services
+          - listitem [ref=e126]:
+            - link "Gallery" [ref=e127] [cursor=pointer]:
+              - /url: /gallery
+          - listitem [ref=e128]:
+            - link "About" [ref=e129] [cursor=pointer]:
+              - /url: /about
+          - listitem [ref=e130]:
+            - link "Contact" [ref=e131] [cursor=pointer]:
+              - /url: /contact
+          - listitem [ref=e132]:
+            - link "Get a Free Quote" [ref=e133] [cursor=pointer]:
+              - /url: "#contact"
+      - navigation "Services" [ref=e134]:
+        - paragraph [ref=e135]: Services
+        - list [ref=e136]:
+          - listitem [ref=e137]:
+            - link "Scheduled Maintenance" [ref=e138] [cursor=pointer]:
+              - /url: /services#maintenance
+          - listitem [ref=e139]:
+            - link "Garden Renovations" [ref=e140] [cursor=pointer]:
+              - /url: /services#renovations
+          - listitem [ref=e141]:
+            - link "Tree & Plant Pruning" [ref=e142] [cursor=pointer]:
+              - /url: /services#pruning
+          - listitem [ref=e143]:
+            - link "Hedge Management" [ref=e144] [cursor=pointer]:
+              - /url: /services#hedge-management
+          - listitem [ref=e145]:
+            - link "Soft Landscaping" [ref=e146] [cursor=pointer]:
+              - /url: /services#planting
+          - listitem [ref=e147]:
+            - link "Pressure Cleaning" [ref=e148] [cursor=pointer]:
+              - /url: /services#pressure-cleaning
+          - listitem [ref=e149]:
+            - link "Pre-Sale Prep" [ref=e150] [cursor=pointer]:
+              - /url: /services#pre-sale
+      - generic [ref=e151]:
+        - paragraph [ref=e152]: Contact
+        - list [ref=e153]:
+          - listitem [ref=e154]:
+            - link "Call 0449 915 712" [ref=e155] [cursor=pointer]:
+              - /url: tel:+61449915712
+              - text: 0449 915 712
+          - listitem [ref=e156]:
+            - link "bookings@leosgardens.com.au" [ref=e157] [cursor=pointer]:
+              - /url: mailto:bookings@leosgardens.com.au
+          - listitem [ref=e158]:
+            - text: Armadale · Toorak · Malvern
+            - text: Brighton · Mornington Peninsula
+        - link "Follow Leo's Beautiful Gardens on Instagram (opens in new tab)" [ref=e159] [cursor=pointer]:
+          - /url: https://www.instagram.com/leos_beautiful_gardens/
+          - img [ref=e160]
+          - text: "@leos_beautiful_gardens"
+    - generic [ref=e164]:
+      - paragraph [ref=e165]: © 2026 Leo's Beautiful Gardens. All rights reserved.
+      - paragraph [ref=e166]: "ABN: [client to supply] · Melbourne, VIC, Australia"
+  - generic [ref=e169]:
+    - button "Menu" [ref=e170]:
+      - img [ref=e172]
+      - generic: Menu
+    - button "Inspect" [ref=e176]:
+      - img [ref=e178]
+      - generic: Inspect
+    - button "Audit" [ref=e180]:
+      - generic [ref=e181]:
+        - img [ref=e182]
+        - img [ref=e185]
+      - generic: Audit
+    - button "Settings" [ref=e188]:
+      - img [ref=e190]
+      - generic: Settings

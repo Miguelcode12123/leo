@@ -1,0 +1,239 @@
+---
+import { Image } from 'astro:assets';
+import logo3    from '../assets/images/logo_3.png';
+import imgHero  from '../assets/images/img_30.jpg';   // New hero candidate
+import imgFall  from '../assets/images/img_8.jpg';    // Fallback desktop
+import imgMob   from '../assets/images/img_17.jpg';   // Mobile portrait
+---
+
+<!--
+  HERO — Leo's Beautiful Gardens
+  ─────────────────────────────────────────────────────────────────────────────
+  Desktop: editorial split-panel — forest-green content panel left (45%) +
+           full-bleed garden image right (55%). Creates a luxury-atelier feel.
+  Mobile:  full-bleed portrait image with gradient overlay and centred copy.
+  ─────────────────────────────────────────────────────────────────────────────
+-->
+<section
+  id="hero"
+  aria-label="Leo's Beautiful Gardens — hero"
+  class="relative flex flex-col md:flex-row min-h-[92vh] md:min-h-screen overflow-hidden"
+>
+
+  <!-- ══════════════════════════════════════════════════════
+       MOBILE: full-bleed portrait image (hidden md+)
+  ══════════════════════════════════════════════════════ -->
+  <div class="absolute inset-0 md:hidden">
+    <Image
+      src={imgMob}
+      alt="Team member on a tall ladder pruning a sculpted olive-tree dome against a deep blue sky"
+      width={900}
+      height={1400}
+      quality={90}
+      class="w-full h-full object-cover object-top"
+      loading="eager"
+      fetchpriority="high"
+    />
+    <!-- Multi-layer gradient for readability -->
+    <div class="absolute inset-0 bg-gradient-to-b from-primary-900/60 via-primary-900/20 to-primary-900/75" aria-hidden="true"></div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════
+       LEFT PANEL — editorial forest-green content (md+)
+  ══════════════════════════════════════════════════════ -->
+  <div class="relative z-10 flex flex-col justify-center md:bg-primary-900 md:w-[44%] md:flex-shrink-0 px-8 sm:px-12 md:px-14 lg:px-16 xl:px-20 pt-32 pb-16 md:py-0 md:min-h-screen">
+
+    <!-- LBG Monogram watermark — very subtle, purely decorative -->
+    <div class="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden" aria-hidden="true">
+      <Image
+        src={logo3}
+        alt=""
+        width={340}
+        height={340}
+        quality={80}
+        class="w-[280px] md:w-[320px] lg:w-[380px] opacity-[0.04] md:opacity-[0.05] select-none"
+        loading="eager"
+      />
+    </div>
+
+    <!-- ── Content block ─────────────────────────────────────────── -->
+    <div class="relative space-y-6 md:space-y-7 max-w-xl">
+
+      <!-- Eyebrow -->
+      <p
+        id="hero-eyebrow"
+        class="hero-anim font-display font-normal text-[0.7rem] tracking-[0.28em] uppercase text-secondary-300"
+      >
+        Melbourne · Garden Care Since 2021
+      </p>
+
+      <!-- Headline -->
+      <h1
+        id="hero-headline"
+        class="hero-anim font-display text-display-xl text-surface leading-[1.02] tracking-[-0.02em]"
+      >
+        Gardens cared<br class="hidden sm:block" /> for like<br class="hidden lg:block" /> our own.
+      </h1>
+
+      <!-- Italian tagline — the brand's unique signature -->
+      <p
+        id="hero-tagline"
+        class="hero-anim font-display italic text-[1.15rem] text-secondary-300 tracking-wide"
+        lang="it"
+        title="Grown with care"
+      >
+        Coltivato con cura.
+      </p>
+
+      <!-- Divider line -->
+      <div id="hero-divider" class="hero-anim w-14 h-px bg-accent origin-left"></div>
+
+      <!-- Subhead -->
+      <p
+        id="hero-subhead"
+        class="hero-anim font-body text-body-lg text-secondary-200 leading-[1.7] max-w-md"
+      >
+        Expert, design-led care for Melbourne's finest gardens — pruning,
+        planting, hedging and renewal by a fourth-generation gardening family.
+      </p>
+
+      <!-- CTA group -->
+      <div
+        id="hero-ctas"
+        class="hero-anim flex flex-col sm:flex-row gap-3 pt-1"
+      >
+        <a
+          href="#contact"
+          class="inline-flex items-center justify-center rounded-pill bg-accent text-surface px-7 py-3.5 font-display font-normal text-[0.75rem] tracking-[0.15em] uppercase hover:bg-accent-600 transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 cursor-pointer"
+        >
+          Book a Consultation
+        </a>
+        <a
+          href="#gallery"
+          class="inline-flex items-center justify-center rounded-pill border border-secondary-400/60 text-surface px-7 py-3.5 font-display font-normal text-[0.75rem] tracking-[0.15em] uppercase hover:border-secondary-200 hover:bg-white/8 transition-all duration-200 motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 cursor-pointer"
+        >
+          Discover Our Work
+        </a>
+      </div>
+
+    </div>
+
+    <!-- ── Bottom credentials strip (md+ only) ─────────────────── -->
+    <div
+      id="hero-creds"
+      class="hero-anim absolute bottom-8 left-8 md:left-14 lg:left-16 xl:left-20 hidden md:flex items-center gap-6"
+      aria-hidden="true"
+    >
+      <span class="font-display font-normal text-[0.62rem] tracking-[0.2em] uppercase text-secondary-500">Fully Insured</span>
+      <span class="w-1 h-1 rounded-full bg-secondary-600"></span>
+      <span class="font-display font-normal text-[0.62rem] tracking-[0.2em] uppercase text-secondary-500">Free Quotes</span>
+      <span class="w-1 h-1 rounded-full bg-secondary-600"></span>
+      <span class="font-display font-normal text-[0.62rem] tracking-[0.2em] uppercase text-secondary-500">All Melbourne</span>
+    </div>
+
+  </div><!-- /left panel -->
+
+
+  <!-- ══════════════════════════════════════════════════════
+       RIGHT PANEL — garden image (md+ only, positioned)
+  ══════════════════════════════════════════════════════ -->
+  <div class="hidden md:block relative flex-1 overflow-hidden" aria-hidden="true">
+
+    <!-- Primary hero image — img_30 (new candidate), fallback img_8 -->
+    <Image
+      src={imgHero}
+      alt=""
+      width={1400}
+      height={1050}
+      quality={88}
+      class="absolute inset-0 w-full h-full object-cover object-center hero-img-scale"
+      loading="eager"
+      fetchpriority="high"
+    />
+
+    <!-- Subtle left-edge gradient to blend into green panel -->
+    <div class="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-primary-900/60 to-transparent pointer-events-none"></div>
+
+    <!-- Elegant bottom-left accent — the brand year stamp -->
+    <div class="absolute bottom-8 right-8 text-right pointer-events-none select-none">
+      <p class="font-display font-normal text-[0.6rem] tracking-[0.3em] uppercase text-white/40">Est. 2021 · Victoria</p>
+    </div>
+
+  </div><!-- /right panel -->
+
+
+  <!-- ══════════════════════════════════════════════════════
+       SCROLL CUE (mobile only — clean minimal indicator)
+  ══════════════════════════════════════════════════════ -->
+  <div
+    id="hero-scroll-cue"
+    class="hero-anim absolute bottom-8 left-1/2 -translate-x-1/2 md:hidden flex flex-col items-center gap-2"
+    aria-hidden="true"
+  >
+    <div class="w-px h-10 bg-gradient-to-b from-transparent via-secondary-400/60 to-transparent animate-pulse"></div>
+  </div>
+
+</section>
+
+
+<style>
+  /* Ken Burns settle on the right-panel image */
+  .hero-img-scale {
+    transform: scale(1.04);
+    transition: transform 1600ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .hero-img-scale.settled {
+    transform: scale(1);
+  }
+
+  /* Initial hidden state for animated elements */
+  .hero-anim {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: none;
+  }
+</style>
+
+<script>
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Staggered entrance animation
+  const elements = [
+    { id: 'hero-eyebrow',    delay: 80  },
+    { id: 'hero-headline',   delay: 180 },
+    { id: 'hero-tagline',    delay: 300 },
+    { id: 'hero-divider',    delay: 380 },
+    { id: 'hero-subhead',    delay: 440 },
+    { id: 'hero-ctas',       delay: 540 },
+    { id: 'hero-creds',      delay: 680 },
+    { id: 'hero-scroll-cue', delay: 700 },
+  ];
+
+  elements.forEach(({ id, delay }) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (prefersReduced) {
+      el.style.opacity   = '1';
+      el.style.transform = 'translateY(0)';
+    } else {
+      setTimeout(() => {
+        el.style.transition = 'opacity 700ms ease-out, transform 700ms ease-out';
+        el.style.opacity    = '1';
+        el.style.transform  = 'translateY(0)';
+      }, delay);
+    }
+  });
+
+  // Ken Burns settle on right panel image
+  if (!prefersReduced) {
+    const img = document.querySelector<HTMLElement>('.hero-img-scale');
+    if (img) {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          img.classList.add('settled');
+        });
+      });
+    }
+  }
+</script>

@@ -1,0 +1,93 @@
+---
+import '../styles/globals.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+  ogType?: string;
+  canonicalUrl?: string;
+}
+
+const {
+  title       = "Leo's Beautiful Gardens | Premium Garden Care Melbourne",
+  description = "Expert, design-led garden care across Melbourne — pruning, hedging, planting & renewal by a fourth-generation gardening family. Free quotes.",
+  ogImage     = "/og-image.jpg",
+  ogType      = "website",
+  canonicalUrl = Astro.url.href,
+} = Astro.props;
+
+const siteUrl = "https://www.leosgardens.com.au";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "Leo's Beautiful Gardens",
+  "image": `${siteUrl}/og-image.jpg`,
+  "url": siteUrl,
+  "telephone": "+61449915712",
+  "email": "bookings@leosgardens.com.au",
+  "priceRange": "$$",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Melbourne",
+    "addressRegion": "VIC",
+    "addressCountry": "AU"
+  },
+  "areaServed": [
+    "Melbourne", "Armadale", "Toorak", "Malvern", "Brighton",
+    "Hawthorn", "Camberwell", "Mornington Peninsula"
+  ],
+  "sameAs": [
+    "https://www.instagram.com/leos_beautiful_gardens/"
+  ],
+  "openingHours": "<!-- client to confirm -->"
+};
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- ─── Primary SEO ──────────────────────────────────────────────────── -->
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+
+    <!-- ─── Open Graph ───────────────────────────────────────────────────── -->
+    <meta property="og:type"        content={ogType} />
+    <meta property="og:title"       content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image"       content={`${siteUrl}${ogImage}`} />
+    <meta property="og:url"         content={canonicalUrl} />
+    <meta property="og:site_name"   content="Leo's Beautiful Gardens" />
+
+    <!-- ─── Twitter Card ─────────────────────────────────────────────────── -->
+    <meta name="twitter:card"        content="summary_large_image" />
+    <meta name="twitter:title"       content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image"       content={`${siteUrl}${ogImage}`} />
+
+    <!-- ─── Favicon ──────────────────────────────────────────────────────── -->
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon"     href="/apple-touch-icon.png" />
+
+    <!-- ─── Google Fonts ─────────────────────────────────────────────────── -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Mulish:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- ─── Structured Data (LocalBusiness) ──────────────────────────────── -->
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+
+  <body>
+    <slot />
+  </body>
+</html>
