@@ -111,22 +111,22 @@ const navLinks = [
           The parent <header> carries `group`, so group-data-[scrolled=true] fires on the
           nav's own data attribute. Transition-colors runs at the same 500ms as the bg.
         -->
-        <span class="flex flex-col justify-center gap-[5px] w-6 h-5 flex-shrink-0" aria-hidden="true">
-          <span class="block h-px bg-current w-6
+        <span class="flex flex-col justify-center gap-[6px] w-7 h-6 flex-shrink-0" aria-hidden="true">
+          <span class="block h-px bg-current w-7
                        transition-[width,color] duration-300 ease-in-out
                        text-primary
                        motion-reduce:transition-none"></span>
-          <span class="block h-px bg-current w-[14px] group-hover/ham:w-6
+          <span class="block h-px bg-current w-4 group-hover/ham:w-7
                        transition-[width,color] duration-300 ease-in-out origin-left
                        text-primary
                        motion-reduce:transition-none"></span>
-          <span class="block h-px bg-current w-6
+          <span class="block h-px bg-current w-7
                        transition-[width,color] duration-300 ease-in-out
                        text-primary
                        motion-reduce:transition-none"></span>
         </span>
         <!-- "Menu" label -->
-        <span class="font-body font-medium text-[0.82rem] tracking-[0.04em]
+        <span class="font-body font-medium text-[0.92rem] tracking-[0.04em]
                      text-primary
                      transition-colors duration-300 motion-reduce:transition-none"
               aria-hidden="true">
@@ -204,7 +204,7 @@ const navLinks = [
         id="nav-cta"
         class={[
           'hidden lg:inline-flex items-center gap-2.5 relative group/cta cursor-pointer',
-          'font-body font-medium text-[0.82rem] tracking-[0.04em] whitespace-nowrap',
+          'font-body font-medium text-[0.92rem] tracking-[0.04em] whitespace-nowrap',
           'text-primary hover:text-accent',
           'transition-colors duration-300 motion-reduce:transition-none',
           'focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-4',
@@ -229,7 +229,7 @@ const navLinks = [
       </a>
 
       <!-- Mobile spacer — mirrors hamburger width to keep logo centred -->
-      <div class="lg:hidden w-6 h-5 flex-shrink-0" aria-hidden="true"></div>
+      <div class="lg:hidden w-7 h-6 flex-shrink-0" aria-hidden="true"></div>
     </div>
 
   </div>
@@ -438,14 +438,11 @@ const navLinks = [
   /**
    * Three-state nav machine:
    *
-   *   hero-phase   (data-hero-phase="true")
-   *     ↳ Fully transparent, full-size, logo only.
-   *       Active while scrollY < heroScrollEnd (the hero animation is live).
+   *   full-size   (data-hero-phase="true", data-scrolled="false")
+   *     ↳ Transparent background, expanded nav height.
+   *       Active until the same threshold that triggers shrinking.
    *
-   *   post-hero expanded  (data-hero-phase="false", data-scrolled="false")
-   *     ↳ Cream background, full-size. Brief window right after hero completes.
-   *
-   *   post-hero compact   (data-hero-phase="false", data-scrolled="true")
+   *   compact     (data-hero-phase="false", data-scrolled="true")
    *     ↳ Cream background, compact (5rem). Normal scrolled state.
    *
    * heroScrollEnd = hero wrapper's offsetHeight − window.innerHeight.
@@ -458,19 +455,18 @@ const navLinks = [
       ? Math.max(0, heroWrapper.offsetHeight - window.innerHeight)
       : 0;
 
-    const inHeroPhase = isTransparent && heroScrollEnd > 0 && window.scrollY < heroScrollEnd;
+    const threshold    = heroScrollEnd > 0 ? heroScrollEnd + 60 : 80;
+    const shouldShrink = isTransparent ? window.scrollY > threshold : true;
+    const inHeroPhase  = isTransparent && !shouldShrink;
 
     if (inHeroPhase) {
-      // ── Hero phase: transparent, full-size, logo only ─────────────────────
+      // ── Full-size state: transparent background until shrink begins ───────
       nav.dataset.heroPhase = 'true';
       nav.dataset.scrolled  = 'false';
       if (scrim) scrim.style.opacity = '0';
     } else {
-      // ── Post-hero: cream bg, resume normal shrink logic ───────────────────
+      // ── Compact state: cream bg appears as the nav shrinks ────────────────
       nav.dataset.heroPhase = 'false';
-      // Shrink 60px after the hero scroll end (snappy hand-off feels intentional)
-      const threshold    = heroScrollEnd > 0 ? heroScrollEnd + 60 : 80;
-      const shouldShrink = isTransparent ? window.scrollY > threshold : true;
       nav.dataset.scrolled = shouldShrink ? 'true' : 'false';
       if (scrim) scrim.style.opacity = shouldShrink ? '0' : '1';
     }

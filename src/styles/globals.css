@@ -104,9 +104,9 @@
   }
 }
 
-/* ─── Hero-phase nav: transparent, full-size ─────────────────────────────────
-   Active while the hero scroll animation is live (scrollY < scrollHeight).
-   JS sets data-hero-phase="true" on #site-nav during this window.
+/* ─── Full-size transparent nav ──────────────────────────────────────────────
+   Active while the nav is expanded. JS sets data-hero-phase="true" until the
+   same scroll threshold that flips data-scrolled="true" and shrinks the nav.
    All nav elements (logo, hamburger, CTA) remain visible — only the cream
    background is stripped so everything floats over the hero image.
 ────────────────────────────────────────────────────────────────────────────── */
