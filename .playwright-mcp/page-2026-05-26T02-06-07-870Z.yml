@@ -1,0 +1,444 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - button "Open navigation menu" [ref=e5] [cursor=pointer]:
+        - generic [ref=e10]: Menu
+      - link "Leo's Beautiful Gardens — return to home page" [ref=e12] [cursor=pointer]:
+        - /url: /
+        - img "Leo's Beautiful Gardens logo" [ref=e14]
+      - link "Book a Consultation" [ref=e16] [cursor=pointer]:
+        - /url: "#contact"
+        - text: Book a Consultation
+        - generic [ref=e17]: →
+  - dialog:
+    - generic:
+      - generic:
+        - button:
+          - generic: Close
+      - link:
+        - /url: /
+        - generic:
+          - img
+    - generic:
+      - navigation:
+        - link:
+          - /url: /
+          - text: Home
+        - link:
+          - /url: /services
+          - text: Services
+        - link:
+          - /url: /gallery
+          - text: Gallery
+        - link:
+          - /url: /about
+          - text: About
+        - link:
+          - /url: /contact
+          - text: Contact
+        - paragraph: Coltivato con cura.
+      - complementary:
+        - link:
+          - /url: "#contact"
+          - text: Book a Consultation
+        - generic:
+          - link:
+            - /url: tel:+61449915712
+            - img
+            - generic: 0449 915 712
+          - link:
+            - /url: mailto:bookings@leosgardens.com.au
+            - img
+            - generic: bookings@leosgardens.com.au
+          - generic:
+            - img
+            - generic: All Melbourne · Mornington Peninsula
+        - generic:
+          - paragraph: Coltivato con cura.
+  - generic [ref=e19]:
+    - generic [ref=e22]:
+      - paragraph [ref=e23]: Melbourne · Garden Care Since 2021
+      - heading "Your garden, in the hands it deserves." [level=1] [ref=e24]:
+        - text: Your garden, in the
+        - text: hands it deserves.
+      - paragraph [ref=e25]: Coltivato con cura.
+    - generic [ref=e27]: Scroll
+  - region "Four generations of craft." [ref=e29]:
+    - generic [ref=e30]:
+      - generic [ref=e31]:
+        - generic [ref=e32]:
+          - paragraph [ref=e33]: Heritage
+          - paragraph [ref=e34]: Coltivato con cura.
+          - heading "Four generations of craft." [level=2] [ref=e35]:
+            - generic [ref=e36]: Four
+            - generic [ref=e37]: generations
+            - generic [ref=e38]: of craft.
+        - img "A team member on a tall ladder pruning a sculpted olive-tree dome against a brilliant blue sky — the considered seasonal craft that defines Leo's Beautiful Gardens" [ref=e40]
+      - generic [ref=e41]:
+        - generic [ref=e42]:
+          - paragraph [ref=e43]: Leonardo grew up among the olive groves of southern Sicily, where his grandfather Rosario taught him to tend a garden the way a family tends a name — with patience, specificity, and a long view of what you're actually building.
+          - paragraph [ref=e44]:
+            - text: Those same groves still produce the family's olive oil,
+            - emphasis [ref=e45]: Olio Qucco
+            - text: ". When Leonardo came to Melbourne, he brought Rosario's approach with him: no shortcuts, no generic solutions, every garden understood on its own terms."
+          - paragraph [ref=e46]: Leo's Beautiful Gardens serves Melbourne's finest residential estates — not because of scale, but because of what fourth-generation craft looks like up close.
+          - link "Read our story" [ref=e47] [cursor=pointer]:
+            - /url: /about
+            - text: Read our story
+        - img "Leonardo, founder of Leo's Beautiful Gardens, surrounded by autumn foliage in southern Sicily" [ref=e50]
+  - region "Every garden has a different story. We know how to read them." [ref=e51]:
+    - generic [ref=e52]:
+      - generic [ref=e53]:
+        - paragraph [ref=e54]: What We Do
+        - heading "Every garden has a different story. We know how to read them." [level=2] [ref=e55]:
+          - text: Every garden has
+          - text: a different story.
+          - text: We know how to read them.
+      - list [ref=e56]:
+        - listitem [ref=e57] [cursor=pointer]:
+          - img "Leo's team member tending a sculpted topiary ball in a French urn beside a pool in a formal garden" [ref=e59]
+          - generic [ref=e60]:
+            - heading "Scheduled Garden Maintenance" [level=3] [ref=e61]
+            - paragraph [ref=e62]: Reliable, seasonally-tuned care that keeps your garden healthy and immaculate year-round — pruning, feeding, weeding and the watchful eye of people who know plants.
+            - link "Learn more about Scheduled Garden Maintenance" [ref=e63]:
+              - /url: /services#maintenance
+              - text: Learn more
+              - img [ref=e64]
+        - listitem [ref=e66] [cursor=pointer]:
+          - img "Two crew members working a courtyard — one on a ladder pruning a Japanese maple, one carrying a large shrub" [ref=e68]
+          - generic [ref=e69]:
+            - heading "Garden Renovations" [level=3] [ref=e70]
+            - paragraph [ref=e71]: Tired or overgrown spaces reimagined and rebuilt — thoughtful design, the right plants, and a garden that thrives for years to come.
+            - link "Learn more about Garden Renovations" [ref=e72]:
+              - /url: /services#renovations
+              - text: Learn more
+              - img [ref=e73]
+        - listitem [ref=e75] [cursor=pointer]:
+          - img "Team member using a long-reach pole hedge-trimmer on a tall leafy hedge wall" [ref=e77]
+          - generic [ref=e78]:
+            - heading "Tree & Plant Pruning" [level=3] [ref=e79]
+            - paragraph [ref=e80]: Precise, species-aware pruning that improves health, structure and form — from fruit trees to feature specimens.
+            - link "Learn more about Tree & Plant Pruning" [ref=e81]:
+              - /url: /services#pruning
+              - text: Learn more
+              - img [ref=e82]
+        - listitem [ref=e84] [cursor=pointer]:
+          - img "Gloved hands using a STIHL HSA 66 battery hedge trimmer on a formal hedge, clippings flying" [ref=e86]
+          - generic [ref=e87]:
+            - heading "Specialised Hedge Management" [level=3] [ref=e88]
+            - paragraph [ref=e89]: Crisp, considered hedging — hand-sheared or machine-cut — for formal lines and lasting density.
+            - link "Learn more about Specialised Hedge Management" [ref=e90]:
+              - /url: /services#hedge-management
+              - text: Learn more
+              - img [ref=e91]
+        - listitem [ref=e93] [cursor=pointer]:
+          - img "Two crew members kneeling, hand-planting a garden bed beside a brick border on a green lawn" [ref=e95]
+          - generic [ref=e96]:
+            - heading "Soft Landscaping & Planting" [level=3] [ref=e97]
+            - paragraph [ref=e98]: Expert plant selection, design and planting that turns a garden into a living, balanced sanctuary.
+            - link "Learn more about Soft Landscaping & Planting" [ref=e99]:
+              - /url: /services#planting
+              - text: Learn more
+              - img [ref=e100]
+        - listitem [ref=e102] [cursor=pointer]:
+          - img "Spray wand misting a lush garden bed — pest and disease treatment in action" [ref=e104]
+          - generic [ref=e105]:
+            - heading "Pest & Disease Control" [level=3] [ref=e106]
+            - paragraph [ref=e107]: Eco-friendly, natural-first treatment that protects your plants and the beneficial life around them.
+            - link "Learn more about Pest & Disease Control" [ref=e108]:
+              - /url: /services#pest-control
+              - text: Learn more
+              - img [ref=e109]
+        - listitem [ref=e111] [cursor=pointer]:
+          - img "Manicured parterre lawn in front of a grand classical Melbourne mansion with box-hedge borders" [ref=e113]
+          - generic [ref=e114]:
+            - heading "Instant Lawn & Turf" [level=3] [ref=e115]
+            - paragraph [ref=e116]: Lush, resilient lawns properly prepared and laid — partnered with one of Australia's best turf suppliers, Lillydale Instant Lawn.
+            - link "Learn more about Instant Lawn & Turf" [ref=e117]:
+              - /url: /services#turf
+              - text: Learn more
+              - img [ref=e118]
+        - listitem [ref=e120] [cursor=pointer]:
+          - img "Pressure-washer wand cleaning a bluestone path surrounded by purple and orange flowering garden beds" [ref=e122]
+          - generic [ref=e123]:
+            - heading "Pressure Cleaning" [level=3] [ref=e124]
+            - paragraph [ref=e125]: Paths, patios and driveways restored — powerful, surface-safe cleaning that brings back the kerb appeal instantly.
+            - link "Learn more about Pressure Cleaning" [ref=e126]:
+              - /url: /services#pressure-cleaning
+              - text: Learn more
+              - img [ref=e127]
+        - listitem [ref=e129] [cursor=pointer]:
+          - img "Lush vertical garden path — the kind of clean, open space left after professional green-waste clearing" [ref=e131]
+          - generic [ref=e132]:
+            - heading "Green-Waste & Rubbish Removal" [level=3] [ref=e133]
+            - paragraph [ref=e134]: Fast, tidy, eco-conscious clearing of garden waste and bulky items — your space left clean and clutter-free.
+            - link "Learn more about Green-Waste & Rubbish Removal" [ref=e135]:
+              - /url: /services#waste-removal
+              - text: Learn more
+              - img [ref=e136]
+      - generic [ref=e139] [cursor=pointer]:
+        - img "Wisteria climbing a rendered period home beside clipped box hedging and a gravel path — pristine kerb appeal" [ref=e141]
+        - generic [ref=e143]:
+          - paragraph [ref=e144]: Signature Service
+          - heading "Garden Makeovers & Pre-Sale Preparation" [level=3] [ref=e145]
+          - paragraph [ref=e146]: Auction-ready gardens that lift kerb appeal and sale price — we work with homeowners and agents from photography day to auction. From a single-day tidy to a full seasonal renewal, your garden will look its absolute best on the day that matters most.
+          - link "Learn more about Garden Makeovers & Pre-Sale Preparation" [ref=e147]:
+            - /url: /services#pre-sale
+            - text: Learn more
+            - img [ref=e148]
+  - region "See the transformation." [ref=e150]:
+    - generic [ref=e151]:
+      - generic [ref=e152]:
+        - paragraph [ref=e153]: The Difference
+        - heading "See the transformation." [level=2] [ref=e154]
+        - paragraph [ref=e155]: Real Melbourne gardens, before and after our team got to work. Drag the handle to reveal the change.
+      - generic [ref=e156]:
+        - generic [ref=e157]:
+          - paragraph [ref=e158]: Heritage Courtyard
+          - 'img "Before and after transformation — Heritage Courtyard: A tired heritage courtyard, brought back to life — fresh lawn, lifted canopies and a considered finish." [ref=e159]':
+            - 'img "After: same courtyard transformed — fresh lush lawn, neatly lifted canopy trees, crisp clipped hedge, and a clean brick path" [ref=e160]'
+            - 'img "Before: tired heritage back courtyard with patchy dirt, exposed weed-mat, weeds, and leggy standard trees" [ref=e162]'
+            - generic: Before
+            - generic: After
+            - button "Drag to compare before and after transformation" [ref=e163] [cursor=pointer]:
+              - img [ref=e164]
+          - paragraph [ref=e167]: A tired heritage courtyard, brought back to life — fresh lawn, lifted canopies and a considered finish.
+        - generic [ref=e168]:
+          - paragraph [ref=e169]: New-Build Front Garden
+          - 'img "Before and after transformation — New-Build Front Garden: From bare ground to a crisp, established front garden — turf laid and beds planted for instant kerb appeal." [ref=e170]':
+            - 'img "After: same townhouse yard finished — laid green lawn, fresh mulched beds with young plants and feature maples" [ref=e171]'
+            - 'img "Before: bare graded dirt at a new brick townhouse front yard, timber garden-bed edging framed out" [ref=e173]'
+            - generic: Before
+            - generic: After
+            - button "Drag to compare before and after transformation" [ref=e174] [cursor=pointer]:
+              - img [ref=e175]
+          - paragraph [ref=e178]: From bare ground to a crisp, established front garden — turf laid and beds planted for instant kerb appeal.
+      - generic [ref=e179]:
+        - paragraph [ref=e180]: Ready to transform your garden?
+        - link "Request a free site visit" [ref=e181] [cursor=pointer]:
+          - /url: "#contact"
+          - text: Request a free site visit
+          - img [ref=e182]
+  - region "Gardens we have the joy of tending." [ref=e184]:
+    - generic [ref=e185]:
+      - generic [ref=e186]:
+        - generic [ref=e187]:
+          - paragraph [ref=e188]: Our Work
+          - heading "Gardens we have the joy of tending." [level=2] [ref=e189]:
+            - text: Gardens we have
+            - text: the joy of tending.
+          - paragraph [ref=e190]: A glimpse of the established Melbourne gardens in our care.
+        - link "See more of our work on Instagram (opens in new tab)" [ref=e191] [cursor=pointer]:
+          - /url: https://www.instagram.com/leos_beautiful_gardens/
+          - img [ref=e192]
+          - text: See more on Instagram
+      - generic [ref=e195]:
+        - 'button "View full size: Manicured box-hedge parterre garden in front of a grand classical Melbourne mansion" [ref=e196] [cursor=pointer]':
+          - img "Manicured box-hedge parterre garden in front of a grand classical Melbourne mansion" [ref=e198]
+          - generic:
+            - paragraph: Manicured box-hedge parterre garden in front of a grand classical Melbourne mansion
+        - 'button "View full size: Team member on a tall ladder pruning a sculpted olive-tree dome against a brilliant blue sky" [ref=e199] [cursor=pointer]':
+          - img "Team member on a tall ladder pruning a sculpted olive-tree dome against a brilliant blue sky" [ref=e201]
+          - generic:
+            - paragraph: Team member on a tall ladder pruning a sculpted olive-tree dome against a brilliant blue sky
+        - 'button "View full size: Romantic courtyard — wrought-iron bench, ferns in aged pots, stone chequerboard paving, ivy-arched doorway" [ref=e202] [cursor=pointer]':
+          - img "Romantic courtyard — wrought-iron bench, ferns in aged pots, stone chequerboard paving, ivy-arched doorway" [ref=e204]
+          - generic:
+            - paragraph: Romantic courtyard
+        - 'button "View full size: Team member tending a sculpted topiary ball in a French urn, pool and formal garden behind" [ref=e205] [cursor=pointer]':
+          - img "Team member tending a sculpted topiary ball in a French urn, pool and formal garden behind" [ref=e207]
+          - generic:
+            - paragraph: Team member tending a sculpted topiary ball in a French urn, pool and formal garden behind
+        - 'button "View full size: View through a classical arch onto a topiary garden — ornate Victorian tiled floor in foreground" [ref=e208] [cursor=pointer]':
+          - img "View through a classical arch onto a topiary garden — ornate Victorian tiled floor in foreground" [ref=e210]
+          - generic:
+            - paragraph: View through a classical arch onto a topiary garden
+        - 'button "View full size: Row of aged French urns with clipped topiary and box hedging beside a stone-slab-and-pebble path" [ref=e211] [cursor=pointer]':
+          - img "Row of aged French urns with clipped topiary and box hedging beside a stone-slab-and-pebble path" [ref=e213]
+          - generic:
+            - paragraph: Row of aged French urns with clipped topiary and box hedging beside a stone-slab-and-pebble path
+        - 'button "View full size: Wisteria climbing a rendered period home beside clipped box hedging and a gravel path — pristine kerb appeal" [ref=e214] [cursor=pointer]':
+          - img "Wisteria climbing a rendered period home beside clipped box hedging and a gravel path — pristine kerb appeal" [ref=e216]
+          - generic:
+            - paragraph: Wisteria climbing a rendered period home beside clipped box hedging and a gravel path
+        - 'button "View full size: Lush vertical garden path — potted topiary, fig tree, stone pavers and blue sky" [ref=e217] [cursor=pointer]':
+          - img "Lush vertical garden path — potted topiary, fig tree, stone pavers and blue sky" [ref=e219]
+          - generic:
+            - paragraph: Lush vertical garden path
+        - 'button "View full size: Two crew members working a courtyard — one on a ladder pruning a Japanese maple, one carrying a large shrub" [ref=e220] [cursor=pointer]':
+          - img "Two crew members working a courtyard — one on a ladder pruning a Japanese maple, one carrying a large shrub" [ref=e222]
+          - generic:
+            - paragraph: Two crew members working a courtyard
+        - 'button "View full size: Team member in branded workwear running a STIHL trimmer down a formal hedge by a classical column" [ref=e223] [cursor=pointer]':
+          - img "Team member in branded workwear running a STIHL trimmer down a formal hedge by a classical column" [ref=e225]
+          - generic:
+            - paragraph: Team member in branded workwear running a STIHL trimmer down a formal hedge by a classical column
+  - dialog:
+    - button:
+      - img
+    - button:
+      - img
+    - button:
+      - img
+  - region "A small team that genuinely cares." [ref=e226]:
+    - generic [ref=e227]:
+      - img "The Leo's Beautiful Gardens crew — four team members smiling together in branded navy polo shirts in a lush garden" [ref=e228]
+      - generic [ref=e230]:
+        - paragraph [ref=e231]: The Team
+        - heading "A small team that genuinely cares." [level=2] [ref=e232]:
+          - text: A small team that
+          - text: genuinely cares.
+    - generic [ref=e234]:
+      - generic [ref=e235]:
+        - paragraph [ref=e236]: We're a close-knit, fully-equipped crew who turn up reliably, work with real skill, and treat your garden — and your home — with respect.
+        - paragraph [ref=e237]: The same friendly faces, every visit. We notice when your camellias need attention, we remember the names of your trees, and we take pride in leaving every garden better than we found it.
+        - link "Book a consultation" [ref=e239] [cursor=pointer]:
+          - /url: "#contact"
+          - text: Book a consultation
+          - img [ref=e240]
+      - generic [ref=e242]:
+        - img "Leo's Beautiful Gardens team member at work in a garden" [ref=e244]
+        - img "Leo's Beautiful Gardens team caring for an established garden" [ref=e246]
+  - img "Romantic heritage courtyard garden — wrought-iron bench, ferns in aged pots, stone chequerboard paving and an ivy-arched doorway" [ref=e248]
+  - region "Let's grow something beautiful together." [ref=e250]:
+    - generic [ref=e252]:
+      - generic [ref=e253]:
+        - paragraph [ref=e254]: Get in touch
+        - heading "Let's grow something beautiful together." [level=2] [ref=e255]
+        - paragraph [ref=e256]: Tell us a little about your garden and we'll be in touch to arrange a free, no-obligation quote.
+        - generic [ref=e257]:
+          - link "Call us on 0449 915 712" [ref=e258] [cursor=pointer]:
+            - /url: tel:+61449915712
+            - img [ref=e260]
+            - generic [ref=e262]:
+              - paragraph [ref=e263]: 0449 915 712
+              - paragraph [ref=e264]: Call or text anytime
+          - link "Email us at bookings@leosgardens.com.au" [ref=e265] [cursor=pointer]:
+            - /url: mailto:bookings@leosgardens.com.au
+            - img [ref=e267]
+            - generic [ref=e270]:
+              - paragraph [ref=e271]: bookings@leosgardens.com.au
+              - paragraph [ref=e272]: We reply within one business day
+          - generic [ref=e273]:
+            - img [ref=e275]
+            - generic [ref=e278]:
+              - paragraph [ref=e279]: Armadale · Toorak · Malvern · Brighton · Hawthorn
+              - paragraph [ref=e280]: All Melbourne inner south-east & Mornington Peninsula
+          - generic [ref=e281]:
+            - img [ref=e283]
+            - generic [ref=e286]:
+              - paragraph [ref=e287]: Mon – Sat, 7 am – 5 pm
+              - paragraph [ref=e288]: Free quotes — no obligation
+      - generic [ref=e290]:
+        - heading "Request a free quote" [level=3] [ref=e291]
+        - generic [ref=e292]:
+          - generic [ref=e293]:
+            - generic [ref=e294]: First name
+            - textbox "First name" [ref=e295]:
+              - /placeholder: Your first name
+          - generic [ref=e296]:
+            - generic [ref=e297]: Email *
+            - textbox "Email required" [ref=e298]:
+              - /placeholder: your@email.com
+          - generic [ref=e299]:
+            - generic [ref=e300]: Phone
+            - textbox "Phone" [ref=e301]:
+              - /placeholder: 0400 000 000
+          - generic [ref=e302]:
+            - generic [ref=e303]: Suburb
+            - textbox "Suburb" [ref=e304]:
+              - /placeholder: e.g. Armadale
+          - generic [ref=e305]:
+            - generic [ref=e306]: About your garden
+            - textbox "About your garden" [ref=e307]:
+              - /placeholder: Tell us a little about your garden and what you're looking for…
+          - button "Request my free quote" [ref=e308] [cursor=pointer]
+          - paragraph [ref=e309]: No obligation. We'll be in touch within one business day.
+  - contentinfo "Site footer" [ref=e310]:
+    - generic [ref=e312]:
+      - generic [ref=e313]:
+        - link "Leo's Beautiful Gardens — return to home page" [ref=e314] [cursor=pointer]:
+          - /url: /
+          - img "Leo's Beautiful Gardens round emblem — cream running gardener on forest green" [ref=e315]
+        - paragraph [ref=e316]:
+          - text: Garden care as craft.
+          - text: Melbourne.
+        - img "Leo's Beautiful Gardens — Since 2021, Victoria — credential crest" [ref=e317]
+      - navigation "Quick links" [ref=e318]:
+        - paragraph [ref=e319]: Navigate
+        - list [ref=e320]:
+          - listitem [ref=e321]:
+            - link "Home" [ref=e322] [cursor=pointer]:
+              - /url: /
+          - listitem [ref=e323]:
+            - link "Services" [ref=e324] [cursor=pointer]:
+              - /url: /services
+          - listitem [ref=e325]:
+            - link "Gallery" [ref=e326] [cursor=pointer]:
+              - /url: /gallery
+          - listitem [ref=e327]:
+            - link "About" [ref=e328] [cursor=pointer]:
+              - /url: /about
+          - listitem [ref=e329]:
+            - link "Contact" [ref=e330] [cursor=pointer]:
+              - /url: /contact
+          - listitem [ref=e331]:
+            - link "Get a Free Quote" [ref=e332] [cursor=pointer]:
+              - /url: "#contact"
+      - navigation "Services" [ref=e333]:
+        - paragraph [ref=e334]: Services
+        - list [ref=e335]:
+          - listitem [ref=e336]:
+            - link "Scheduled Maintenance" [ref=e337] [cursor=pointer]:
+              - /url: /services#maintenance
+          - listitem [ref=e338]:
+            - link "Garden Renovations" [ref=e339] [cursor=pointer]:
+              - /url: /services#renovations
+          - listitem [ref=e340]:
+            - link "Tree & Plant Pruning" [ref=e341] [cursor=pointer]:
+              - /url: /services#pruning
+          - listitem [ref=e342]:
+            - link "Hedge Management" [ref=e343] [cursor=pointer]:
+              - /url: /services#hedge-management
+          - listitem [ref=e344]:
+            - link "Soft Landscaping" [ref=e345] [cursor=pointer]:
+              - /url: /services#planting
+          - listitem [ref=e346]:
+            - link "Pressure Cleaning" [ref=e347] [cursor=pointer]:
+              - /url: /services#pressure-cleaning
+          - listitem [ref=e348]:
+            - link "Pre-Sale Prep" [ref=e349] [cursor=pointer]:
+              - /url: /services#pre-sale
+      - generic [ref=e350]:
+        - paragraph [ref=e351]: Contact
+        - list [ref=e352]:
+          - listitem [ref=e353]:
+            - link "Call 0449 915 712" [ref=e354] [cursor=pointer]:
+              - /url: tel:+61449915712
+              - text: 0449 915 712
+          - listitem [ref=e355]:
+            - link "bookings@leosgardens.com.au" [ref=e356] [cursor=pointer]:
+              - /url: mailto:bookings@leosgardens.com.au
+          - listitem [ref=e357]:
+            - text: Armadale · Toorak · Malvern
+            - text: Brighton · Mornington Peninsula
+        - link "Follow Leo's Beautiful Gardens on Instagram (opens in new tab)" [ref=e358] [cursor=pointer]:
+          - /url: https://www.instagram.com/leos_beautiful_gardens/
+          - img [ref=e359]
+          - text: "@leos_beautiful_gardens"
+    - generic [ref=e363]:
+      - paragraph [ref=e364]: © 2026 Leo's Beautiful Gardens. All rights reserved.
+      - paragraph [ref=e365]: "ABN: [client to supply] · Melbourne, VIC, Australia"
+  - generic [ref=e368]:
+    - button "Menu" [ref=e369]:
+      - img [ref=e371]
+      - generic: Menu
+    - button "Inspect" [ref=e375]:
+      - img [ref=e377]
+      - generic: Inspect
+    - button "Audit" [ref=e379]:
+      - img [ref=e381]
+      - generic: Audit
+    - button "Settings" [ref=e384]:
+      - img [ref=e386]
+      - generic: Settings

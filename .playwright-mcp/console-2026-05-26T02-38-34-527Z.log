@@ -1,0 +1,9 @@
+[      63ms] [WARNING] Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly. @ http://localhost:4321/node_modules/.vite/deps/framer-motion_dom.js?v=d5ac2439:1092
+[  465576ms] [WARNING] Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly. @ http://localhost:4321/node_modules/.vite/deps/framer-motion_dom.js?v=d5ac2439:1092
+[  885807ms] ReferenceError: animate is not defined
+    at http://localhost:4321/src/components/HeritageStory.astro?astro&type=script&index=0&lang.ts:42:5
+[  885820ms] [WARNING] Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly. @ http://localhost:4321/node_modules/.vite/deps/framer-motion_dom.js?v=d5ac2439:1092
+[  901042ms] [WARNING] Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly. @ http://localhost:4321/node_modules/.vite/deps/framer-motion_dom.js?v=d5ac2439:1092
+[  913767ms] [WARNING] Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly. @ http://localhost:4321/node_modules/.vite/deps/framer-motion_dom.js?v=d5ac2439:1092
+[ 5138411ms] [LOG] [vite] server connection lost. Polling for restart... @ http://localhost:4321/@vite/client:1246
+[ 5138669ms] [WARNING] Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly. @ http://localhost:4321/node_modules/.vite/deps/framer-motion_dom.js?v=d5ac2439:1092

@@ -2,203 +2,478 @@
 /**
  * HeritageStory.astro — Leo's Beautiful Gardens
  *
- * Full-viewport editorial split.
- * After the cinematic hero, this is the intimate, grounding moment —
- * the garden opened up; now Leonardo steps forward.
+ * Four-zone heritage section. Aesthetic: Heckfield Place / Aesop —
+ * editorial stillness, cream ground, one terracotta accent.
  *
- * Layout
- * ──────
- * Left  : img_23 (Leonardo portrait) bleeds from the absolute left viewport
- *         edge to ~45% width. No border-radius, no shadow, no frame.
- *         The photograph acts as architecture, not decoration.
- * Right : Cream text column. Vertically centred. Generous padding.
+ * Zone 1 — Declaration:    2-col grid, typographic sculpture + tilted portrait
+ * Zone 2 — First narrative: centred chrome, terracotta dropcap lead paragraph
+ * Zone 3 — Cinematic pivot: full-width img_23, gentle upward parallax
+ * Zone 4 — Closing:         second paragraph, signature, read-link
  *
- * Animation
- * ─────────
- * IntersectionObserver only — no framer-motion (that belongs to the hero).
- * Image: scale(0.97) + opacity → visible on enter, 800ms ease-out.
- * Text lines: staggered translateY(24px) + opacity via CSS --stagger variable.
- *
- * CTA style
- * ─────────
- * "Read our story →" mirrors the nav's "Book a Consultation →" exactly —
- * same font, same weight, same arrow slide + scaleX underline on hover.
- * Deliberate continuity signal between the two components.
+ * Parallax (Framer Motion scroll API, desktop ≥1024px only):
+ *   img_17 — strong: ±250 px vertical + –2.2° → 0° rotation as section passes
+ *   img_23 — gentle: ±125 px vertical, no rotation (different weight/placement)
  */
 
 import { Image } from 'astro:assets';
+import img17 from '../assets/images/img_17.jpg';
 import img23 from '../assets/images/img_23.jpg';
 ---
 
 <section
   id="heritage"
   aria-labelledby="heritage-heading"
-  class="bg-background overflow-hidden"
 >
-  <!--
-    Full-width flex — NO max-w-container wrapping this element.
-    Image bleeds from the absolute left edge of the viewport.
-  -->
-  <div class="flex flex-col lg:flex-row lg:min-h-screen">
+  <!-- Canvas receives .h-revealed once it crosses the viewport threshold -->
+  <div class="h-canvas" id="h-canvas">
+    <div class="h-container">
 
-    <!-- ── LEFT: Portrait — bleeds from viewport left edge ──────────────── -->
-    <div
-      class="heritage-image
-             relative overflow-hidden flex-shrink-0
-             w-full lg:w-[45%] xl:w-[42%]
-             h-[65vw] min-h-[400px] lg:h-auto"
-    >
-      <Image
-        src={img23}
-        alt="Leonardo, founder of Leo's Beautiful Gardens, beneath autumn vine foliage on a stone path"
-        width={900}
-        height={1200}
-        quality={90}
-        densities={[1, 2]}
-        class="absolute inset-0 w-full h-full object-cover object-center"
-        loading="lazy"
-      />
-    </div>
+      <!-- ─────────────────────────────────────────────────────────────────────
+           ZONE 1 · DECLARATION
+           2-col grid: typographic sculpture (left) · img_17 portrait (right).
+           Image column is wider and gap is tighter so the portrait sits more
+           toward the page centre rather than pushed to the far right edge.
+      ───────────────────────────────────────────────────────────────────────── -->
+      <div class="h-decl h-zone" id="h-decl">
 
-    <!-- ── RIGHT: Text column ────────────────────────────────────────────── -->
-    <div
-      class="flex-1 flex items-center bg-background
-             px-8 sm:px-12 lg:px-16 xl:px-24
-             py-20 lg:py-28"
-    >
-      <div class="heritage-text w-full" style="max-width: 32rem;">
+        <!-- Left: eyebrow + typographic sculpture -->
+        <div class="h-decl-type">
 
-        <!-- Eyebrow — Fraunces italic, reserved for Italian/heritage phrases only -->
-        <p
-          class="heritage-line font-display italic text-secondary
-                 text-[0.95rem] tracking-[0.02em] mb-6"
-          lang="it"
-          style="--stagger: 0ms;"
-        >
-          Coltivato con cura.
-        </p>
+          <p class="h-eyebrow">Heritage</p>
 
-        <!-- Headline -->
-        <h2
-          id="heritage-heading"
-          class="heritage-line font-display font-normal text-primary
-                 leading-[1.06] tracking-[-0.015em] mb-8"
-          style="font-size: clamp(2.25rem, 3.2vw, 3rem); --stagger: 110ms;"
-        >
-          Four generations<br class="hidden sm:block" /> of craft.
-        </h2>
+          <h2 id="heritage-heading" class="h-title">
+            <span class="h-title-four">Four</span>
+            <span class="h-title-gen">generations</span>
+            <span class="h-title-craft">of <em>craft.</em></span>
+          </h2>
 
-        <!-- Body paragraphs — flattened, no wrapper div, for clean stagger -->
-        <p
-          class="heritage-line font-body text-[1.0625rem] leading-[1.75] text-text-base mb-5"
-          style="--stagger: 220ms;"
-        >
-          Leonardo grew up among the olive groves of southern Sicily, where his
-          grandfather Rosario taught him to tend a garden the way a family tends
-          a name — with patience, specificity, and a long view of what you're
-          actually building.
-        </p>
+        </div>
 
-        <p
-          class="heritage-line font-body text-[1.0625rem] leading-[1.75] text-text-base mb-5"
-          style="--stagger: 320ms;"
-        >
-          Those same groves still produce the family's olive oil,&nbsp;<em
-            class="font-display italic">Olio&nbsp;Qucco</em>.
-          When Leonardo came to Melbourne, he brought Rosario's approach with
-          him: no shortcuts, no generic solutions, every garden understood on
-          its own terms.
-        </p>
+        <!-- Right: portrait — Framer Motion drives translateY + rotation -->
+        <div class="h-decl-img" id="h-decl-img">
+          <Image
+            src={img17}
+            alt="A gardener on a tall ladder shaping a mature olive tree against a clear blue sky."
+            width={840}
+            height={1120}
+            quality={90}
+            densities={[1, 2]}
+            class="h-portrait"
+            loading="lazy"
+          />
+        </div>
 
-        <p
-          class="heritage-line font-body text-[1.0625rem] leading-[1.75] text-text-base mb-10"
-          style="--stagger: 420ms;"
-        >
-          Leo's Beautiful Gardens serves Melbourne's finest residential
-          estates — not because of scale, but because of what
-          fourth-generation craft looks like up close.
-        </p>
+      </div><!-- /h-decl -->
 
-        <!-- Rule -->
-        <div
-          class="heritage-line w-10 h-px bg-border mb-8"
-          aria-hidden="true"
-          style="--stagger: 510ms;"
-        ></div>
 
-        <!-- CTA — exact same pattern as nav "Book a Consultation →" -->
-        <a
-          href="/about"
-          class="heritage-line
-                 inline-flex items-center gap-2.5 relative group/story
-                 font-body font-medium text-[0.82rem] tracking-[0.04em]
-                 text-primary hover:text-accent
-                 cursor-pointer
-                 focus-visible:outline-2 focus-visible:outline-accent
-                 focus-visible:outline-offset-4"
-          style="--stagger: 590ms;"
-        >
-          Read our story
-          <!-- Arrow slides right 3px on hover -->
-          <span
-            class="inline-block transition-transform duration-700 ease-out
-                   group-hover/story:translate-x-[3px]
-                   motion-reduce:transition-none"
-            aria-hidden="true"
-          >→</span>
-          <!-- 1px underline grows left→right on hover — matches nav CTA -->
-          <span
-            class="absolute inset-x-0 bottom-[-3px] h-px bg-current
-                   scale-x-0 origin-left
-                   group-hover/story:scale-x-100
-                   transition-transform duration-700 ease-out
-                   motion-reduce:transition-none"
-            aria-hidden="true"
-          ></span>
-        </a>
+      <!-- ─────────────────────────────────────────────────────────────────────
+           ZONE 2 · FIRST NARRATIVE
+           Centred chrome column (34rem). .letter overrides to text-align:left
+           so the terracotta dropcap float works correctly.
+      ───────────────────────────────────────────────────────────────────────── -->
+      <div class="h-chrome h-zone">
+        <hr class="h-hairline" aria-hidden="true" />
+        <div class="h-prose-col">
+          <p class="letter lead">
+            Leonardo grew up among the olive groves of southern Sicily, where his
+            grandfather Rosario taught him <em>to tend a garden the way a family
+            tends a name</em> — with patience, with specificity, and with a long
+            view of what you are actually building.
+          </p>
+        </div>
+      </div>
 
-      </div><!-- /heritage-text -->
-    </div><!-- /text column -->
 
-  </div>
+      <!-- ─────────────────────────────────────────────────────────────────────
+           ZONE 3 · CINEMATIC PIVOT
+           Full container width. Opacity reveal is handled separately (no
+           transform in the reveal) so the parallax owns transform cleanly.
+      ───────────────────────────────────────────────────────────────────────── -->
+      <div class="h-pivot" id="h-pivot">
+        <Image
+          src={img23}
+          alt="Leonardo Qucco standing on a stone path beneath a tunnel of autumn vines."
+          width={2400}
+          height={1350}
+          quality={90}
+          densities={[1, 2]}
+          class="h-pivot-img"
+          loading="lazy"
+        />
+      </div>
+
+
+      <!-- ─────────────────────────────────────────────────────────────────────
+           ZONE 4 · CLOSING
+           Second paragraph, signature, read-link. No dropcap.
+      ───────────────────────────────────────────────────────────────────────── -->
+      <div class="h-chrome h-zone h-closing">
+        <div class="h-prose-col">
+
+          <p class="letter">
+            Today the same craft is practised here in Melbourne, by the same
+            small team, on the day we said we would.
+          </p>
+
+          <div class="h-sig">
+            <p class="h-sig-name">Leonardo Qucco</p>
+            <span class="h-sig-meta">Founder</span>
+          </div>
+
+          <a href="#our-story" class="h-read-link" aria-label="Read our story">
+            <span class="h-read-label">Read our story</span>
+            <span class="h-read-rule" aria-hidden="true"></span>
+          </a>
+
+        </div>
+      </div>
+
+    </div><!-- /.h-container -->
+  </div><!-- /#h-canvas -->
 </section>
 
 
 <style>
-  /* ── Image: scale + fade reveal ─────────────────────────────────────────── */
-  .heritage-image {
-    opacity: 0;
-    transform: scale(0.97);
-    transition: opacity 800ms ease-out, transform 800ms ease-out;
-  }
-  .heritage-image.is-visible {
-    opacity: 1;
-    transform: scale(1);
+  /* ═══════════════════════════════════════════════════════════════════════════
+     Design tokens
+  ═══════════════════════════════════════════════════════════════════════════ */
+  #heritage {
+    --cream:      #F7F4EC;
+    --ink:        #1F2A1A;
+    --muted:      #5E6B54;
+    --green-700:  #2E4628;
+    --terra-500:  #B45F38;
+    --ink-soft:   rgba(31, 42, 26, 0.42);
   }
 
-  /* ── Text lines: staggered fade-up via CSS --stagger custom property ─────
-     Each .heritage-line carries its own --stagger delay set via inline style.
-     The transition fires when .is-visible is added to the parent .heritage-text.
-  ─────────────────────────────────────────────────────────────────────────── */
-  .heritage-line {
-    opacity: 0;
-    transform: translateY(24px);
-    transition:
-      opacity   700ms ease-out var(--stagger, 0ms),
-      transform 700ms ease-out var(--stagger, 0ms),
-      color     400ms ease-out; /* for CTA hover — doesn't affect other lines */
+  /* ═══════════════════════════════════════════════════════════════════════════
+     Section shell
+     Top padding is deliberately generous — the reader should finish the hero
+     and encounter a long cream exhale before any heritage content arrives.
+  ═══════════════════════════════════════════════════════════════════════════ */
+  #heritage {
+    background-color: var(--cream);
+    padding-top:    clamp(18rem, 38vh, 26rem);
+    padding-bottom: clamp(9rem, 18vh, 14rem);
+    overflow-x: hidden;
   }
-  .heritage-text.is-visible .heritage-line {
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     Container — max-width 84rem, responsive horizontal padding
+  ═══════════════════════════════════════════════════════════════════════════ */
+  .h-container {
+    max-width: 84rem;
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+  }
+  @media (min-width: 768px)  { .h-container { padding-inline: 2.5rem; } }
+  @media (min-width: 1280px) { .h-container { padding-inline: 4rem; } }
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     ZONE 1 — Declaration grid
+     Right column is wider and gap tighter vs. the original so the portrait
+     sits more toward the page centre rather than the far right edge.
+  ═══════════════════════════════════════════════════════════════════════════ */
+  .h-decl {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    align-items: start;
+    margin-bottom: clamp(6rem, 11vw, 10rem);
+  }
+  @media (min-width: 1024px) {
+    .h-decl {
+      /* wider image column (was clamp(290px,30vw,420px) gap 6rem) */
+      grid-template-columns: 1fr clamp(360px, 40vw, 500px);
+      gap: 4rem 4rem;
+    }
+  }
+
+  /* Eyebrow */
+  .h-eyebrow {
+    font-family: 'Mulish', sans-serif;
+    font-weight: 500;
+    font-size: 0.72rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+  }
+
+  /* Typographic sculpture — shared container */
+  .h-title {
+    font-family: 'Fraunces', serif;
+    font-optical-sizing: auto;
+    line-height: 0.96;
+    letter-spacing: -0.028em;
+    color: var(--ink);
+    font-style: normal;
+  }
+
+  /* "Four" — the largest line */
+  .h-title-four {
+    display: block;
+    font-weight: 400;
+    font-size: clamp(4.5rem, 9.5vw, 8.5rem);
+  }
+
+  /* "generations" — smaller, italic, faded */
+  .h-title-gen {
+    display: block;
+    font-weight: 300;
+    font-style: italic;
+    font-size: clamp(2.4rem, 4.5vw, 4rem);
+    color: var(--ink-soft);
+    padding-left: 0.5ch;
+    margin: 0.15rem 0 0.2rem;
+  }
+
+  /* "of craft." — medium-large */
+  .h-title-craft {
+    display: block;
+    font-weight: 400;
+    font-size: clamp(3.6rem, 7.2vw, 6.5rem);
+  }
+
+  /* "craft." — non-italic dark green accent */
+  .h-title em {
+    font-style: normal;
+    color: var(--green-700);
+  }
+
+  /* Portrait wrapper — mobile: untilted, centred, limited width */
+  .h-decl-img {
+    max-width: 24rem;
+    margin: 0 auto;
+  }
+
+  /* Desktop: Framer Motion drives all transforms via style.transform */
+  @media (min-width: 1024px) {
+    .h-decl-img {
+      max-width: none;
+      margin: 0;
+      will-change: transform;
+    }
+  }
+
+  .h-portrait {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    object-position: 50% 42%;
+    display: block;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     ZONES 2 & 4 — Centred prose chrome
+     text-align:center on the chrome; .letter overrides to left inside.
+  ═══════════════════════════════════════════════════════════════════════════ */
+  .h-chrome {
+    max-width: 34rem;
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  /* Zone 2 hairline rule */
+  .h-hairline {
+    display: block;
+    width: 3.5rem;
+    height: 1px;
+    background: var(--green-700);
+    opacity: 0.45;
+    margin: 0 auto 3.5rem;
+    border: 0;
+  }
+
+  /* Letter paragraphs — left-aligned inside centred chrome */
+  .letter {
+    font-family: 'Fraunces', serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-size: 1.15rem;
+    line-height: 1.75;
+    letter-spacing: 0.005em;
+    color: var(--ink);
+    text-align: left;
+    max-width: 30rem;
+    text-wrap: pretty;
+    margin: 0 auto;
+  }
+  @media (min-width: 1024px) {
+    .letter {
+      font-weight: 400;
+      font-size: 1.2rem;
+      line-height: 1.78;
+    }
+  }
+
+  /* Terracotta dropcap — ONLY on .letter.lead (not :first-of-type) */
+  .letter.lead::first-letter {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: 4em;
+    float: left;
+    line-height: 0.82;
+    margin: 0.3rem 0.55rem -0.1rem 0;
+    color: var(--terra-500);
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     ZONE 3 — Cinematic pivot image
+     Full container width. Aspect 5:3 → 16:9 on desktop.
+     Framer Motion applies a gentle upward translateY to the zone div.
+  ═══════════════════════════════════════════════════════════════════════════ */
+  /*
+   * Pivot reveal — opacity only.
+   * Transform is owned 100% by the JS parallax (no CSS transform here).
+   * Keeping them on separate properties avoids any specificity fight.
+   */
+  .h-pivot {
+    width: 100%;
+    margin: 4rem auto;
+    opacity: 0;
+    transition: opacity 1.1s cubic-bezier(0.2, 0.7, 0.2, 1) 250ms;
+  }
+  .h-canvas.h-revealed .h-pivot {
+    opacity: 1;
+  }
+  @media (min-width: 768px)  { .h-pivot { margin: 5rem auto; } }
+  @media (min-width: 1024px) {
+    .h-pivot {
+      margin: 6.5rem auto;
+      will-change: transform;
+    }
+  }
+
+  .h-pivot-img {
+    width: 100%;
+    aspect-ratio: 5 / 3;
+    object-fit: cover;
+    object-position: 50% 28%;
+    display: block;
+  }
+  @media (min-width: 1024px) {
+    .h-pivot-img { aspect-ratio: 16 / 9; }
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     ZONE 4 — Signature
+  ═══════════════════════════════════════════════════════════════════════════ */
+  .h-sig {
+    margin-top: 2.75rem;
+  }
+
+  .h-sig-name {
+    font-family: 'Fraunces', serif;
+    font-optical-sizing: auto;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 1.15rem;
+    line-height: 1.45;
+    color: var(--ink);
+    margin: 0;
+  }
+
+  .h-sig-meta {
+    font-family: 'Mulish', sans-serif;
+    font-weight: 500;
+    font-size: 0.68rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: block;
+    margin-top: 0.65rem;
+  }
+
+  /* Read-link */
+  .h-read-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 1.15rem;
+    margin-top: 3.5rem;
+    text-decoration: none;
+    color: var(--ink);
+    font-family: 'Mulish', sans-serif;
+    font-weight: 500;
+    font-size: 0.74rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    transition: color 0.3s ease;
+  }
+  .h-read-link:hover {
+    color: var(--green-700);
+  }
+  .h-read-link:focus-visible {
+    outline: 2px solid var(--terra-500);
+    outline-offset: 4px;
+    border-radius: 1px;
+  }
+
+  /* Hairline rule that extends on hover */
+  .h-read-rule {
+    display: block;
+    width: 2.75rem;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.5;
+    flex-shrink: 0;
+    transition:
+      width   0.7s cubic-bezier(0.2, 0.7, 0.2, 1),
+      opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .h-read-link:hover .h-read-rule,
+  .h-read-link:focus-visible .h-read-rule {
+    width: 4.25rem;
+    opacity: 0.9;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     Reveal animation
+     All 4 zones fade + lift into view when the canvas enters the viewport.
+     For .h-pivot, opacity is the meaningful transition — JS controls transform.
+  ═══════════════════════════════════════════════════════════════════════════ */
+  .h-zone {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+      opacity   1.1s cubic-bezier(0.2, 0.7, 0.2, 1),
+      transform 1.1s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  /*
+   * Stagger. The pivot (child 3) is no longer .h-zone so nth-child counts
+   * DOM position — child 4 is the closing chrome:
+   *   child 1 → h-decl        (h-zone)
+   *   child 2 → h-chrome Z2   (h-zone)
+   *   child 3 → h-pivot        (NOT h-zone — separate reveal)
+   *   child 4 → h-chrome Z4   (h-zone)
+   */
+  .h-zone:nth-child(1) { transition-delay:   0ms; }
+  .h-zone:nth-child(2) { transition-delay: 130ms; }
+  .h-zone:nth-child(4) { transition-delay: 380ms; }
+
+  /* Revealed — added by IntersectionObserver */
+  .h-canvas.h-revealed .h-zone {
     opacity: 1;
     transform: none;
   }
 
-  /* ── Reduced motion ──────────────────────────────────────────────────────── */
+  /* ═══════════════════════════════════════════════════════════════════════════
+     Reduced motion — reveal instantly, disable all parallax
+  ═══════════════════════════════════════════════════════════════════════════ */
   @media (prefers-reduced-motion: reduce) {
-    .heritage-image,
-    .heritage-line {
+    .h-zone {
       opacity: 1;
       transform: none;
+      transition: none;
+    }
+    /* Pivot has its own reveal, also skip it */
+    .h-pivot {
+      opacity: 1;
+      transition: none;
+    }
+    .h-read-rule {
       transition: none;
     }
   }
@@ -207,57 +482,102 @@ import img23 from '../assets/images/img_23.jpg';
 
 <script>
   /**
-   * HeritageStory — IntersectionObserver reveals.
+   * Heritage section — animation driver
    *
-   * Two observers so image and text fire independently:
-   *   • Image fires first (threshold 0.12)
-   *   • Text fires with a 150ms offset after it enters the viewport,
-   *     giving the stagger a natural lead-in after the photo settles.
+   * ── 1. Reveal on enter ──────────────────────────────────────────────────
+   *    IntersectionObserver on #h-canvas → .h-revealed.
+   *    .h-zone children fade + lift. .h-pivot fades separately (opacity only).
    *
-   * Once visible, each observer disconnects — no need to re-fire.
+   * ── 2. Scroll parallax — centre-offset formula ───────────────────────────
+   *
+   *    WHY not Framer Motion scroll({ target, offset:['start end','end start'] }):
+   *    That API only fires while the element is inside the viewport. Before it
+   *    enters, transform is untouched (natural position). At entry, it suddenly
+   *    jumps to the parallax start value → visible snap. The centre-offset
+   *    formula runs on EVERY tick, including while elements are off-screen, so
+   *    their displaced position is already set before they become visible.
+   *
+   *    Formula:
+   *      center = elementMidY − viewportMidY
+   *        > 0  → element below viewport centre → positive y → rendered lower
+   *        < 0  → element above viewport centre → negative y → rendered higher
+   *      y = center × factor
+   *
+   *    Scrolling DOWN moves elements toward viewport centre (center shrinks),
+   *    y shrinks, elements visually RISE — opposite to scroll direction. ✓
+   *
+   *    img_17  factor 0.30 — strong:  ~180 px travel at 600 px centre-offset
+   *    img_23  factor 0.20 — gentler: ~120 px travel at same offset
+   *
+   *    Rotation on img_17: –2.2° when 1 vh below centre, 0° at centre.
    */
 
-  const prefersReduced = window.matchMedia(
-    '(prefers-reduced-motion: reduce)'
-  ).matches;
+  const canvas    = document.getElementById('h-canvas')   as HTMLElement | null;
+  const declImg   = document.getElementById('h-decl-img') as HTMLElement | null;
+  const pivotZone = document.getElementById('h-pivot')    as HTMLElement | null;
 
-  const imageEl = document.querySelector<HTMLElement>('.heritage-image');
-  const textEl  = document.querySelector<HTMLElement>('.heritage-text');
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const isDesktop      = window.matchMedia('(min-width: 1024px)').matches;
 
-  if (!prefersReduced) {
-
-    /* ── Image observer ─────────────────────────────────────────────────── */
-    const imgObserver = new IntersectionObserver(
+  /* ── 1. Reveal ──────────────────────────────────────────────────────────── */
+  if (prefersReduced) {
+    canvas?.classList.add('h-revealed');
+  } else if (canvas) {
+    const revealObs = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible');
-            imgObserver.unobserve(entry.target);
-          }
-        });
+        if (entries[0].isIntersecting) {
+          canvas.classList.add('h-revealed');
+          revealObs.disconnect();
+        }
       },
-      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+      { rootMargin: '0px 0px -10% 0px', threshold: 0.05 }
     );
+    revealObs.observe(canvas);
+  }
 
-    /* ── Text observer — 150ms delay after entering viewport ───────────── */
-    const txtObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setTimeout(() => textEl?.classList.add('is-visible'), 150);
-            txtObserver.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
-    );
+  /* ── 2. Parallax ────────────────────────────────────────────────────────── */
+  if (!prefersReduced && isDesktop) {
 
-    if (imageEl) imgObserver.observe(imageEl);
-    if (textEl)  txtObserver.observe(textEl);
+    const IMG17_FACTOR = 0.30;  // portrait: strong
+    const PIVOT_FACTOR = 0.20;  // pivot: clearly visible, gentler
+    const MAX_ROT      = -2.2;  // portrait max tilt in degrees
 
-  } else {
-    /* Reduced motion: make everything immediately visible */
-    imageEl?.classList.add('is-visible');
-    textEl?.classList.add('is-visible');
+    let rafId = 0;
+
+    const tick = () => {
+      const vh = window.innerHeight;
+
+      /* img_17 — strong upward parallax + tilt that straightens at centre */
+      if (declImg) {
+        const r      = declImg.getBoundingClientRect();
+        const center = r.top + r.height / 2 - vh / 2;
+        const y      = center * IMG17_FACTOR;
+        // Rotation: full tilt when 1 vh below centre, 0° at/above centre
+        const rotT   = Math.max(0, Math.min(1, center / vh));
+        const rot    = MAX_ROT * rotT;
+        declImg.style.transform =
+          `translateY(${y.toFixed(1)}px) rotate(${rot.toFixed(3)}deg)`;
+      }
+
+      /* img_23 — gentle upward parallax, no rotation */
+      if (pivotZone) {
+        const r      = pivotZone.getBoundingClientRect();
+        const center = r.top + r.height / 2 - vh / 2;
+        const y      = center * PIVOT_FACTOR;
+        pivotZone.style.transform = `translateY(${y.toFixed(1)}px)`;
+      }
+
+      rafId = 0;
+    };
+
+    /*
+     * Run immediately so displaced positions are set BEFORE the reveal
+     * fades elements in. Prevents any snap on first visibility.
+     */
+    tick();
+
+    window.addEventListener('scroll', () => {
+      if (!rafId) rafId = requestAnimationFrame(tick);
+    }, { passive: true });
   }
 </script>

@@ -1,0 +1,6 @@
+[     259ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://base44.app/api/apps/69cbcd44d3da2a5cef013f5e/entities/User/me:0
+[     469ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://base44.app/api/apps/69cbcd44d3da2a5cef013f5e/entities/User/me:0
+[    1395ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://base44.app/api/apps/69cbcd44d3da2a5cef013f5e/entities/Tool/69ff715694e00b4e9d80e6be:0
+[    1618ms] [WARNING] Canvas2D: Multiple readback operations using getImageData are faster with the willReadFrequently attribute set to true. See: https://html.spec.whatwg.org/multipage/canvas.html#concept-canvas-will-read-frequently @ blob:https://brik.space/b1e450e2-0b5c-4b0c-bffa-1efbc36b6139:10847
+[    2625ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://base44.app/api/apps/69cbcd44d3da2a5cef013f5e/entities/Tool/69ff715694e00b4e9d80e6be:0
+[    8066ms] [WARNING] The resource https://media.base44.com/images/public/69cbcd44d3da2a5cef013f5e/09f2b09ad_poster.jpg was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ https://brik.space/ToolViewer?slug=remix-of-system-mp0wd6p3:0
