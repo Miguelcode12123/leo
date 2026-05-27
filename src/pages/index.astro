@@ -1,5 +1,6 @@
 ---
 import Layout        from '../layouts/Layout.astro';
+import SmoothScroll  from '../components/SmoothScroll.astro';
 import Nav           from '../components/Nav.astro';
 import HeroSection   from '../components/HeroSection.astro';
 import Services      from '../components/Services.astro';
@@ -19,6 +20,8 @@ import heroMobile  from '../assets/images/img_17.jpg';  // portrait crop for mob
   title="Leo's Beautiful Gardens | Premium Garden Care Melbourne"
   description="Expert, design-led garden care across Melbourne — pruning, hedging, planting & renewal by a fourth-generation gardening family. Free quotes."
 >
+  <SmoothScroll />
+
   <!--
     Nav is rendered BEFORE the hero wrapper in the DOM.
     HeroSection compensates with a negative top margin (-mt-[5rem] lg:-mt-[6.5rem])
@@ -36,9 +39,9 @@ import heroMobile  from '../assets/images/img_17.jpg';  // portrait crop for mob
   />
 
   <HeritageStory />
+  <Gallery />
   <Services />
   <BeforeAfter />
-  <Gallery />
   <Team />
   <ContactCta />
   <Footer />

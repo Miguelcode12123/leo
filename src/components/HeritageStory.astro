@@ -539,6 +539,8 @@ import img23 from '../assets/images/img_23.jpg';
 
 
 <script>
+  import { gsap } from 'gsap';
+
   /**
    * Heritage section — animation driver
    *
@@ -602,6 +604,14 @@ import img23 from '../assets/images/img_23.jpg';
 
     const pivotStage = document.querySelector<HTMLElement>('.h-pivot-scroll-stage');
     const pivotCard  = document.querySelector<HTMLElement>('.h-pivot-card');
+    const setPivotY = pivotCard ? gsap.quickSetter(pivotCard, 'y', 'px') : null;
+
+    if (pivotCard) {
+      gsap.set(pivotCard, {
+        y: window.innerHeight * 0.367,
+        force3D: true,
+      });
+    }
 
     let rafId = 0;
 
@@ -631,15 +641,46 @@ import img23 from '../assets/images/img_23.jpg';
         const progress     = Math.max(0, Math.min(1, -r.top / scrollBudget));
         const startY       = vh * 0.367;
         const y            = startY * (1 - progress);
-        pivotCard.style.transform = `translate3d(0, ${y.toFixed(1)}px, 0)`;
+        if (setPivotY) {
+          setPivotY(y);
+        } else {
+          pivotCard.style.transform = `translate3d(0, ${y.toFixed(1)}px, 0)`;
+        }
       }
 
       rafId = 0;
     };
 
-    window.addEventListener('scroll', () => {
+    const scheduleTick = () => {
       if (!rafId) rafId = requestAnimationFrame(tick);
-    }, { passive: true });
+    };
+
+    type LenisLike = {
+      on?: (event: 'scroll', callback: () => void) => (() => void) | void;
+    };
+
+    const lenisWindow = window as Window & { __leoLenis?: LenisLike };
+    let usingLenisScroll = false;
+
+    function bindLenisScroll(): boolean {
+      if (usingLenisScroll || !lenisWindow.__leoLenis?.on) {
+        return false;
+      }
+
+      lenisWindow.__leoLenis.on('scroll', scheduleTick);
+      window.removeEventListener('scroll', scheduleTick);
+      usingLenisScroll = true;
+      scheduleTick();
+      return true;
+    }
+
+    requestAnimationFrame(() => {
+      if (!bindLenisScroll()) {
+        window.addEventListener('scroll', scheduleTick, { passive: true });
+      }
+    });
+
+    window.addEventListener('leo:lenis-ready', bindLenisScroll);
 
     /* Wait for images to decode and lay out before the first tick so that
        getBoundingClientRect() and offsetHeight are accurate. */

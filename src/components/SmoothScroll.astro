@@ -1,0 +1,39 @@
+---
+/**
+ * Root Lenis controller.
+ *
+ * This component is intentionally opt-in from Layout.astro. It creates one
+ * document-level Lenis instance and exposes start/stop events for UI overlays
+ * that need native scroll locking.
+ */
+---
+
+<script>
+  import Lenis from 'lenis';
+  import 'lenis/dist/lenis.css';
+
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (!prefersReduced && !('__leoLenis' in window)) {
+    const lenis = new Lenis({
+      autoRaf: true,
+      smoothWheel: true,
+      syncTouch: false,
+      anchors: {
+        offset: 80,
+      },
+      prevent: (node) => (
+        node instanceof HTMLElement && Boolean(node.closest('[data-lenis-prevent]'))
+      ),
+    });
+
+    Object.defineProperty(window, '__leoLenis', {
+      value: lenis,
+      configurable: true,
+    });
+
+    window.addEventListener('leo:lenis-stop', () => lenis.stop());
+    window.addEventListener('leo:lenis-start', () => lenis.start());
+    window.dispatchEvent(new CustomEvent('leo:lenis-ready', { detail: lenis }));
+  }
+</script>

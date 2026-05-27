@@ -21,6 +21,10 @@
     @apply scroll-smooth;
   }
 
+  html.lenis {
+    scroll-behavior: auto;
+  }
+
   body {
     @apply bg-background text-text-base font-body text-body-md antialiased;
   }
