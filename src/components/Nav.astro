@@ -58,9 +58,12 @@ const navLinks = [
   data-scrolled={transparent ? "false" : "true"}
   data-transparent={transparent.toString()}
   data-hero-phase={transparent ? "true" : "false"}
+  data-gallery-clear="false"
+  data-gallery-returning="false"
+  data-hidden="false"
   class={[
     'sticky top-0 z-50 w-full group',
-    'transition-[background-color,border-color] duration-500 motion-reduce:transition-none',
+    'transition-[background-color,border-color,opacity,transform] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none',
     /*
      * Pre-scroll  : warm cream frosted glass — the cream of the brand emblem.
      *               border-border gives a warm sand hairline visible against cream.
@@ -431,6 +434,9 @@ const navLinks = [
   const toggleBtn   = document.getElementById('menu-toggle')  as HTMLButtonElement | null;
   const closeBtn    = document.getElementById('menu-close')   as HTMLButtonElement | null;
   const heroWrapper = document.getElementById('hero-wrapper') as HTMLElement | null;
+  const hiddenRegions = Array.from(
+    document.querySelectorAll<HTMLElement>('[data-nav-hidden-region]')
+  );
 
   const isTransparent  = nav?.dataset.transparent === 'true';
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -446,9 +452,58 @@ const navLinks = [
    *   compact     (data-hero-phase="false", data-scrolled="true")
    *     ↳ Cream background, compact (5rem). Normal scrolled state.
    *
+   *   gallery hidden region (data-gallery-clear="true", data-hidden="true")
+   *     ↳ Nav chrome clears first, then the nav content fades/lifts out.
+   *
    * heroScrollEnd = hero wrapper's offsetHeight − window.innerHeight.
    * Wrapper height = scrollHeight prop + 100vh → heroScrollEnd = scrollHeight (e.g. 1500px).
    */
+  function isInHiddenRegion(): boolean {
+    const scrollY = window.scrollY;
+
+    return hiddenRegions.some((region) => {
+      const rect = region.getBoundingClientRect();
+      const top = scrollY + rect.top;
+      const end = Math.max(top, top + region.offsetHeight - window.innerHeight);
+
+      return scrollY >= top && scrollY <= end;
+    });
+  }
+
+  let galleryNavConcealed = false;
+  let galleryClearTimer = 0;
+  let galleryHideTimer = 0;
+  let galleryReturnTimer = 0;
+  const galleryHideDelay = 260;
+  const galleryRevealDelay = 360;
+
+  function setGalleryNavConcealed(shouldConceal: boolean): void {
+    if (!nav || galleryNavConcealed === shouldConceal) return;
+
+    galleryNavConcealed = shouldConceal;
+    window.clearTimeout(galleryClearTimer);
+    window.clearTimeout(galleryHideTimer);
+    window.clearTimeout(galleryReturnTimer);
+
+    if (shouldConceal) {
+      nav.dataset.galleryReturning = 'false';
+      nav.dataset.galleryClear = 'true';
+      galleryHideTimer = window.setTimeout(() => {
+        nav.dataset.hidden = 'true';
+      }, galleryHideDelay);
+      return;
+    }
+
+    nav.dataset.galleryReturning = 'true';
+    nav.dataset.galleryClear = 'false';
+    galleryClearTimer = window.setTimeout(() => {
+      nav.dataset.hidden = 'false';
+    }, galleryRevealDelay);
+    galleryReturnTimer = window.setTimeout(() => {
+      nav.dataset.galleryReturning = 'false';
+    }, galleryRevealDelay + 520);
+  }
+
   function syncScrollState(): void {
     if (!nav) return;
 
@@ -456,20 +511,17 @@ const navLinks = [
       ? Math.max(0, heroWrapper.offsetHeight - window.innerHeight)
       : 0;
 
-    const threshold    = heroScrollEnd > 0 ? heroScrollEnd + 60 : 80;
-    const shouldShrink = isTransparent ? window.scrollY > threshold : true;
-    const inHeroPhase  = isTransparent && !shouldShrink;
+    const threshold       = heroScrollEnd > 0 ? heroScrollEnd + 60 : 80;
+    const shouldShrink    = isTransparent ? window.scrollY > threshold : true;
+    const inHeroPhase     = isTransparent && !shouldShrink;
+    const inHiddenRegion  = isTransparent && shouldShrink && isInHiddenRegion();
 
-    if (inHeroPhase) {
-      // ── Full-size state: transparent background until shrink begins ───────
-      nav.dataset.heroPhase = 'true';
-      nav.dataset.scrolled  = 'false';
-      if (scrim) scrim.style.opacity = '0';
-    } else {
-      // ── Compact state: cream bg appears as the nav shrinks ────────────────
-      nav.dataset.heroPhase = 'false';
-      nav.dataset.scrolled = shouldShrink ? 'true' : 'false';
-      if (scrim) scrim.style.opacity = shouldShrink ? '0' : '1';
+    setGalleryNavConcealed(inHiddenRegion);
+    nav.dataset.heroPhase = inHeroPhase ? 'true' : 'false';
+    nav.dataset.scrolled = inHeroPhase ? 'false' : (shouldShrink ? 'true' : 'false');
+
+    if (scrim) {
+      scrim.style.opacity = inHeroPhase || shouldShrink ? '0' : '1';
     }
   }
 

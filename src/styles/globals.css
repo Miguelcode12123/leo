@@ -123,6 +123,29 @@
   border-bottom-color: transparent;
 }
 
+/* Gallery transition: clear the nav chrome first, then fade/lift the nav away. */
+#site-nav {
+  transform: translateY(0);
+  will-change: opacity, transform;
+}
+
+#site-nav[data-gallery-clear="true"] {
+  background-color: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom-color: transparent;
+}
+
+#site-nav[data-gallery-returning="true"] {
+  transition-duration: 420ms;
+}
+
+#site-nav[data-hidden="true"] {
+  opacity: 0;
+  transform: translateY(-0.75rem);
+  pointer-events: none;
+}
+
 /* 2. Logo drop-shadow: keeps the logo crisp and legible as the hero image fills in.
       Transitions in/out with the hero phase for a polished feel. */
 .nav-logo-desktop img,

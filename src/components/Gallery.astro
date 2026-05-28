@@ -3,7 +3,7 @@
  * Gallery.astro — Sticky Grid Scroll
  *
  * Faithful Codrops-style Sticky Grid Scroll implementation using
- * GSAP + ScrollTrigger + Lenis + imagesLoaded.
+ * GSAP + ScrollTrigger + Lenis.
  *
  * Brand tokens remain unchanged:
  * font-display, font-body, text-text-base, text-text-muted, text-accent,
@@ -11,56 +11,49 @@
  */
 
 import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
 
-import img8  from '../assets/images/img_8.jpg';
-import img17 from '../assets/images/img_17.jpg';
-import img13 from '../assets/images/img_13.jpg';
-import img19 from '../assets/images/img_19.jpg';
-import img21 from '../assets/images/img_21.jpg';
-import img22 from '../assets/images/img_22.jpg';
-import img20 from '../assets/images/img_20.jpg';
-import img7  from '../assets/images/img_7.jpg';
-import img16 from '../assets/images/img_16.jpg';
-import img10 from '../assets/images/img_10.jpg';
-import img11 from '../assets/images/img_11.jpg';
-import img12 from '../assets/images/img_12.jpg';
-import img15 from '../assets/images/img_15.jpg';
+import left1 from '../assets/images/gallery/g61.jpg';
+import left2 from '../assets/images/gallery/g8.jpg';
+import left3 from '../assets/images/gallery/g65.jpg';
+import left4 from '../assets/images/gallery/g3.jpg';
 
-const gridImages = [
-  { src: img17, alt: 'Team member pruning a sculpted olive-tree dome against a brilliant blue sky' },
-  { src: img13, alt: 'Romantic courtyard — wrought-iron bench, ferns in aged pots, stone chequerboard paving' },
-  { src: img19, alt: 'Team member tending a sculpted topiary ball in a French urn, pool behind' },
-  { src: img21, alt: 'View through a classical arch onto a topiary garden' },
-  { src: img22, alt: 'Aged French urns with clipped topiary beside a stone-slab-and-pebble path' },
-  { src: img20, alt: 'Wisteria climbing a rendered period home beside clipped box hedging' },
-  { src: img7,  alt: 'Lush vertical garden path — potted topiary, fig tree, stone pavers' },
-  { src: img16, alt: 'Two crew members working a courtyard — pruning a Japanese maple and planting' },
-  { src: img10, alt: 'Team member trimming a formal hedge by a classical column' },
-{ src: img11, alt: 'Formal green garden detail with mature planting and crisp seasonal care' },
-{ src: img12, alt: 'Established garden path bordered by sculpted greenery and layered planting' },
-{ src: img15, alt: 'Quiet heritage garden moment with lush foliage and considered maintenance' },
+import mid1 from '../assets/images/gallery/g28.jpg';
+import mid2 from '../assets/images/gallery/g40.jpg';
+import mid3 from '../assets/images/gallery/g7.jpg';
+import mid4 from '../assets/images/gallery/g8.jpg';
+
+import right1 from '../assets/images/gallery/g38.jpg';
+import right2 from '../assets/images/gallery/g52.jpg';
+import right3 from '../assets/images/gallery/g15.jpg';
+import right4 from '../assets/images/gallery/g59.jpg';
+
+type GalleryImage = {
+  src: ImageMetadata;
+  alt: string;
+  position?: string;
+};
+
+const gridImages: GalleryImage[] = [
+  { src: left1, alt: 'Team member pruning a sculpted olive-tree dome against a brilliant blue sky', position: '50% 50%' },
+  { src: mid1, alt: 'Aged French urns with clipped topiary beside a stone-slab-and-pebble path', position: '50% 50%' },
+  { src: right1, alt: 'Romantic courtyard — wrought-iron bench, ferns in aged pots, stone chequerboard paving', position: '50% 50%' },
+  { src: left2, alt: 'View through a classical arch onto a topiary garden', position: '50% 50%' },
+  { src: mid2, alt: 'Team member tending a sculpted topiary ball in a French urn, pool behind', position: '50% 50%' },
+  { src: right2, alt: 'Wisteria climbing a rendered period home beside clipped box hedging', position: '50% 50%' },
+  { src: left3, alt: 'Lush vertical garden path — potted topiary, fig tree, stone pavers', position: '50% 100%' },
+  { src: mid3, alt: 'Two crew members working a courtyard — pruning a Japanese maple and planting', position: '50% 50%' },
+  { src: right3, alt: 'Team member trimming a formal hedge by a classical column', position: '50% 50%' },
+  { src: left4, alt: 'Formal green garden detail with mature planting and crisp seasonal care', position: '50% 50%' },
+  { src: mid4, alt: 'Established garden path bordered by sculpted greenery and layered planting', position: '50% 50%' },
+  { src: right4, alt: 'Quiet heritage garden moment with lush foliage and considered maintenance', position: '50% 50%' },
 ];
 ---
 
-<section class="gallery-intro relative z-10">
-  <figure class="relative flex h-screen w-full items-center justify-center overflow-hidden m-0">
-    <Image
-      src={img8}
-      alt="Manicured box-hedge parterre garden in front of a grand classical Melbourne mansion"
-      width={1600}
-      height={900}
-      quality={90}
-      class="absolute inset-0 h-full w-full object-cover"
-      loading="eager"
-    />
-    <figcaption class="relative z-10 max-w-[14rem] text-center font-display text-[0.68rem] font-normal uppercase leading-snug tracking-[0.28em] text-surface/80">
-      Established garden care · Melbourne
-    </figcaption>
-  </figure>
-</section>
-
 <section
   id="gallery"
+  data-nav-hidden-region
+  data-gallery-grid-visible="false"
   class="gallery-main block--main relative bg-background"
   aria-labelledby="gallery-heading"
 >
@@ -95,11 +88,14 @@ const gridImages = [
             <Image
               src={img.src}
               alt={img.alt}
-              width={400}
-              height={400}
-              quality={80}
+              width={1600}
+              height={1600}
+              quality={100}
+              densities={[1, 2]}
               class="gallery__image"
-              loading="lazy"
+              style={`object-position: ${img.position ?? '50% 50%'}`}
+              loading="eager"
+              fetchpriority="low"
             />
           </li>
         ))}
@@ -111,7 +107,7 @@ const gridImages = [
 <style>
   #gallery {
     --gallery-rem: calc(100vw / 1440);
-    height: 425vh;
+    height: 560vh;
   }
 
   .block__wrapper {
@@ -125,6 +121,17 @@ const gridImages = [
 
   .gallery {
     width: min(calc(736 * var(--gallery-rem)), 90vw);
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 260ms ease,
+      visibility 0s linear 260ms;
+  }
+
+  #gallery[data-gallery-grid-visible="true"] .gallery {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 260ms ease;
   }
 
   .gallery__grid {
@@ -154,7 +161,6 @@ const gridImages = [
 
 <script>
   import Lenis from 'lenis';
-  import imagesLoaded from 'imagesloaded';
   import { gsap } from 'gsap';
   import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -175,24 +181,33 @@ const gridImages = [
   const galleryWindow = window as GalleryWindow;
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  function preloadImages(selector = '#gallery img, .gallery-intro img'): Promise<void> {
-    return new Promise((resolve) => {
-      imagesLoaded(document.querySelectorAll(selector), { background: true }, () => resolve());
-    });
+  function syncGridVisibility(): void {
+    const gallery = document.getElementById('gallery');
+    if (!gallery) return;
+
+    const top = gallery.getBoundingClientRect().top;
+    const isVisible = gallery.dataset.galleryGridVisible === 'true';
+    const showAt = window.innerHeight * 0.10;
+
+    if (!isVisible && top <= showAt) {
+      gallery.dataset.galleryGridVisible = 'true';
+    }
   }
 
   function initSmoothScrolling(): LenisLike | null {
     if (galleryWindow.__leoLenis) {
       galleryWindow.__leoLenis.on('scroll', ScrollTrigger.update);
+      galleryWindow.__leoLenis.on('scroll', syncGridVisibility);
       return galleryWindow.__leoLenis;
     }
 
     const lenis = new Lenis({
-      lerp: 0.08,
-      wheelMultiplier: 1.4,
+      lerp: 0.075,
+      wheelMultiplier: 0.85,
     }) as LenisLike;
 
     lenis.on('scroll', ScrollTrigger.update);
+    lenis.on('scroll', syncGridVisibility);
 
     gsap.ticker.add((time) => {
       lenis.raf?.(time * 1000);
@@ -233,7 +248,6 @@ const gridImages = [
 
       this.initContent();
       this.groupItemsByColumn();
-      this.addParallaxOnScroll();
       this.animateTitleOnScroll();
       this.animateGridOnScroll();
     }
@@ -266,19 +280,6 @@ const gridImages = [
       this.columns = Array.from({ length: this.numColumns }, () => []);
       this.items.forEach((item, index) => {
         this.columns[index % this.numColumns].push(item);
-      });
-    }
-
-    addParallaxOnScroll(): void {
-      gsap.from(this.wrapper, {
-        yPercent: -100,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: this.block,
-          start: 'top bottom',
-          end: 'top top',
-          scrub: true,
-        },
       });
     }
 
@@ -367,7 +368,17 @@ const gridImages = [
           trigger: this.block,
           start: 'top 25%',
           end: 'bottom bottom',
-          scrub: true,
+          scrub: 1.35,
+          onLeaveBack: () => {
+            if (this.block) {
+              this.block.dataset.galleryGridVisible = 'false';
+            }
+          },
+          onEnterBack: () => {
+            if (this.block) {
+              this.block.dataset.galleryGridVisible = 'true';
+            }
+          },
         },
       });
 
@@ -390,10 +401,11 @@ const gridImages = [
   } else if (!galleryWindow.__leoGalleryGsapInitialized) {
     galleryWindow.__leoGalleryGsapInitialized = true;
 
-    preloadImages().then(() => {
-      initSmoothScrolling();
-      new StickyGridScroll();
-      ScrollTrigger.refresh();
-    });
+    initSmoothScrolling();
+    syncGridVisibility();
+    window.addEventListener('scroll', syncGridVisibility, { passive: true });
+    window.addEventListener('resize', syncGridVisibility, { passive: true });
+    new StickyGridScroll();
+    ScrollTrigger.refresh();
   }
 </script>
