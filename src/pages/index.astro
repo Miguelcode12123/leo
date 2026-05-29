@@ -11,7 +11,8 @@ import Team          from '../components/Team.astro';
 import ContactCta    from '../components/ContactCta.astro';
 import Footer        from '../components/Footer.astro';
 
-// Hero images — .src gives the Vite-processed URL for CSS background-image
+// Hero images are passed as metadata so HeroSection can render optimized
+// AVIF/WebP picture sources instead of raw CSS background URLs.
 import heroDesktop from '../assets/images/hero.jpg';
 import heroMobile  from '../assets/images/img_17.jpg';  // portrait crop for mobile
 ---
@@ -19,6 +20,9 @@ import heroMobile  from '../assets/images/img_17.jpg';  // portrait crop for mob
 <Layout
   title="Leo's Beautiful Gardens | Premium Garden Care Melbourne"
   description="Expert, design-led garden care across Melbourne — pruning, hedging, planting & renewal by a fourth-generation gardening family. Free quotes."
+  heroDesktopImage={heroDesktop}
+  heroMobileImage={heroMobile}
+  preloadGallery={true}
 >
   <SmoothScroll />
 
@@ -31,8 +35,8 @@ import heroMobile  from '../assets/images/img_17.jpg';  // portrait crop for mob
   <Nav transparent={true} />
 
   <HeroSection
-    desktopImage={heroDesktop.src}
-    mobileImage={heroMobile.src}
+    desktopImage={heroDesktop}
+    mobileImage={heroMobile}
     scrollHeight={1500}
     initialClipPercentage={25}
     finalClipPercentage={0}

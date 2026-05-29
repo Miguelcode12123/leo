@@ -1,5 +1,8 @@
 ---
 import '../styles/globals.css';
+import { getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import PreloadGallery from '../components/PreloadGallery.astro';
 
 interface Props {
   title?: string;
@@ -7,6 +10,9 @@ interface Props {
   ogImage?: string;
   ogType?: string;
   canonicalUrl?: string;
+  heroDesktopImage?: ImageMetadata;
+  heroMobileImage?: ImageMetadata;
+  preloadGallery?: boolean;
 }
 
 const {
@@ -15,9 +21,36 @@ const {
   ogImage     = "/og-image.jpg",
   ogType      = "website",
   canonicalUrl = Astro.url.href,
+  heroDesktopImage,
+  heroMobileImage,
+  preloadGallery = false,
 } = Astro.props;
 
+const heroPreloadSizes = '100vw';
+const heroDesktopWidths = [1280, 1600, 1920, 2400, 2880];
+const heroMobileWidths = [480, 640, 828, 1080, 1280];
+const heroPreloadQuality = 92;
+const [heroDesktopPreload, heroMobilePreload] = heroDesktopImage && heroMobileImage
+  ? await Promise.all([
+      getImage({
+        src: heroDesktopImage,
+        widths: heroDesktopWidths,
+        sizes: heroPreloadSizes,
+        quality: heroPreloadQuality,
+        format: 'avif',
+      }),
+      getImage({
+        src: heroMobileImage,
+        widths: heroMobileWidths,
+        sizes: heroPreloadSizes,
+        quality: heroPreloadQuality,
+        format: 'avif',
+      }),
+    ])
+  : [null, null];
+
 const siteUrl = "https://www.leosgardens.com.au";
+const fontStylesheetHref = "https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Mulish:wght@400;500;600;700&display=swap";
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -79,9 +112,41 @@ const jsonLd = {
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Mulish:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      as="style"
+      href={fontStylesheetHref}
+      onload="this.onload=null;this.rel='stylesheet'"
     />
+    <noscript>
+      <link href={fontStylesheetHref} rel="stylesheet" />
+    </noscript>
+
+    {heroDesktopPreload && (
+      <link
+        rel="preload"
+        as="image"
+        href={heroDesktopPreload.src}
+        imagesrcset={heroDesktopPreload.srcSet.attribute}
+        imagesizes={heroPreloadSizes}
+        media="(min-width: 768px)"
+        type="image/avif"
+        fetchpriority="high"
+      />
+    )}
+    {heroMobilePreload && (
+      <link
+        rel="preload"
+        as="image"
+        href={heroMobilePreload.src}
+        imagesrcset={heroMobilePreload.srcSet.attribute}
+        imagesizes={heroPreloadSizes}
+        media="(max-width: 767px)"
+        type="image/avif"
+        fetchpriority="high"
+      />
+    )}
+
+    {preloadGallery && <PreloadGallery />}
 
     <!-- ─── Structured Data (LocalBusiness) ──────────────────────────────── -->
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />

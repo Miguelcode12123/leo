@@ -63,7 +63,7 @@ const navLinks = [
   data-hidden="false"
   class={[
     'sticky top-0 z-50 w-full group',
-    'transition-[background-color,border-color,opacity,transform] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none',
+    'transition-[background-color,opacity,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none',
     /*
      * Pre-scroll  : warm cream frosted glass — the cream of the brand emblem.
      *               border-border gives a warm sand hairline visible against cream.
@@ -426,6 +426,9 @@ const navLinks = [
 
 
 <script>
+  import { debounce } from '../utils/debounce';
+  import { registerScrollFrame, scheduleScrollFrame } from '../utils/scrollFrame';
+
   /* ─── Element refs ────────────────────────────────────────────────────────── */
   const nav         = document.getElementById('site-nav')     as HTMLElement | null;
   const scrim       = document.getElementById('nav-scrim')    as HTMLElement | null;
@@ -440,6 +443,10 @@ const navLinks = [
 
   const isTransparent  = nav?.dataset.transparent === 'true';
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let cachedHeroScrollEnd = heroWrapper
+    ? Math.max(0, heroWrapper.offsetHeight - window.innerHeight)
+    : 0;
+  let hiddenRegionBounds: Array<{ top: number; end: number }> = [];
 
   /* ─── syncScrollState ────────────────────────────────────────────────────── */
   /**
@@ -458,14 +465,22 @@ const navLinks = [
    * heroScrollEnd = hero wrapper's offsetHeight − window.innerHeight.
    * Wrapper height = scrollHeight prop + 100vh → heroScrollEnd = scrollHeight (e.g. 1500px).
    */
-  function isInHiddenRegion(): boolean {
+  function cacheHiddenRegionBounds(): void {
     const scrollY = window.scrollY;
 
-    return hiddenRegions.some((region) => {
+    hiddenRegionBounds = hiddenRegions.map((region) => {
       const rect = region.getBoundingClientRect();
       const top = scrollY + rect.top;
       const end = Math.max(top, top + region.offsetHeight - window.innerHeight);
 
+      return { top, end };
+    });
+  }
+
+  function isInHiddenRegion(): boolean {
+    const scrollY = window.scrollY;
+
+    return hiddenRegionBounds.some(({ top, end }) => {
       return scrollY >= top && scrollY <= end;
     });
   }
@@ -504,24 +519,30 @@ const navLinks = [
     }, galleryRevealDelay + 520);
   }
 
-  function syncScrollState(): void {
+  type NavScrollState = {
+    inHeroPhase: boolean;
+    inHiddenRegion: boolean;
+    shouldShrink: boolean;
+  };
+
+  function readNavScrollState(): NavScrollState {
+    const threshold = cachedHeroScrollEnd > 0 ? cachedHeroScrollEnd + 60 : 80;
+    const shouldShrink = isTransparent ? window.scrollY > threshold : true;
+    const inHeroPhase = isTransparent && !shouldShrink;
+    const inHiddenRegion = isTransparent && shouldShrink && isInHiddenRegion();
+
+    return { inHeroPhase, inHiddenRegion, shouldShrink };
+  }
+
+  function writeNavScrollState(state: NavScrollState): void {
     if (!nav) return;
 
-    const heroScrollEnd = heroWrapper
-      ? Math.max(0, heroWrapper.offsetHeight - window.innerHeight)
-      : 0;
-
-    const threshold       = heroScrollEnd > 0 ? heroScrollEnd + 60 : 80;
-    const shouldShrink    = isTransparent ? window.scrollY > threshold : true;
-    const inHeroPhase     = isTransparent && !shouldShrink;
-    const inHiddenRegion  = isTransparent && shouldShrink && isInHiddenRegion();
-
-    setGalleryNavConcealed(inHiddenRegion);
-    nav.dataset.heroPhase = inHeroPhase ? 'true' : 'false';
-    nav.dataset.scrolled = inHeroPhase ? 'false' : (shouldShrink ? 'true' : 'false');
+    setGalleryNavConcealed(state.inHiddenRegion);
+    nav.dataset.heroPhase = state.inHeroPhase ? 'true' : 'false';
+    nav.dataset.scrolled = state.inHeroPhase ? 'false' : (state.shouldShrink ? 'true' : 'false');
 
     if (scrim) {
-      scrim.style.opacity = inHeroPhase || shouldShrink ? '0' : '1';
+      scrim.style.opacity = state.inHeroPhase || state.shouldShrink ? '0' : '1';
     }
   }
 
@@ -529,36 +550,31 @@ const navLinks = [
   // correct, so heroPhase never flickers "false" and triggers a stray cream-in transition.
   // The initial HTML already has data-hero-phase set correctly for scrollY=0, so
   // there is no visible gap on first paint.
-  type LenisLike = {
-    on?: (event: 'scroll', callback: () => void) => (() => void) | void;
-  };
-
-  const lenisWindow = window as Window & { __leoLenis?: LenisLike };
-  let usingLenisScroll = false;
-
-  function bindLenisScroll(): boolean {
-    if (!isTransparent || usingLenisScroll || !lenisWindow.__leoLenis?.on) {
-      return false;
-    }
-
-    lenisWindow.__leoLenis.on('scroll', syncScrollState);
-    window.removeEventListener('scroll', syncScrollState);
-    usingLenisScroll = true;
-    syncScrollState();
-    return true;
-  }
-
-  requestAnimationFrame(() => {
-    syncScrollState();
-    if (isTransparent && !bindLenisScroll()) {
-      window.addEventListener('scroll', syncScrollState, { passive: true });
-    }
-  });
-
   if (isTransparent) {
-    window.addEventListener('leo:lenis-ready', bindLenisScroll);
+    cacheHiddenRegionBounds();
+    registerScrollFrame({
+      read: readNavScrollState,
+      write: writeNavScrollState,
+    }, { immediate: true });
+
+    requestAnimationFrame(() => {
+      cacheHiddenRegionBounds();
+      scheduleScrollFrame();
+    });
+
     // Recalculate heroScrollEnd on resize (innerHeight changes on mobile browser chrome show/hide)
-    window.addEventListener('resize', syncScrollState, { passive: true });
+    window.addEventListener('resize', debounce(() => {
+      cachedHeroScrollEnd = heroWrapper
+        ? Math.max(0, heroWrapper.offsetHeight - window.innerHeight)
+        : 0;
+      cacheHiddenRegionBounds();
+      scheduleScrollFrame();
+    }), { passive: true });
+
+    window.addEventListener('load', () => {
+      cacheHiddenRegionBounds();
+      scheduleScrollFrame();
+    }, { once: true });
   }
 
 

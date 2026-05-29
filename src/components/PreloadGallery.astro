@@ -1,0 +1,62 @@
+---
+import { getImage } from 'astro:assets';
+import {
+  GALLERY_IMAGE_DENSITIES,
+  GALLERY_IMAGE_FORMAT,
+  GALLERY_IMAGE_HEIGHT,
+  GALLERY_IMAGE_QUALITY,
+  GALLERY_IMAGE_SIZES,
+  GALLERY_IMAGE_WIDTH,
+} from '../utils/galleryImages';
+
+import left1  from '../assets/images/gallery/g61.jpg';
+import mid1   from '../assets/images/gallery/g28.jpg';
+import right1 from '../assets/images/gallery/g38.jpg';
+import left2  from '../assets/images/gallery/g8.jpg';
+import mid2   from '../assets/images/gallery/g40.jpg';
+import right2 from '../assets/images/gallery/g52.jpg';
+import left3  from '../assets/images/gallery/g65.jpg';
+import mid3   from '../assets/images/gallery/g7.jpg';
+import right3 from '../assets/images/gallery/g15.jpg';
+import left4  from '../assets/images/gallery/g3.jpg';
+import mid4   from '../assets/images/gallery/g8.jpg';
+import right4 from '../assets/images/gallery/g59.jpg';
+
+const sources = [
+  left1, mid1, right1,
+  left2, mid2, right2,
+  left3, mid3, right3,
+  left4, mid4, right4,
+];
+
+const optimised = await Promise.all(
+  sources.map((src) =>
+    getImage({
+      src,
+      width: GALLERY_IMAGE_WIDTH,
+      height: GALLERY_IMAGE_HEIGHT,
+      quality: GALLERY_IMAGE_QUALITY,
+      format: GALLERY_IMAGE_FORMAT,
+      densities: GALLERY_IMAGE_DENSITIES,
+    })
+  )
+);
+---
+
+{optimised.map((img) => {
+  const srcset = img.srcSet?.values
+    ?.map(({ url, descriptor }) => `${url} ${descriptor}`)
+    .join(', ');
+
+  return (
+    <link
+      rel="preload"
+      as="image"
+      href={img.src}
+      imagesrcset={srcset ?? undefined}
+      imagesizes={GALLERY_IMAGE_SIZES}
+      type="image/avif"
+      fetchpriority="high"
+    />
+  );
+})}

@@ -1,5 +1,6 @@
 ---
 import Layout      from '../layouts/Layout.astro';
+import SmoothScroll from '../components/SmoothScroll.astro';
 import Nav         from '../components/Nav.astro';
 import Gallery     from '../components/Gallery.astro';
 import BeforeAfter from '../components/BeforeAfter.astro';
@@ -12,7 +13,10 @@ import img13       from '../assets/images/img_13.jpg';
 <Layout
   title="Garden Gallery | Leo's Beautiful Gardens"
   description="Browse our portfolio of Melbourne's finest gardens — estate lawns, sculpted topiary, heritage courtyards, and before/after transformations by Leo's Beautiful Gardens."
+  preloadGallery={true}
 >
+  <SmoothScroll />
+
   <Nav transparent={false} />
 
   <!-- Page hero -->

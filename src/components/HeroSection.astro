@@ -2,17 +2,17 @@
 /**
  * HeroSection.astro — Leo's Beautiful Gardens
  *
- * Scroll-driven clip-path reveal hero.
+ * Scroll-driven transform reveal hero.
  *
- * On load   : The background image appears behind a rectangular "window"
- *             (clip-path: inset(initialClipPercentage%)), the rest of the
- *             sticky container showing the warm cream page background.
+ * On load   : The background image appears behind transform-driven cream
+ *             mask panels, with the rest of the sticky container showing
+ *             the warm cream page background.
  *             Headline and copy sit at the bottom in deep forest-green ink.
  *
  * On scroll : A Lenis-aware native scroll driver applies three simultaneous
  *             transforms:
- *               1. clip-path inset shrinks → 0% (window opens to full screen)
- *               2. background-size 170% → 100% (image zooms out as it reveals)
+ *               1. mask panels shrink → 0% (window opens to full screen)
+ *               2. image scale 1.7 → 1 (image zooms out as it reveals)
  *               3. Gradient overlay fades in for text legibility
  *             Text colour transitions from forest-green (#2E4628) on cream
  *             to cream (#F7F4EC) on the darkened full-bleed image.
@@ -20,8 +20,8 @@
  * Props
  * ─────
  *   scrollHeight          Extra scroll room in px (default 1500)
- *   desktopImage          URL string — pass `import.src` from parent
- *   mobileImage           URL string — pass `import.src` from parent
+ *   desktopImage          Imported image metadata from parent
+ *   mobileImage           Imported image metadata from parent
  *   initialClipPercentage Starting inset % on all sides (default 25)
  *   finalClipPercentage   Ending inset % (default 0 = full viewport)
  *
@@ -32,11 +32,13 @@
  * Mobile nav = 5 rem (80 px) | Desktop expanded nav = 6.5 rem (104 px).
  * Nav z-index 50 renders above hero z-index 1 — no z-index conflicts.
  */
+import { getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
 
 interface Props {
   scrollHeight?: number;
-  desktopImage: string;
-  mobileImage: string;
+  desktopImage: ImageMetadata;
+  mobileImage: ImageMetadata;
   initialClipPercentage?: number;
   finalClipPercentage?: number;
 }
@@ -48,12 +50,32 @@ const {
   initialClipPercentage = 25,
   finalClipPercentage   = 0,
 } = Astro.props;
+
+const heroSizes = '100vw';
+const mobileWidths = [480, 640, 828, 1080, 1280];
+const desktopWidths = [1280, 1600, 1920, 2400, 2880];
+const heroQuality = 92;
+
+const [
+  mobileAvif,
+  mobileWebp,
+  mobileJpg,
+  desktopAvif,
+  desktopWebp,
+  desktopJpg,
+] = await Promise.all([
+  getImage({ src: mobileImage, widths: mobileWidths, sizes: heroSizes, quality: heroQuality, format: 'avif' }),
+  getImage({ src: mobileImage, widths: mobileWidths, sizes: heroSizes, quality: heroQuality, format: 'webp' }),
+  getImage({ src: mobileImage, widths: mobileWidths, sizes: heroSizes, quality: heroQuality, format: 'jpg' }),
+  getImage({ src: desktopImage, widths: desktopWidths, sizes: heroSizes, quality: heroQuality, format: 'avif' }),
+  getImage({ src: desktopImage, widths: desktopWidths, sizes: heroSizes, quality: heroQuality, format: 'webp' }),
+  getImage({ src: desktopImage, widths: desktopWidths, sizes: heroSizes, quality: heroQuality, format: 'jpg' }),
+]);
 ---
 
 <!-- ─── Scroll-room wrapper ──────────────────────────────────────────────────
      Negative margin pulls the wrapper up behind the sticky nav so the hero
      fills the full viewport from the very first frame.
-     CSS vars carry the image URLs into the <style> block below.
 ──────────────────────────────────────────────────────────────────────────── -->
 <div
   id="hero-wrapper"
@@ -62,37 +84,77 @@ const {
   data-final-clip={finalClipPercentage}
   style={`
     height: calc(${scrollHeight}px + 100vh);
-    --hero-desktop: url('${desktopImage}');
-    --hero-mobile:  url('${mobileImage}');
+    --hero-mask-scale: ${Math.max(0, Math.min(1, initialClipPercentage / 50))};
+    --hero-text-color: #2E4628;
   `}
 >
 
   <!-- ─── Sticky hero ─────────────────────────────────────────────────────────
-       bg-background (cream #F7F4EC) shows around the clipped image at progress=0.
+       bg-background (cream #F7F4EC) shows around the masked image at progress=0.
        z-index 1 sits below the nav (z-50) but above normal document flow.
   ──────────────────────────────────────────────────────────────────────────── -->
   <div
     id="hero-sticky"
-    class="sticky top-0 h-screen w-full overflow-hidden bg-background"
-    style="z-index: 1;"
+    class="sticky top-0 z-[1] h-screen w-full overflow-hidden bg-background"
   >
 
-    <!-- ── 1. Background image layer ────────────────────────────────────────
-         clip-path and background-size are the two scroll-animated properties.
-         will-change promotes the element to its own GPU composite layer.
+    <!-- ── 1. Image layer ───────────────────────────────────────────────────
+         Image scale replaces background-size so Astro can emit optimized
+         AVIF/WebP picture sources.
     ──────────────────────────────────────────────────────────────────────── -->
     <div
       id="hero-bg"
       class="absolute inset-0"
       aria-hidden="true"
-      style={`
-        background-position: center center;
-        background-repeat:   no-repeat;
-        background-size:     170%;
-        clip-path:           inset(${initialClipPercentage}%);
-        will-change:         clip-path, background-size;
-      `}
-    ></div>
+    >
+      <picture class="hero-picture">
+        <source
+          media="(min-width: 768px)"
+          type="image/avif"
+          srcset={desktopAvif.srcSet.attribute}
+          sizes={heroSizes}
+        />
+        <source
+          media="(min-width: 768px)"
+          type="image/webp"
+          srcset={desktopWebp.srcSet.attribute}
+          sizes={heroSizes}
+        />
+        <source
+          media="(min-width: 768px)"
+          type="image/jpeg"
+          srcset={desktopJpg.srcSet.attribute}
+          sizes={heroSizes}
+        />
+        <source
+          type="image/avif"
+          srcset={mobileAvif.srcSet.attribute}
+          sizes={heroSizes}
+        />
+        <source
+          type="image/webp"
+          srcset={mobileWebp.srcSet.attribute}
+          sizes={heroSizes}
+        />
+        <img
+          src={mobileJpg.src}
+          srcset={mobileJpg.srcSet.attribute}
+          sizes={heroSizes}
+          width={mobileImage.width}
+          height={mobileImage.height}
+          alt=""
+          loading="eager"
+          decoding="sync"
+          fetchpriority="high"
+          style="transform: scale(1.7);"
+        />
+      </picture>
+    </div>
+
+    <div class="hero-mask hero-mask--top bg-background" aria-hidden="true"></div>
+    <div class="hero-mask hero-mask--bottom bg-background" aria-hidden="true"></div>
+    <div class="hero-mask hero-mask--left bg-background" aria-hidden="true"></div>
+    <div class="hero-mask hero-mask--right bg-background" aria-hidden="true"></div>
 
     <!-- ── 2. Gradient overlay ───────────────────────────────────────────────
          Forest-green toned (not black) per constraint §6.
@@ -102,7 +164,7 @@ const {
     ──────────────────────────────────────────────────────────────────────── -->
     <div
       id="hero-overlay"
-      class="absolute inset-0 pointer-events-none"
+      class="absolute inset-0 z-[3] pointer-events-none"
       aria-hidden="true"
       style="
         background: linear-gradient(
@@ -121,7 +183,7 @@ const {
          JS) starting at forest-green and transitioning to cream on scroll.
          z-index 10 keeps content above overlay and bg layers.
     ──────────────────────────────────────────────────────────────────────── -->
-    <div class="absolute inset-0 flex flex-col justify-end" style="z-index: 10;">
+    <div class="absolute inset-0 z-10 flex flex-col justify-end">
       <div
         class="max-w-container mx-auto w-full
                px-8 sm:px-12 md:px-16 xl:px-20
@@ -133,7 +195,6 @@ const {
           id="hero-eyebrow"
           class="hero-el font-body font-semibold
                  text-[0.72rem] tracking-[0.26em] uppercase mb-4"
-          style="color: #2E4628;"
         >
           Melbourne &nbsp;·&nbsp; Garden Care Since 2021
         </p>
@@ -144,7 +205,6 @@ const {
           class="hero-el font-display font-normal
                  leading-[1.02] tracking-[-0.02em] mb-5"
           style="font-size: clamp(2.6rem, 5.5vw, 4.5rem);
-                 color: #2E4628;
                  max-width: 14ch;"
         >
           Your garden, in&nbsp;the<br />
@@ -155,7 +215,7 @@ const {
         <p
           id="hero-tagline"
           class="hero-el font-display italic tracking-[0.02em] mb-10"
-          style="font-size: 1.1rem; color: #2E4628;"
+          style="font-size: 1.1rem;"
           lang="it"
           title="Grown with care"
         >
@@ -172,9 +232,8 @@ const {
     <div
       id="hero-scroll-cue"
       class="hero-el absolute bottom-8 right-8 md:right-12
-             hidden md:flex flex-col items-center gap-2"
+             z-10 hidden md:flex flex-col items-center gap-2"
       aria-hidden="true"
-      style="z-index: 10; color: #2E4628;"
     >
       <span class="font-body text-[0.6rem] tracking-[0.26em] uppercase select-none">
         Scroll
@@ -187,19 +246,72 @@ const {
 
 
 <style>
-  /* ── Background images: mobile portrait first, override at md ──────── */
-  #hero-bg {
-    background-image: var(--hero-mobile);
+  :global(.hero-picture) {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
   }
-  @media (min-width: 768px) {
-    #hero-bg {
-      background-image: var(--hero-desktop);
-    }
+
+  :global(.hero-picture img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+    transform-origin: center center;
+    will-change: transform;
+  }
+
+  .hero-mask {
+    position: absolute;
+    z-index: 2;
+    pointer-events: none;
+    will-change: transform;
+  }
+
+  .hero-mask--top,
+  .hero-mask--bottom {
+    left: 0;
+    width: 100%;
+    height: 50%;
+    transform: scaleY(var(--hero-mask-scale, 0.5));
+  }
+
+  .hero-mask--top {
+    top: 0;
+    transform-origin: top center;
+  }
+
+  .hero-mask--bottom {
+    bottom: 0;
+    transform-origin: bottom center;
+  }
+
+  .hero-mask--left,
+  .hero-mask--right {
+    top: 0;
+    width: 50%;
+    height: 100%;
+    transform: scaleX(var(--hero-mask-scale, 0.5));
+  }
+
+  .hero-mask--left {
+    left: 0;
+    transform-origin: left center;
+  }
+
+  .hero-mask--right {
+    right: 0;
+    transform-origin: right center;
   }
 
   /* ── Entrance: all hero-el elements start invisible ────────────────── */
   /* JS adds the transition and animated values after the stagger delay. */
   .hero-el {
+    color: var(--hero-text-color, #2E4628);
     opacity: 0;
     transform: translateY(18px);
   }
@@ -229,26 +341,26 @@ const {
 
 
 <script>
+  import { debounce } from '../utils/debounce';
+  import { registerScrollFrame, scheduleScrollFrame } from '../utils/scrollFrame';
+
   /**
    * HeroSection animation driver
    *
    * Two independent systems:
    *   A. Entrance  — staggered fade-up on page load (setTimeout + CSS transition)
-   *   B. Scroll    — Lenis-aware scroll driver updates clip-path, bg-size,
+   *   B. Scroll    — Lenis-aware scroll driver updates mask transforms, image scale,
    *                  overlay opacity, and text colour in a single rAF callback.
    *                  Falls back to native scroll when Lenis is not mounted.
    */
   /* ── Element refs ─────────────────────────────────────────────────────── */
   const wrapper   = document.getElementById('hero-wrapper')    as HTMLElement | null;
   const bg        = document.getElementById('hero-bg')         as HTMLElement | null;
+  const heroImg   = bg?.querySelector('img')                   as HTMLImageElement | null;
   const overlay   = document.getElementById('hero-overlay')    as HTMLElement | null;
-  const eyebrow   = document.getElementById('hero-eyebrow')    as HTMLElement | null;
-  const headline  = document.getElementById('hero-headline')   as HTMLElement | null;
-  const tagline   = document.getElementById('hero-tagline')    as HTMLElement | null;
-  const scrollCue = document.getElementById('hero-scroll-cue') as HTMLElement | null;
 
   /* Guard — bail if critical elements are missing (e.g. SSR-only render) */
-  if (!wrapper || !bg) {
+  if (!wrapper || !bg || !heroImg) {
     console.warn('[HeroSection] Required elements not found — animations skipped.');
   } else {
 
@@ -319,23 +431,29 @@ const {
                                       = scrollHeight px  ✓
 
        Four values are updated per frame:
-         1. clip-path   — window opens from initialClip% inset to finalClip%
-         2. bg-size     — image zooms out from 170% to 100% as window opens
+         1. mask scale  — window opens from initialClip% inset to finalClip%
+         2. image scale — image zooms out from 1.7 to 1 as window opens
          3. overlay     — dark gradient fades in for text legibility
          4. text colour — forest-green fades to cream
     ─────────────────────────────────────────────────────────────────────── */
-    let rafId = 0;
+    let wrapperTop = 0;
+    let scrollDistance = 1;
+
+    function measureHeroScroll(): void {
+      wrapperTop = wrapper.getBoundingClientRect().top + window.scrollY;
+      scrollDistance = Math.max(1, wrapper.offsetHeight - window.innerHeight);
+    }
 
     function updateProgress(progress: number): void {
       const p = clamp(progress, 0, 1);
 
-      /* 1. Clip-path — the core window-reveal effect */
+      /* 1. Transform masks — the core window-reveal effect */
       const clip = lerp(initialClip, finalClip, p);
-      bg.style.clipPath = `inset(${clip.toFixed(3)}%)`;
+      wrapper.style.setProperty('--hero-mask-scale', String(clamp(clip / 50, 0, 1).toFixed(4)));
 
-      /* 2. Background-size — subtle zoom-out accompanies the clip opening */
+      /* 2. Image scale — subtle zoom-out accompanies the clip opening */
       const size = lerp(170, 100, p);
-      bg.style.backgroundSize = `${size.toFixed(2)}%`;
+      heroImg.style.transform = `scale(${(size / 100).toFixed(4)})`;
 
       /* 3. Overlay — forest-green gradient fades in; completes at ~85% scroll */
       if (overlay) {
@@ -346,51 +464,28 @@ const {
             so text is fully cream well before the image reaches full bleed.    */
       const colorT = clamp(p / 0.55, 0, 1);
       const color  = lerpRgb(colorT);
-
-      ([eyebrow, headline, tagline, scrollCue] as Array<HTMLElement | null>)
-        .forEach(el => { if (el) el.style.color = color; });
+      wrapper.style.setProperty('--hero-text-color', color);
     }
 
-    function tick(): void {
-      const rect = wrapper.getBoundingClientRect();
-      const scrollDistance = Math.max(1, wrapper.offsetHeight - window.innerHeight);
-      const progress = -rect.top / scrollDistance;
-      updateProgress(progress);
-      rafId = 0;
-    }
+    measureHeroScroll();
+    registerScrollFrame({
+      read: () => (window.scrollY - wrapperTop) / scrollDistance,
+      write: updateProgress,
+    }, { immediate: true });
 
-    const scheduleTick = () => {
-      if (!rafId) rafId = requestAnimationFrame(tick);
-    };
-
-    type LenisLike = {
-      on?: (event: 'scroll', callback: () => void) => (() => void) | void;
-    };
-
-    const lenisWindow = window as Window & { __leoLenis?: LenisLike };
-    let usingLenisScroll = false;
-
-    function bindLenisScroll(): boolean {
-      if (usingLenisScroll || !lenisWindow.__leoLenis?.on) {
-        return false;
-      }
-
-      lenisWindow.__leoLenis.on('scroll', scheduleTick);
-      window.removeEventListener('scroll', scheduleTick);
-      usingLenisScroll = true;
-      scheduleTick();
-      return true;
-    }
+    window.addEventListener('load', () => {
+      measureHeroScroll();
+      scheduleScrollFrame();
+    }, { once: true });
 
     requestAnimationFrame(() => {
-      tick();
-      if (!bindLenisScroll()) {
-        window.addEventListener('scroll', scheduleTick, { passive: true });
-      }
+      scheduleScrollFrame();
     });
 
-    window.addEventListener('resize', scheduleTick, { passive: true });
-    window.addEventListener('leo:lenis-ready', bindLenisScroll);
+    window.addEventListener('resize', debounce(() => {
+      measureHeroScroll();
+      scheduleScrollFrame();
+    }), { passive: true });
 
   } /* end null-guard */
 </script>

@@ -9,16 +9,17 @@
 ---
 
 <script>
+  import { gsap, ScrollTrigger } from '../utils/gsap';
+  import { scheduleScrollFrame } from '../utils/scrollFrame';
   import Lenis from 'lenis';
-  import 'lenis/dist/lenis.css';
 
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   if (!prefersReduced && !('__leoLenis' in window)) {
     const lenis = new Lenis({
-      autoRaf: true,
+      autoRaf: false,
       smoothWheel: true,
-      lerp: 0.075,
+      lerp: 0.11,
       wheelMultiplier: 0.85,
       syncTouch: false,
       anchors: {
@@ -28,6 +29,14 @@
         node instanceof HTMLElement && Boolean(node.closest('[data-lenis-prevent]'))
       ),
     });
+
+    lenis.on('scroll', ScrollTrigger.update);
+    lenis.on('scroll', scheduleScrollFrame);
+
+    gsap.ticker.add((time) => {
+      lenis.raf(time * 1000);
+    });
+    gsap.ticker.lagSmoothing(0);
 
     Object.defineProperty(window, '__leoLenis', {
       value: lenis,

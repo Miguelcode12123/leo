@@ -61,8 +61,8 @@ import img23 from '../assets/images/img_23.jpg';
       <div class="h-decl h-zone" id="h-decl">
 
         <div class="h-decl-type">
-          <p class="h-eyebrow">Heritage</p>
-          <h2 id="heritage-heading" class="h-title">
+          <p class="h-eyebrow font-body">Heritage</p>
+          <h2 id="heritage-heading" class="h-title font-display">
             <span class="h-title-four">Four</span>
             <span class="h-title-gen">generations</span>
             <span class="h-title-craft">of <em>craft.</em></span>
@@ -101,7 +101,7 @@ import img23 from '../assets/images/img_23.jpg';
                normal flow on mobile. Card rises over this. -->
           <div class="h-pivot-text-layer">
             <hr class="h-hairline" aria-hidden="true" />
-            <p class="letter lead">
+            <p class="letter lead font-display">
               Leonardo grew up among the olive groves of southern Sicily, where his
               grandfather Rosario taught him <em>to tend a garden the way a family
               tends a name</em> — with patience, with specificity, and with a long
@@ -135,17 +135,17 @@ import img23 from '../assets/images/img_23.jpg';
       <div class="h-chrome h-zone h-closing">
         <div class="h-prose-col">
 
-          <p class="letter">
+          <p class="letter font-display">
             Today the same craft is practised here in Melbourne, by the same
             small team, on the day we said we would.
           </p>
 
           <div class="h-sig">
-            <p class="h-sig-name">Leonardo Qucco</p>
-            <span class="h-sig-meta">Founder</span>
+            <p class="h-sig-name font-display">Leonardo Qucco</p>
+            <span class="h-sig-meta font-body">Founder</span>
           </div>
 
-          <a href="#our-story" class="h-read-link" aria-label="Read our story">
+          <a href="#our-story" class="h-read-link font-body" aria-label="Read our story">
             <span class="h-read-label">Read our story</span>
             <span class="h-read-rule" aria-hidden="true"></span>
           </a>
@@ -160,22 +160,10 @@ import img23 from '../assets/images/img_23.jpg';
 
 <style>
   /* ═══════════════════════════════════════════════════════════════════════════
-     Design tokens
-  ═══════════════════════════════════════════════════════════════════════════ */
-  #heritage {
-    --cream:      #F7F4EC;
-    --ink:        #1F2A1A;
-    --muted:      #5E6B54;
-    --green-700:  #2E4628;
-    --terra-500:  #B45F38;
-    --ink-soft:   rgba(31, 42, 26, 0.42);
-  }
-
-  /* ═══════════════════════════════════════════════════════════════════════════
      Section shell
   ═══════════════════════════════════════════════════════════════════════════ */
   #heritage {
-    background-color: var(--cream);
+    background-color: var(--color-background);
     padding-top:    clamp(18rem, 38vh, 26rem);
     padding-bottom: clamp(9rem, 18vh, 14rem);
   }
@@ -209,21 +197,19 @@ import img23 from '../assets/images/img_23.jpg';
   }
 
   .h-eyebrow {
-    font-family: 'Mulish', sans-serif;
     font-weight: 500;
     font-size: 0.72rem;
     letter-spacing: 0.28em;
     text-transform: uppercase;
-    color: var(--muted);
+    color: var(--color-text-muted);
     margin-bottom: 1.5rem;
   }
 
   .h-title {
-    font-family: 'Fraunces', serif;
     font-optical-sizing: auto;
     line-height: 0.96;
     letter-spacing: -0.028em;
-    color: var(--ink);
+    color: var(--color-text);
     font-style: normal;
   }
   .h-title-four {
@@ -236,7 +222,7 @@ import img23 from '../assets/images/img_23.jpg';
     font-weight: 300;
     font-style: italic;
     font-size: clamp(2.4rem, 4.5vw, 4rem);
-    color: var(--ink-soft);
+    color: color-mix(in srgb, var(--color-text) 42%, transparent);
     padding-left: 0.5ch;
     margin: 0.15rem 0 0.2rem;
   }
@@ -247,7 +233,7 @@ import img23 from '../assets/images/img_23.jpg';
   }
   .h-title em {
     font-style: normal;
-    color: var(--green-700);
+    color: var(--color-primary);
   }
 
   .h-decl-img {
@@ -258,7 +244,6 @@ import img23 from '../assets/images/img_23.jpg';
     .h-decl-img {
       max-width: none;
       margin: 0;
-      will-change: transform;
     }
   }
   .h-portrait {
@@ -372,7 +357,6 @@ import img23 from '../assets/images/img_23.jpg';
       position: relative;
       width: min(90%, 1100px);
       z-index: 2;
-      will-change: transform;
       flex-shrink: 0;
     }
 
@@ -386,20 +370,19 @@ import img23 from '../assets/images/img_23.jpg';
     display: block;
     width: 3.5rem;
     height: 1px;
-    background: var(--green-700);
+    background: var(--color-primary);
     opacity: 0.45;
     margin: 0 auto 3.5rem;
     border: 0;
   }
 
   .letter {
-    font-family: 'Fraunces', serif;
     font-optical-sizing: auto;
     font-weight: 300;
     font-size: 1.15rem;
     line-height: 1.75;
     letter-spacing: 0.005em;
-    color: var(--ink);
+    color: var(--color-text);
     text-align: left;
     max-width: 30rem;
     text-wrap: pretty;
@@ -420,14 +403,13 @@ import img23 from '../assets/images/img_23.jpg';
   .letter.lead { display: flow-root; }
 
   .letter.lead::first-letter {
-    font-family: 'Fraunces', serif;
     font-style: italic;
     font-weight: 300;
     font-size: 4em;
     float: left;
     line-height: 0.82;
     margin: 0.3rem 0.55rem -0.1rem 0;
-    color: var(--terra-500);
+    color: var(--color-accent);
   }
 
   /* ═══════════════════════════════════════════════════════════════════════════
@@ -448,22 +430,20 @@ import img23 from '../assets/images/img_23.jpg';
     margin-top: 2.75rem;
   }
   .h-sig-name {
-    font-family: 'Fraunces', serif;
     font-optical-sizing: auto;
     font-style: italic;
     font-weight: 400;
     font-size: 1.15rem;
     line-height: 1.45;
-    color: var(--ink);
+    color: var(--color-text);
     margin: 0;
   }
   .h-sig-meta {
-    font-family: 'Mulish', sans-serif;
     font-weight: 500;
     font-size: 0.68rem;
     letter-spacing: 0.28em;
     text-transform: uppercase;
-    color: var(--muted);
+    color: var(--color-text-muted);
     display: block;
     margin-top: 0.65rem;
   }
@@ -474,17 +454,16 @@ import img23 from '../assets/images/img_23.jpg';
     gap: 1.15rem;
     margin-top: 3.5rem;
     text-decoration: none;
-    color: var(--ink);
-    font-family: 'Mulish', sans-serif;
+    color: var(--color-text);
     font-weight: 500;
     font-size: 0.74rem;
     letter-spacing: 0.28em;
     text-transform: uppercase;
     transition: color 0.3s ease;
   }
-  .h-read-link:hover { color: var(--green-700); }
+  .h-read-link:hover { color: var(--color-primary); }
   .h-read-link:focus-visible {
-    outline: 2px solid var(--terra-500);
+    outline: 2px solid var(--color-accent);
     outline-offset: 4px;
     border-radius: 1px;
   }
@@ -539,7 +518,9 @@ import img23 from '../assets/images/img_23.jpg';
 
 
 <script>
-  import { gsap } from 'gsap';
+  import { gsap } from '../utils/gsap';
+  import { debounce } from '../utils/debounce';
+  import { registerScrollFrame, scheduleScrollFrame } from '../utils/scrollFrame';
 
   /**
    * Heritage section — animation driver
@@ -596,6 +577,17 @@ import img23 from '../assets/images/img_23.jpg';
     revealObs.observe(canvas);
   }
 
+  // Toggle will-change only while declImg is in the viewport
+  if (declImg && isDesktop) {
+    const willChangeObs = new IntersectionObserver(
+      (entries) => {
+        declImg.style.willChange = entries[0].isIntersecting ? 'transform' : 'auto';
+      },
+      { rootMargin: '200px 0px 200px 0px' }
+    );
+    willChangeObs.observe(declImg);
+  }
+
   /* ── 2. Scroll driver ───────────────────────────────────────────────────── */
   if (!prefersReduced && isDesktop) {
 
@@ -604,6 +596,52 @@ import img23 from '../assets/images/img_23.jpg';
 
     const pivotStage = document.querySelector<HTMLElement>('.h-pivot-scroll-stage');
     const pivotCard  = document.querySelector<HTMLElement>('.h-pivot-card');
+    let cachedDeclTop = 0;
+    let cachedDeclH = declImg ? declImg.offsetHeight : 0;
+    let cachedStageTop = 0;
+    let cachedStageH = pivotStage ? pivotStage.offsetHeight : 0;
+
+    function getDocumentTop(element: HTMLElement): number {
+      let top = 0;
+      let node: HTMLElement | null = element;
+
+      while (node) {
+        top += node.offsetTop;
+        node = node.offsetParent as HTMLElement | null;
+      }
+
+      return top;
+    }
+
+    function measureHeritageLayout(): void {
+      if (declImg) {
+        cachedDeclTop = getDocumentTop(declImg);
+        cachedDeclH = declImg.offsetHeight;
+      }
+
+      if (pivotStage) {
+        cachedStageTop = getDocumentTop(pivotStage);
+        cachedStageH = pivotStage.offsetHeight;
+      }
+    }
+
+    const resizeObserver = new ResizeObserver(() => {
+      measureHeritageLayout();
+      scheduleScrollFrame();
+    });
+    if (declImg) resizeObserver.observe(declImg);
+    if (pivotStage) resizeObserver.observe(pivotStage);
+
+    // Toggle will-change only while the sticky stage is active
+    if (pivotCard && pivotStage) {
+      const pivotObs = new IntersectionObserver(
+        (entries) => {
+          pivotCard.style.willChange = entries[0].isIntersecting ? 'transform' : 'auto';
+        },
+        { rootMargin: '300px 0px 300px 0px' }
+      );
+      pivotObs.observe(pivotStage);
+    }
     const setPivotY = pivotCard ? gsap.quickSetter(pivotCard, 'y', 'px') : null;
 
     if (pivotCard) {
@@ -613,15 +651,21 @@ import img23 from '../assets/images/img_23.jpg';
       });
     }
 
-    let rafId = 0;
+    type HeritageScrollState = {
+      scrollY: number;
+      vh: number;
+    };
 
-    const tick = () => {
-      const vh = window.innerHeight;
+    const readHeritageScroll = (): HeritageScrollState => {
+      return {
+        scrollY: window.scrollY,
+        vh: window.innerHeight,
+      };
+    };
 
-      /* A) img_17 — portrait parallax + tilt */
+    const writeHeritageScroll = ({ scrollY, vh }: HeritageScrollState) => {
       if (declImg) {
-        const r      = declImg.getBoundingClientRect();
-        const center = r.top + r.height / 2 - vh / 2;
+        const center = cachedDeclTop - scrollY + cachedDeclH / 2 - vh / 2;
         const y      = center * IMG17_FACTOR;
         const rotT   = Math.max(0, Math.min(1, center / vh));
         const rot    = MAX_ROT * rotT;
@@ -629,16 +673,9 @@ import img23 from '../assets/images/img_23.jpg';
           `translateY(${y.toFixed(1)}px) rotate(${rot.toFixed(3)}deg)`;
       }
 
-      /* B) img_23 — scroll-jacked card rise
-       *
-       *  Both card and text are in the same sticky container, so the text
-       *  stays frozen while the card rises. startY below 100vh brings the
-       *  image in sooner while preserving scroll-driven motion.
-       */
       if (pivotStage && pivotCard) {
-        const r            = pivotStage.getBoundingClientRect();
-        const scrollBudget = Math.max(1, pivotStage.offsetHeight - vh);
-        const progress     = Math.max(0, Math.min(1, -r.top / scrollBudget));
+        const scrollBudget = Math.max(1, cachedStageH - vh);
+        const progress     = Math.max(0, Math.min(1, (scrollY - cachedStageTop) / scrollBudget));
         const startY       = vh * 0.367;
         const y            = startY * (1 - progress);
         if (setPivotY) {
@@ -647,47 +684,28 @@ import img23 from '../assets/images/img_23.jpg';
           pivotCard.style.transform = `translate3d(0, ${y.toFixed(1)}px, 0)`;
         }
       }
-
-      rafId = 0;
     };
 
-    const scheduleTick = () => {
-      if (!rafId) rafId = requestAnimationFrame(tick);
-    };
-
-    type LenisLike = {
-      on?: (event: 'scroll', callback: () => void) => (() => void) | void;
-    };
-
-    const lenisWindow = window as Window & { __leoLenis?: LenisLike };
-    let usingLenisScroll = false;
-
-    function bindLenisScroll(): boolean {
-      if (usingLenisScroll || !lenisWindow.__leoLenis?.on) {
-        return false;
-      }
-
-      lenisWindow.__leoLenis.on('scroll', scheduleTick);
-      window.removeEventListener('scroll', scheduleTick);
-      usingLenisScroll = true;
-      scheduleTick();
-      return true;
-    }
-
-    requestAnimationFrame(() => {
-      if (!bindLenisScroll()) {
-        window.addEventListener('scroll', scheduleTick, { passive: true });
-      }
-    });
-
-    window.addEventListener('leo:lenis-ready', bindLenisScroll);
+    registerScrollFrame({
+      read: readHeritageScroll,
+      write: writeHeritageScroll,
+    }, { immediate: true });
+    measureHeritageLayout();
+    window.addEventListener('resize', debounce(() => {
+      measureHeritageLayout();
+      scheduleScrollFrame();
+    }), { passive: true });
 
     /* Wait for images to decode and lay out before the first tick so that
-       getBoundingClientRect() and offsetHeight are accurate. */
+       offset-based measurements are accurate. */
     if (document.readyState === 'complete') {
-      requestAnimationFrame(tick);
+      measureHeritageLayout();
+      scheduleScrollFrame();
     } else {
-      window.addEventListener('load', () => requestAnimationFrame(tick), { once: true });
+      window.addEventListener('load', () => {
+        measureHeritageLayout();
+        scheduleScrollFrame();
+      }, { once: true });
     }
 
   }
