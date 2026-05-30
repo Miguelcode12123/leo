@@ -1,7 +1,8 @@
 ---
+import type { ImageMetadata } from 'astro';
 import { Image } from 'astro:assets';
 
-// Unique Tier-1 asset for each service — no duplicates
+// Unique Tier-1 asset for each service - no duplicates
 import img19 from '../assets/images/img_19.jpg';   // Maintenance (tending topiary urn)
 import img16 from '../assets/images/img_16.jpg';   // Garden Renovations (crew, courtyard)
 import img15 from '../assets/images/img_15.jpg';   // Tree & Plant Pruning
@@ -11,13 +12,20 @@ import img6  from '../assets/images/img_6.jpg';    // Pest & Disease Control
 import img8  from '../assets/images/img_8.jpg';    // Instant Lawn & Turf
 import img25 from '../assets/images/img_25.jpg';   // Pressure Cleaning (real asset)
 import img7  from '../assets/images/img_7.jpg';    // Green-Waste Removal (lush clean path)
-// ↑ img_7 replaces the duplicate img_16 for Green-Waste
-
-// Featured 10th service — Garden Makeovers (full-width card)
 import img20 from '../assets/images/img_20.jpg';   // Pre-sale / Makeovers (wisteria kerb appeal)
 
-const services = [
+type Service = {
+  num: string;
+  title: string;
+  body: string;
+  img: ImageMetadata;
+  alt: string;
+  href: string;
+};
+
+const services: Service[] = [
   {
+    num:   '01',
     title: 'Scheduled Garden Maintenance',
     body:  'Reliable, seasonally-tuned care that keeps your garden healthy and immaculate year-round — pruning, feeding, weeding and the watchful eye of people who know plants.',
     img:   img19,
@@ -25,6 +33,7 @@ const services = [
     href:  '/services#maintenance',
   },
   {
+    num:   '02',
     title: 'Garden Renovations',
     body:  'Tired or overgrown spaces reimagined and rebuilt — thoughtful design, the right plants, and a garden that thrives for years to come.',
     img:   img16,
@@ -32,6 +41,7 @@ const services = [
     href:  '/services#renovations',
   },
   {
+    num:   '03',
     title: 'Tree & Plant Pruning',
     body:  'Precise, species-aware pruning that improves health, structure and form — from fruit trees to feature specimens.',
     img:   img15,
@@ -39,6 +49,7 @@ const services = [
     href:  '/services#pruning',
   },
   {
+    num:   '04',
     title: 'Specialised Hedge Management',
     body:  'Crisp, considered hedging — hand-sheared or machine-cut — for formal lines and lasting density.',
     img:   img9,
@@ -46,6 +57,7 @@ const services = [
     href:  '/services#hedge-management',
   },
   {
+    num:   '05',
     title: 'Soft Landscaping & Planting',
     body:  'Expert plant selection, design and planting that turns a garden into a living, balanced sanctuary.',
     img:   img11,
@@ -53,6 +65,7 @@ const services = [
     href:  '/services#planting',
   },
   {
+    num:   '06',
     title: 'Pest & Disease Control',
     body:  'Eco-friendly, natural-first treatment that protects your plants and the beneficial life around them.',
     img:   img6,
@@ -60,6 +73,7 @@ const services = [
     href:  '/services#pest-control',
   },
   {
+    num:   '07',
     title: 'Instant Lawn & Turf',
     body:  'Lush, resilient lawns properly prepared and laid — partnered with one of Australia\'s best turf suppliers, Lillydale Instant Lawn.',
     img:   img8,
@@ -67,6 +81,7 @@ const services = [
     href:  '/services#turf',
   },
   {
+    num:   '08',
     title: 'Pressure Cleaning',
     body:  'Paths, patios and driveways restored — powerful, surface-safe cleaning that brings back the kerb appeal instantly.',
     img:   img25,
@@ -74,159 +89,424 @@ const services = [
     href:  '/services#pressure-cleaning',
   },
   {
+    num:   '09',
     title: 'Green-Waste & Rubbish Removal',
     body:  'Fast, tidy, eco-conscious clearing of garden waste and bulky items — your space left clean and clutter-free.',
     img:   img7,
     alt:   'Lush vertical garden path — the kind of clean, open space left after professional green-waste clearing',
     href:  '/services#waste-removal',
   },
+  {
+    num:   '10',
+    title: 'Garden Makeovers & Pre-Sale Preparation',
+    body:  'Auction-ready gardens that lift kerb appeal and sale price — we work with homeowners and agents from photography day to auction. From a single-day tidy to a full seasonal renewal, your garden will look its absolute best on the day that matters most.',
+    img:   img20,
+    alt:   'Wisteria climbing a rendered period home beside clipped box hedging and a gravel path — pristine kerb appeal',
+    href:  '/services#pre-sale',
+  },
 ];
-
-// Featured 10th service — displayed as a full-width editorial strip below the 3×3 grid
-const featuredService = {
-  title: 'Garden Makeovers & Pre-Sale Preparation',
-  body:  'Auction-ready gardens that lift kerb appeal and sale price — we work with homeowners and agents from photography day to auction. From a single-day tidy to a full seasonal renewal, your garden will look its absolute best on the day that matters most.',
-  img:   img20,
-  alt:   'Wisteria climbing a rendered period home beside clipped box hedging and a gravel path — pristine kerb appeal',
-  href:  '/services#pre-sale',
-};
 ---
 
 <section
   id="services"
-  class="py-20 md:py-section bg-background"
+  class="py-section bg-background"
   aria-labelledby="services-heading"
 >
-  <div class="max-w-container mx-auto px-6 md:px-10">
-
-    <!-- Section header -->
-    <div class="max-w-2xl mb-14 service-reveal">
-      <p class="font-display font-normal text-[0.68rem] tracking-[0.28em] uppercase text-text-muted mb-4">
+  <div class="max-w-container mx-auto px-6 sm:px-10 xl:px-14">
+    <div class="max-w-2xl mb-14 svc-reveal" style="transition-delay: 0ms">
+      <p class="font-display italic text-[0.68rem] tracking-[0.26em] uppercase text-accent mb-5">
         What We Do
       </p>
       <h2
         id="services-heading"
-        class="font-display text-heading-xl text-text-base leading-tight"
+        class="font-display font-normal text-heading-xl md:text-[3.25rem] text-text-base leading-[1.05] tracking-[-0.015em] max-w-[20ch] [text-wrap:balance]"
       >
-        Every garden has<br class="hidden md:block" /> a different story.<br class="hidden md:block" />
-        We know how to read them.
+        The work we're trusted with
       </h2>
     </div>
 
-    <!-- ── 9-card grid (3 × 3 on desktop) ──────────────────────────── -->
-    <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 list-none m-0 p-0 mb-5 md:mb-6">
-      {services.map((s, i) => (
-        <li
-          class="service-reveal bg-surface rounded-brand-lg overflow-hidden shadow-brand hover:shadow-brand-lg hover:-translate-y-1.5 transition-all duration-300 motion-reduce:transition-none cursor-pointer group"
-          style={`transition-delay: ${(i % 3) * 70}ms`}
-        >
-          <!-- Card image — fixed 4:3 ratio, consistent across all cards -->
-          <div class="aspect-[4/3] overflow-hidden">
-            <Image
-              src={s.img}
-              alt={s.alt}
-              width={800}
-              height={600}
-              quality={85}
-              class="w-full h-full object-cover transition-transform duration-600 group-hover:scale-[1.05] motion-reduce:transition-none"
-              loading="lazy"
-            />
+    <ul class="svc-list svc-reveal list-none m-0 p-0" style="transition-delay: 80ms">
+      {services.map((service) => (
+        <li class="svc-row group relative flex items-center border-t border-border last:border-b cursor-pointer" data-svc-index={service.num}>
+          <div class="grid grid-cols-[54px_1fr] gap-[30px] items-start w-full py-[26px]">
+            <span class="svc-num font-display text-[13px] text-secondary-400 pt-[10px]" aria-hidden="true">
+              {service.num}
+            </span>
+
+            <div>
+              <h3 class="svc-title font-display font-normal text-[1.5rem] lg:text-[2rem] leading-[1.12] tracking-[-0.01em] text-text-base">
+                {service.title}
+              </h3>
+              <div class="svc-desc font-body text-[15.5px] leading-[1.6] text-text-muted max-w-[46ch]">
+                <p>{service.body}</p>
+                <a
+                  href={service.href}
+                  class="inline-flex items-center gap-1.5 mt-4 font-body font-semibold text-body-sm text-accent hover:text-accent-600 transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 rounded-sm"
+                  aria-label={`Learn more about ${service.title}`}
+                >
+                  Learn more
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
+                  </svg>
+                </a>
+              </div>
+            </div>
           </div>
-          <!-- Card body -->
-          <div class="p-6 space-y-2">
-            <h3 class="font-display text-heading-md text-text-base">{s.title}</h3>
-            <p class="font-body text-body-sm text-text-muted leading-relaxed">{s.body}</p>
-            <a
-              href={s.href}
-              class="inline-flex items-center gap-1.5 pt-2 font-body font-semibold text-body-sm text-accent hover:text-accent-600 transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 rounded-sm"
-              aria-label={`Learn more about ${s.title}`}
-            >
-              Learn more
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-              </svg>
-            </a>
-          </div>
+
         </li>
       ))}
     </ul>
+  </div>
 
-    <!-- ── Featured 10th service — full-width editorial card ─────────
-         Prevents the awkward single-card orphan in the grid.
-         Gives the flagship "Pre-Sale Prep" service a premium spotlight.
-    ────────────────────────────────────────────────────────────────── -->
-    <div
-      class="service-reveal bg-primary rounded-brand-lg overflow-hidden shadow-brand-lg group cursor-pointer hover:shadow-[0_24px_60px_-16px_rgba(31,42,26,0.28)] transition-shadow duration-400"
-      style="transition-delay: 100ms"
-    >
-      <div class="grid grid-cols-1 md:grid-cols-2 min-h-[320px] md:min-h-[360px]">
-
-        <!-- Image — left on desktop, top on mobile -->
-        <div class="relative overflow-hidden min-h-[220px] md:min-h-0">
-          <Image
-            src={featuredService.img}
-            alt={featuredService.alt}
-            width={900}
-            height={600}
-            quality={88}
-            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04] motion-reduce:transition-none"
-            loading="lazy"
-          />
-          <!-- Subtle right-edge blend into the green text panel -->
-          <div class="absolute inset-y-0 right-0 w-16 md:w-24 bg-gradient-to-r from-transparent to-primary hidden md:block" aria-hidden="true"></div>
-        </div>
-
-        <!-- Text panel — right on desktop -->
-        <div class="flex flex-col justify-center px-8 md:px-12 py-10 space-y-5">
-          <p class="font-display font-normal text-[0.65rem] tracking-[0.28em] uppercase text-secondary-400">
-            Signature Service
-          </p>
-          <h3 class="font-display text-heading-xl text-surface leading-tight">
-            {featuredService.title}
-          </h3>
-          <p class="font-body text-body-md text-secondary-200 leading-relaxed">
-            {featuredService.body}
-          </p>
-          <a
-            href={featuredService.href}
-            class="inline-flex items-center gap-2 font-display font-normal text-[0.72rem] tracking-[0.15em] uppercase text-accent hover:text-accent-400 transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 rounded-sm group/link"
-            aria-label={`Learn more about ${featuredService.title}`}
-          >
-            Learn more
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="transition-transform duration-200 group-hover/link:translate-x-1">
-              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-            </svg>
-          </a>
-        </div>
-
+  <!-- Cursor-following image panel - desktop only, position:fixed, outside container -->
+  <div
+    id="svc-cursor-plate"
+    aria-hidden="true"
+    class="pointer-events-none fixed z-[49] hidden lg:block overflow-hidden rounded-brand"
+    style="width: 404px; height: 240px; top: 0; left: 0; opacity: 0; transform: translate3d(0,0,0) scale(0.88);"
+  >
+    {services.map((service) => (
+      <div
+        data-svc-img={service.num}
+        class="svc-cursor-img absolute inset-0"
+      >
+        <Image
+          src={service.img}
+          alt=""
+          width={404}
+          height={240}
+          quality={85}
+          loading="lazy"
+          class="w-full h-full object-cover"
+        />
       </div>
-    </div>
-
+    ))}
   </div>
 </section>
 
+<style>
+  .svc-row {
+    min-height: 96px;
+    transition: min-height 500ms cubic-bezier(.2,.7,.3,1), opacity 350ms ease;
+  }
+
+  .svc-list:has(.svc-row:focus-within) .svc-row:not(:focus-within) {
+    opacity: 0.4;
+  }
+
+  .svc-num {
+    transition: color 350ms ease;
+  }
+
+  .svc-title {
+    transition: color 350ms ease, transform 400ms cubic-bezier(.2,.7,.3,1);
+  }
+
+  .svc-desc {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    margin-top: 0;
+    transition: max-height 450ms ease, opacity 350ms ease, margin-top 450ms ease;
+  }
+
+  .svc-row:hover,
+  .svc-row:focus-within {
+    min-height: 262px;
+  }
+
+  .svc-row:hover .svc-num,
+  .svc-row:focus-within .svc-num {
+    color: var(--color-accent);
+  }
+
+  .svc-row:hover .svc-title,
+  .svc-row:focus-within .svc-title {
+    color: var(--color-primary);
+    transform: translateX(8px);
+  }
+
+  .svc-row:hover .svc-desc,
+  .svc-row:focus-within .svc-desc {
+    max-height: 120px;
+    opacity: 1;
+    overflow: visible;
+    margin-top: 16px;
+  }
+
+  /* -- Cursor panel images ------------------------------------------------
+     The panel's own opacity/transform are set inline and managed by JS.
+     Individual image transitions are CSS - JS only toggles the class.
+  ---------------------------------------------------------------------- */
+  .svc-cursor-img {
+    opacity: 0;
+    transform: scale(1.08);
+    filter: blur(8px);
+    transition:
+      opacity 450ms cubic-bezier(0.4, 0, 0.2, 1),
+      transform 450ms cubic-bezier(0.4, 0, 0.2, 1),
+      filter 450ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .svc-cursor-img.is-active {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0px);
+  }
+
+  .svc-cursor-img img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Subtle forest-green vignette - matches the brand image treatment */
+  #svc-cursor-plate::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      transparent 60%,
+      rgba(31, 42, 26, 0.18) 100%
+    );
+    pointer-events: none;
+  }
+
+  /* Panel CSS transition - for the opacity fade-in/out.
+     Transform (position) is written per-frame by JS, which overrides the
+     translate part; the scale pop-in only fires on first show. */
+  #svc-cursor-plate {
+    transition: opacity 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* JS-driven sibling-dim - replaces the :has() hover rule */
+  .svc-list.has-hover .svc-row:not(.is-hovered) {
+    opacity: 0.4;
+  }
+
+  @media (max-width: 1023px) {
+    .svc-row,
+    .svc-row:hover,
+    .svc-row:focus-within {
+      min-height: auto;
+    }
+
+    .svc-desc,
+    .svc-row:hover .svc-desc,
+    .svc-row:focus-within .svc-desc {
+      max-height: none;
+      opacity: 1;
+      margin-top: 16px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .svc-row,
+    .svc-title,
+    .svc-desc,
+    .svc-cursor-img,
+    #svc-cursor-plate {
+      transition: none;
+    }
+  }
+</style>
+
 <script>
-  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  /* -- 1. Scroll-reveal - unchanged pattern from the rest of the project -- */
+  const prefersReduced: boolean = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   if (!prefersReduced) {
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach(entry => {
+    const revealIo: IntersectionObserver = new IntersectionObserver(
+      (entries: IntersectionObserverEntry[]): void => {
+        entries.forEach((entry: IntersectionObserverEntry): void => {
           if (entry.isIntersecting) {
-            const el = entry.target as HTMLElement;
-            const delay = el.style.transitionDelay || '0ms';
+            const el: HTMLElement = entry.target as HTMLElement;
+            const delay: string = el.style.transitionDelay || '0ms';
             el.style.transition = `opacity 650ms ease-out ${delay}, transform 650ms ease-out ${delay}`;
-            el.style.opacity   = '1';
-            el.style.transform = 'translateY(0)';
-            io.unobserve(el);
+            el.style.opacity    = '1';
+            el.style.transform  = 'translateY(0)';
+            revealIo.unobserve(el);
           }
         });
       },
       { threshold: 0.08 }
     );
-    document.querySelectorAll<HTMLElement>('.service-reveal').forEach(el => {
+    document.querySelectorAll<HTMLElement>('.svc-reveal').forEach((el: HTMLElement): void => {
       el.style.opacity   = '0';
       el.style.transform = 'translateY(20px)';
-      io.observe(el);
+      revealIo.observe(el);
     });
+  }
+
+  /* -- 2. Cursor-following image panel ---------------------------------- */
+
+  // Guard: skip on touch-primary devices (phones, tablets without hover)
+  const isTouch: boolean = window.matchMedia('(hover: none)').matches;
+
+  if (!isTouch && !prefersReduced) {
+    const panel   = document.getElementById('svc-cursor-plate') as HTMLElement | null;
+    const section = document.getElementById('services')          as HTMLElement | null;
+    const list    = document.querySelector<HTMLElement>('.svc-list');
+    const rows    = document.querySelectorAll<HTMLElement>('.svc-row');
+
+    if (!panel || !list || !section) {
+      console.warn('[Services] Cursor panel elements not found - cursor animation skipped.');
+    } else {
+      const PANEL_W = 404;
+      const PANEL_H = 240;
+      const LERP    = 0.12;
+
+      let targetX = 0;
+      let targetY = 0;
+      let smoothX = 0;
+      let smoothY = 0;
+      let panelVisible = false;
+      let activeIndex: string | null = null;
+      let rafId = 0;
+      let cursorInitialized = false;
+
+      const willChangeObs = new IntersectionObserver(
+        (entries: IntersectionObserverEntry[]): void => {
+          if (entries[0].isIntersecting) {
+            panel.style.willChange = 'transform, opacity';
+          } else {
+            panel.style.willChange = 'auto';
+            hidePanel();
+          }
+        },
+        { rootMargin: '300px 0px 300px 0px' }
+      );
+      willChangeObs.observe(section);
+
+      function getClampedPosition(x: number, y: number): { x: number; y: number } {
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+        return {
+          x: Math.min(Math.max(x + 20, 0), vw - PANEL_W),
+          y: Math.min(Math.max(y - PANEL_H / 2, 0), vh - PANEL_H),
+        };
+      }
+
+      function tick(): void {
+        smoothX += (targetX - smoothX) * LERP;
+        smoothY += (targetY - smoothY) * LERP;
+
+        const pos = getClampedPosition(smoothX, smoothY);
+        panel.style.transform = `translate3d(${pos.x}px, ${pos.y}px, 0) scale(1)`;
+
+        rafId = requestAnimationFrame(tick);
+      }
+
+      function startLoop(): void {
+        if (!prefersReduced && !rafId) rafId = requestAnimationFrame(tick);
+      }
+
+      function stopLoop(): void {
+        if (rafId) {
+          cancelAnimationFrame(rafId);
+          rafId = 0;
+        }
+      }
+
+      function activateImage(index: string): void {
+        if (activeIndex === index) return;
+
+        if (activeIndex !== null) {
+          panel
+            .querySelector<HTMLElement>(`[data-svc-img="${activeIndex}"]`)
+            ?.classList.remove('is-active');
+        }
+
+        panel
+          .querySelector<HTMLElement>(`[data-svc-img="${index}"]`)
+          ?.classList.add('is-active');
+        activeIndex = index;
+      }
+
+      function showPanel(index: string): void {
+        if (!panelVisible) {
+          panelVisible = true;
+          const pos = getClampedPosition(smoothX, smoothY);
+          panel.style.opacity   = '1';
+          panel.style.transform = `translate3d(${pos.x}px, ${pos.y}px, 0) scale(1)`;
+          startLoop();
+        }
+
+        activateImage(index);
+      }
+
+      function hidePanel(): void {
+        if (!panelVisible) return;
+        panelVisible = false;
+        const pos = getClampedPosition(smoothX, smoothY);
+        panel.style.opacity   = '0';
+        panel.style.transform = `translate3d(${pos.x}px, ${pos.y}px, 0) scale(0.88)`;
+
+        if (activeIndex !== null) {
+          panel
+            .querySelector<HTMLElement>(`[data-svc-img="${activeIndex}"]`)
+            ?.classList.remove('is-active');
+          activeIndex = null;
+        }
+
+        stopLoop();
+      }
+
+      if (!cursorInitialized) {
+        cursorInitialized = true;
+
+        list.addEventListener('mousemove', (e: MouseEvent): void => {
+          targetX = e.clientX;
+          targetY = e.clientY;
+
+          if (prefersReduced && panelVisible) {
+            smoothX = targetX;
+            smoothY = targetY;
+            const pos = getClampedPosition(targetX, targetY);
+            panel.style.transform = `translate3d(${pos.x}px, ${pos.y}px, 0) scale(1)`;
+          }
+        });
+
+        rows.forEach((row: HTMLElement): void => {
+          const index = row.dataset.svcIndex ?? '';
+
+          row.addEventListener('mouseenter', (e: MouseEvent): void => {
+            targetX = e.clientX;
+            targetY = e.clientY;
+            smoothX = e.clientX;
+            smoothY = e.clientY;
+            if (prefersReduced) {
+              smoothX = targetX;
+              smoothY = targetY;
+            }
+
+            showPanel(index);
+            list.classList.add('has-hover');
+            rows.forEach((r: HTMLElement): void => r.classList.remove('is-hovered'));
+            row.classList.add('is-hovered');
+          });
+
+          row.addEventListener('mouseleave', (): void => {
+            row.classList.remove('is-hovered');
+          });
+        });
+
+        list.addEventListener('mouseleave', (): void => {
+          hidePanel();
+          stopLoop();
+          list.classList.remove('has-hover');
+          rows.forEach((r: HTMLElement): void => r.classList.remove('is-hovered'));
+        });
+
+        window.addEventListener('leo:lenis-stop', (): void => {
+          hidePanel();
+          stopLoop();
+          list.classList.remove('has-hover');
+          rows.forEach((r: HTMLElement): void => r.classList.remove('is-hovered'));
+        });
+      }
+    }
   }
 </script>
