@@ -1,0 +1,25 @@
+# Environment
+.env
+.env.*
+!.env.example
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# OS
+.DS_Store
+
+# Logs
+*.log
+console.log
+gallery-console.log
+
+# Astro
+.astro/
+
+# Claude / MCP
+.claude/
+.mcp.json
