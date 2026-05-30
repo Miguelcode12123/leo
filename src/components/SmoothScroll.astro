@@ -10,7 +10,6 @@
 
 <script>
   import { gsap, ScrollTrigger } from '../utils/gsap';
-  import { scheduleScrollFrame } from '../utils/scrollFrame';
   import Lenis from 'lenis';
 
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -31,7 +30,6 @@
     });
 
     lenis.on('scroll', ScrollTrigger.update);
-    lenis.on('scroll', scheduleScrollFrame);
 
     gsap.ticker.add((time) => {
       lenis.raf(time * 1000);

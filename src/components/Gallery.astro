@@ -61,11 +61,12 @@ const gridImages: GalleryImage[] = [
 <section
   id="gallery"
   data-nav-hidden-region
+  data-gallery-ready="false"
   data-gallery-grid-visible="false"
   class="gallery-main block--main relative bg-background"
   aria-labelledby="gallery-heading"
 >
-  <div class="gallery-wrapper block__wrapper sticky top-0 overflow-hidden px-6">
+  <div class="gallery-wrapper block__wrapper sticky top-0 px-6">
     <div class="gallery-content content relative z-10 flex h-screen w-full flex-col items-center justify-center text-center">
       <h2
         id="gallery-heading"
@@ -90,28 +91,29 @@ const gridImages: GalleryImage[] = [
       </a>
     </div>
 
-    <div class="gallery absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2">
-      <ul class="gallery__grid" data-gallery-grid>
-        {gridImages.map((img) => (
-          <li class="gallery__item overflow-hidden bg-stone-100">
-            <Image
-              src={img.src}
-              alt={img.alt}
-              width={GALLERY_IMAGE_WIDTH}
-              height={GALLERY_IMAGE_HEIGHT}
-              quality={GALLERY_IMAGE_QUALITY}
-              format={GALLERY_IMAGE_FORMAT}
-              densities={GALLERY_IMAGE_DENSITIES}
-              class="gallery__image"
-              style={`object-position: ${img.position ?? '50% 50%'}`}
-              loading="eager"
-              decoding="sync"
-              fetchpriority="high"
-              sizes={GALLERY_IMAGE_SIZES}
-            />
-          </li>
-        ))}
-      </ul>
+    <div class="gallery-clip absolute inset-0 z-20 overflow-hidden">
+      <div class="gallery absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+        <ul class="gallery__grid" data-gallery-grid>
+          {gridImages.map((img) => (
+            <li class="gallery__item overflow-hidden bg-stone-100">
+              <Image
+                src={img.src}
+                alt={img.alt}
+                width={GALLERY_IMAGE_WIDTH}
+                height={GALLERY_IMAGE_HEIGHT}
+                quality={GALLERY_IMAGE_QUALITY}
+                format={GALLERY_IMAGE_FORMAT}
+                densities={GALLERY_IMAGE_DENSITIES}
+                class="gallery__image"
+                style={`object-position: ${img.position ?? '50% 50%'}`}
+                loading="eager"
+                decoding="async"
+                sizes={GALLERY_IMAGE_SIZES}
+              />
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   </div>
 </section>
@@ -123,6 +125,20 @@ const gridImages: GalleryImage[] = [
   }
 
   .block__wrapper {
+    transition:
+      opacity 180ms ease,
+      visibility 0s linear 180ms;
+  }
+
+  #gallery[data-gallery-ready="false"] .block__wrapper {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  #gallery[data-gallery-ready="true"] .block__wrapper {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 180ms ease;
   }
 
   .content__title {
@@ -160,10 +176,6 @@ const gridImages: GalleryImage[] = [
     aspect-ratio: 1;
   }
 
-  #gallery[data-gallery-will-change="true"] .gallery__item {
-    will-change: transform;
-  }
-
   .gallery__image {
     display: block;
     width: 100%;
@@ -195,6 +207,7 @@ const gridImages: GalleryImage[] = [
     columns: HTMLElement[][] = [];
     titleOffsetY = 0;
     revealDy = 0;
+    contentTimeline: gsap.core.Timeline | null = null;
 
     constructor() {
       this.getElements();
@@ -230,20 +243,43 @@ const gridImages: GalleryImage[] = [
 
     initContent(): void {
       gsap.set([this.description, this.button], { opacity: 0, pointerEvents: 'none' });
-      gsap.set(this.grid, { force3D: true, transformOrigin: "50% 50%" });
+      gsap.set(this.grid, { force3D: true, transformOrigin: '50% 50%' });
 
       const dy = (this.content!.offsetHeight - this.title!.offsetHeight) / 2;
       this.titleOffsetY = (dy / this.content!.offsetHeight) * 100;
       gsap.set(this.title, { yPercent: this.titleOffsetY });
+      this.createContentTimeline();
+    }
+
+    createContentTimeline(): void {
+      this.contentTimeline = gsap.timeline({
+        paused: true,
+        defaults: { overwrite: 'auto' },
+      })
+        .to(this.title, {
+          yPercent: 0,
+          duration: 0.7,
+          ease: 'power2.inOut',
+        })
+        .to(
+          [this.description, this.button],
+          {
+            opacity: 1,
+            duration: 0.4,
+            ease: 'power1.inOut',
+            pointerEvents: 'all',
+          },
+          '-=90%',
+        );
     }
 
     observeWillChange(): void {
-      if (!this.block) return;
+      if (!this.block || !this.grid) return;
 
       const observer = new IntersectionObserver(
         (entries) => {
-          if (!this.block) return;
-          this.block.dataset.galleryWillChange = entries[0].isIntersecting ? 'true' : 'false';
+          if (!this.grid) return;
+          this.grid.style.willChange = entries[0].isIntersecting ? 'transform' : 'auto';
         },
         { rootMargin: '300px 0px 300px 0px' },
       );
@@ -299,7 +335,7 @@ const gridImages: GalleryImage[] = [
     gridZoomTimeline(columns = this.columns): gsap.core.Timeline {
       const timeline = gsap.timeline({ defaults: { duration: 1, ease: 'power3.inOut', force3D: true } });
 
-      timeline.to(this.grid, { scale: 2.05 });
+      timeline.to(this.grid, { scale: 2.05, force3D: true });
       timeline.to(columns[0], { xPercent: -40 }, '<');
       timeline.to(columns[2], { xPercent: 40 }, '<');
       timeline.to(
@@ -313,25 +349,6 @@ const gridImages: GalleryImage[] = [
       );
 
       return timeline;
-    }
-
-    toggleContent(isVisible: boolean): void {
-      gsap.timeline({ defaults: { overwrite: true } })
-        .to(this.title, {
-          yPercent: isVisible ? 0 : this.titleOffsetY,
-          duration: 0.7,
-          ease: 'power2.inOut',
-        })
-        .to(
-          [this.description, this.button],
-          {
-            opacity: isVisible ? 1 : 0,
-            duration: 0.4,
-            ease: `power1.${isVisible ? 'inOut' : 'out'}`,
-            pointerEvents: isVisible ? 'all' : 'none',
-          },
-          isVisible ? '-=90%' : '<',
-        );
     }
 
     animateGridOnScroll(): void {
@@ -358,13 +375,14 @@ const gridImages: GalleryImage[] = [
             if (this.block) this.block.dataset.galleryGridVisible = 'false';
             // Snap content back to its pre-animation state so it's
             // ready for the next forward pass without a flash
-            gsap.set(this.title, { yPercent: this.titleOffsetY });
+            this.contentTimeline?.pause(0);
             gsap.set([this.description, this.button], { opacity: 0, pointerEvents: 'none' });
           },
         },
       });
 
-      // Store the timeline so toggleContent can read a reliable progress value
+      // Use ScrollTrigger direction at call-time so scrub callbacks can
+      // play/reverse the prebuilt content timeline without allocating.
       const self = this;
       timeline
         .add(this.gridRevealTimeline())
@@ -373,41 +391,74 @@ const gridImages: GalleryImage[] = [
         // which can be stale when the callback fires during scrub playback.
         .add(function() {
           const goingForward = (timeline.scrollTrigger?.direction ?? 1) === 1;
-          self.toggleContent(goingForward);
+          if (goingForward) {
+            self.contentTimeline?.play();
+          } else {
+            self.contentTimeline?.reverse();
+          }
         }, '-=0.32');
     }
 
   }
 
   function revealReducedMotionContent(): void {
+    const gallerySection = document.querySelector<HTMLElement>('#gallery');
     const description = document.querySelector<HTMLElement>('.gallery-description');
     const button = document.querySelector<HTMLElement>('.gallery-button');
+    if (gallerySection) gallerySection.dataset.galleryReady = 'true';
     gsap.set([description, button], { opacity: 1, pointerEvents: 'auto' });
   }
 
-  async function waitForImageDecode(): Promise<void> {
+  let galleryImagesDecoded = false;
+
+  async function decodeGalleryImages(): Promise<void> {
     const images = Array.from(
       document.querySelectorAll<HTMLImageElement>('.gallery__image')
     );
+
     await Promise.all(
-      images.map((img) => {
-        if (img.complete) return Promise.resolve();
-        return img.decode().catch(() => Promise.resolve());
-      })
+      images.map((img) => img.decode().catch(() => Promise.resolve()))
     );
+
+    galleryImagesDecoded = true;
+    const gallerySection = document.querySelector<HTMLElement>('#gallery');
+    if (gallerySection) gallerySection.dataset.galleryReady = 'true';
+  }
+
+  function initStickyGridScroll(): void {
+    if (!galleryImagesDecoded) return;
+
+    requestAnimationFrame(() => {
+      new StickyGridScroll();
+      ScrollTrigger.refresh();
+    });
+  }
+
+  function observeGalleryForDecode(): void {
+    const gallerySection = document.querySelector<HTMLElement>('#gallery');
+
+    if (!gallerySection || !('IntersectionObserver' in window)) {
+      decodeGalleryImages().then(initStickyGridScroll);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+
+        observer.disconnect();
+        decodeGalleryImages().then(initStickyGridScroll);
+      },
+      { rootMargin: '200% 0px' },
+    );
+
+    observer.observe(gallerySection);
   }
 
   if (prefersReduced) {
     revealReducedMotionContent();
   } else if (!galleryWindow.__leoGalleryGsapInitialized) {
     galleryWindow.__leoGalleryGsapInitialized = true;
-
-    window.addEventListener('load', async () => {
-      await waitForImageDecode();
-      requestAnimationFrame(() => {
-        new StickyGridScroll();
-        ScrollTrigger.refresh();
-      });
-    });
+    observeGalleryForDecode();
   }
 </script>

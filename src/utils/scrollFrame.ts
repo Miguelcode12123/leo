@@ -7,12 +7,16 @@ const tasks = new Set<ScrollFrameTask>();
 let rafId = 0;
 let sourceBound = false;
 
-type LenisWindow = Window & {
-  __leoLenis?: unknown;
+type LenisLike = {
+  on: (event: 'scroll', callback: () => void) => void;
 };
 
-function hasLeoLenis(): boolean {
-  return Boolean((window as LenisWindow).__leoLenis);
+type LenisWindow = Window & {
+  __leoLenis?: LenisLike;
+};
+
+function getLeoLenis(): LenisLike | undefined {
+  return (window as LenisWindow).__leoLenis;
 }
 
 export function scheduleScrollFrame(): void {
@@ -33,14 +37,21 @@ function bindScrollSource(): void {
   if (sourceBound) return;
   sourceBound = true;
 
-  if (hasLeoLenis()) {
+  const bindLenis = (lenis: LenisLike): void => {
     window.removeEventListener('scroll', scheduleScrollFrame);
+    lenis.on('scroll', scheduleScrollFrame);
+    scheduleScrollFrame();
+  };
+
+  const lenis = getLeoLenis();
+  if (lenis) {
+    bindLenis(lenis);
     return;
   }
 
-  window.addEventListener('leo:lenis-ready', () => {
-    window.removeEventListener('scroll', scheduleScrollFrame);
-    scheduleScrollFrame();
+  window.addEventListener('leo:lenis-ready', (event) => {
+    const readyEvent = event as CustomEvent<LenisLike>;
+    bindLenis(readyEvent.detail);
   }, { once: true });
   window.addEventListener('scroll', scheduleScrollFrame, { passive: true });
 }

@@ -13,10 +13,9 @@
  *
  *  The "card rises over text" effect requires both elements to share the same
  *  scroll reference frame. If the text is in normal document flow (as it was),
- *  it moves upward at 1px per scroll-px. The card in a sticky container also
- *  moves upward, but only at (startY / scrollBudget) px per scroll-px. At
- *  typical desktop heights these rates are nearly identical — the card can
- *  never catch the text.
+ *  it moves upward at 1px per scroll-px. The card now rises on a Lenis-aware
+ *  ScrollTrigger scrub timeline, so it shares the same normalized scroll
+ *  progress as the rest of the scroll-driven animation system.
  *
  *  Putting the text INSIDE the sticky container freezes it in place while the
  *  card rises beneath it. The relative motion is now the full card travel
@@ -43,6 +42,12 @@
 import { Image } from 'astro:assets';
 import img17 from '../assets/images/img_17.jpg';
 import img23 from '../assets/images/img_23.jpg';
+
+const HERITAGE_IMAGE_QUALITY = 90;
+const HERITAGE_IMAGE_FORMAT = 'avif';
+const HERITAGE_IMAGE_DENSITIES = [1, 2] as const;
+const HERITAGE_PORTRAIT_SIZES = '(max-width: 1023px) 384px, 500px';
+const HERITAGE_PIVOT_SIZES = '(max-width: 1023px) 100vw, 1100px';
 ---
 
 <section
@@ -75,8 +80,10 @@ import img23 from '../assets/images/img_23.jpg';
             alt="A gardener on a tall ladder shaping a mature olive tree against a clear blue sky."
             width={840}
             height={1120}
-            quality={90}
-            densities={[1, 2]}
+            quality={HERITAGE_IMAGE_QUALITY}
+            format={HERITAGE_IMAGE_FORMAT}
+            densities={HERITAGE_IMAGE_DENSITIES}
+            sizes={HERITAGE_PORTRAIT_SIZES}
             class="h-portrait"
             loading="lazy"
           />
@@ -116,8 +123,10 @@ import img23 from '../assets/images/img_23.jpg';
               alt="Leonardo Qucco standing on a stone path beneath a tunnel of autumn vines."
               width={2400}
               height={1350}
-              quality={90}
-              densities={[1, 2]}
+              quality={HERITAGE_IMAGE_QUALITY}
+              format={HERITAGE_IMAGE_FORMAT}
+              densities={HERITAGE_IMAGE_DENSITIES}
+              sizes={HERITAGE_PIVOT_SIZES}
               class="h-pivot-img"
               loading="lazy"
             />
@@ -518,7 +527,7 @@ import img23 from '../assets/images/img_23.jpg';
 
 
 <script>
-  import { gsap } from '../utils/gsap';
+  import { gsap, ScrollTrigger } from '../utils/gsap';
   import { debounce } from '../utils/debounce';
   import { registerScrollFrame, scheduleScrollFrame } from '../utils/scrollFrame';
 
@@ -545,8 +554,7 @@ import img23 from '../assets/images/img_23.jpg';
    *       Stage height = 200vh → scroll budget = 100vh.
    *       startY = 36.7vh (matches the upper and lower visual gaps).
    *
-   *       progress = clamp(0, –stage.top / scrollBudget, 1)
-   *       y        = startY × (1 − progress)
+   *       Progress is driven by a Lenis-aware ScrollTrigger scrub timeline.
    *
    *       At progress 0:   card at translateY(+vh) — off-screen below.
    *       At progress 1:   card at translateY(0)   — resting at centre.
@@ -598,39 +606,66 @@ import img23 from '../assets/images/img_23.jpg';
     const pivotCard  = document.querySelector<HTMLElement>('.h-pivot-card');
     let cachedDeclTop = 0;
     let cachedDeclH = declImg ? declImg.offsetHeight : 0;
-    let cachedStageTop = 0;
-    let cachedStageH = pivotStage ? pivotStage.offsetHeight : 0;
+    let currentDeclY = 0;
+    let currentDeclRot = 0;
 
-    function getDocumentTop(element: HTMLElement): number {
-      let top = 0;
-      let node: HTMLElement | null = element;
+    function getTransformY(element: Element | null): number {
+      if (!element) return 0;
 
-      while (node) {
-        top += node.offsetTop;
-        node = node.offsetParent as HTMLElement | null;
-      }
+      const transform = window.getComputedStyle(element).transform;
+      if (transform === 'none') return 0;
 
-      return top;
+      return new DOMMatrixReadOnly(transform).m42;
     }
 
     function measureHeritageLayout(): void {
       if (declImg) {
-        cachedDeclTop = getDocumentTop(declImg);
+        gsap.set(declImg, { y: 0, rotation: 0 });
+        cachedDeclTop = window.scrollY + declImg.getBoundingClientRect().top - getTransformY(declImg.closest('.h-zone'));
         cachedDeclH = declImg.offsetHeight;
-      }
-
-      if (pivotStage) {
-        cachedStageTop = getDocumentTop(pivotStage);
-        cachedStageH = pivotStage.offsetHeight;
+        gsap.set(declImg, { y: currentDeclY, rotation: currentDeclRot });
       }
     }
 
-    const resizeObserver = new ResizeObserver(() => {
+    function refreshHeritageScroll(): void {
       measureHeritageLayout();
       scheduleScrollFrame();
+      ScrollTrigger.refresh();
+    }
+
+    function afterLenisReadyFrame(callback: () => void): void {
+      if ('__leoLenis' in window) {
+        requestAnimationFrame(callback);
+        return;
+      }
+
+      window.addEventListener('leo:lenis-ready', () => {
+        requestAnimationFrame(callback);
+      }, { once: true });
+    }
+
+    let resizeObserverFrame = 0;
+    const scheduleResizeObserverFrame = (): void => {
+      if (resizeObserverFrame) return;
+
+      resizeObserverFrame = requestAnimationFrame(() => {
+        resizeObserverFrame = 0;
+        measureHeritageLayout();
+        scheduleScrollFrame();
+      });
+    };
+
+    const resizeObserver = new ResizeObserver(() => {
+      scheduleResizeObserverFrame();
     });
     if (declImg) resizeObserver.observe(declImg);
-    if (pivotStage) resizeObserver.observe(pivotStage);
+
+    const setDeclY = declImg ? gsap.quickSetter(declImg, 'y', 'px') : null;
+    const setDeclRot = declImg ? gsap.quickSetter(declImg, 'rotation', 'deg') : null;
+
+    if (declImg) {
+      gsap.set(declImg, { force3D: true });
+    }
 
     // Toggle will-change only while the sticky stage is active
     if (pivotCard && pivotStage) {
@@ -642,71 +677,73 @@ import img23 from '../assets/images/img_23.jpg';
       );
       pivotObs.observe(pivotStage);
     }
-    const setPivotY = pivotCard ? gsap.quickSetter(pivotCard, 'y', 'px') : null;
-
-    if (pivotCard) {
-      gsap.set(pivotCard, {
-        y: window.innerHeight * 0.367,
-        force3D: true,
-      });
+    if (pivotCard && pivotStage) {
+      gsap.timeline({
+        scrollTrigger: {
+          trigger: pivotStage,
+          start: 'top top',
+          end: 'bottom bottom',
+          scrub: true,
+          invalidateOnRefresh: true,
+        },
+      }).fromTo(
+        pivotCard,
+        { y: () => window.innerHeight * 0.367 },
+        { y: 0, ease: 'none', force3D: true },
+      );
     }
 
-    type HeritageScrollState = {
+    type PortraitScrollState = {
       scrollY: number;
       vh: number;
     };
 
-    const readHeritageScroll = (): HeritageScrollState => {
+    const readPortraitScroll = (): PortraitScrollState => {
       return {
         scrollY: window.scrollY,
         vh: window.innerHeight,
       };
     };
 
-    const writeHeritageScroll = ({ scrollY, vh }: HeritageScrollState) => {
+    const writePortraitScroll = ({ scrollY, vh }: PortraitScrollState) => {
       if (declImg) {
         const center = cachedDeclTop - scrollY + cachedDeclH / 2 - vh / 2;
         const y      = center * IMG17_FACTOR;
         const rotT   = Math.max(0, Math.min(1, center / vh));
         const rot    = MAX_ROT * rotT;
-        declImg.style.transform =
-          `translateY(${y.toFixed(1)}px) rotate(${rot.toFixed(3)}deg)`;
-      }
-
-      if (pivotStage && pivotCard) {
-        const scrollBudget = Math.max(1, cachedStageH - vh);
-        const progress     = Math.max(0, Math.min(1, (scrollY - cachedStageTop) / scrollBudget));
-        const startY       = vh * 0.367;
-        const y            = startY * (1 - progress);
-        if (setPivotY) {
-          setPivotY(y);
-        } else {
-          pivotCard.style.transform = `translate3d(0, ${y.toFixed(1)}px, 0)`;
+        if (setDeclY && setDeclRot) {
+          currentDeclY = y;
+          currentDeclRot = rot;
+          setDeclY(y);
+          setDeclRot(rot);
         }
       }
     };
 
     registerScrollFrame({
-      read: readHeritageScroll,
-      write: writeHeritageScroll,
+      read: readPortraitScroll,
+      write: writePortraitScroll,
     }, { immediate: true });
     measureHeritageLayout();
     window.addEventListener('resize', debounce(() => {
-      measureHeritageLayout();
-      scheduleScrollFrame();
+      refreshHeritageScroll();
     }), { passive: true });
 
     /* Wait for images to decode and lay out before the first tick so that
        offset-based measurements are accurate. */
     if (document.readyState === 'complete') {
-      measureHeritageLayout();
-      scheduleScrollFrame();
+      refreshHeritageScroll();
     } else {
       window.addEventListener('load', () => {
-        measureHeritageLayout();
-        scheduleScrollFrame();
+        refreshHeritageScroll();
       }, { once: true });
     }
+
+    if ('fonts' in document) {
+      document.fonts.ready.then(refreshHeritageScroll);
+    }
+
+    afterLenisReadyFrame(refreshHeritageScroll);
 
   }
 </script>

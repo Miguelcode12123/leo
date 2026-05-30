@@ -4,14 +4,13 @@
  *
  * Scroll-driven transform reveal hero.
  *
- * On load   : The background image appears behind transform-driven cream
- *             mask panels, with the rest of the sticky container showing
- *             the warm cream page background.
+ * On load   : The media layer starts clipped to a centered inset window,
+ *             with the warm cream page background visible around it.
  *             Headline and copy sit at the bottom in deep forest-green ink.
  *
  * On scroll : A Lenis-aware native scroll driver applies three simultaneous
- *             transforms:
- *               1. mask panels shrink → 0% (window opens to full screen)
+ *             updates:
+ *               1. clip-path inset shrinks → 0% (window opens to full screen)
  *               2. image scale 1.7 → 1 (image zooms out as it reveals)
  *               3. Gradient overlay fades in for text legibility
  *             Text colour transitions from forest-green (#2E4628) on cream
@@ -84,7 +83,6 @@ const [
   data-final-clip={finalClipPercentage}
   style={`
     height: calc(${scrollHeight}px + 100vh);
-    --hero-mask-scale: ${Math.max(0, Math.min(1, initialClipPercentage / 50))};
     --hero-text-color: #2E4628;
   `}
 >
@@ -106,6 +104,7 @@ const [
       id="hero-bg"
       class="absolute inset-0"
       aria-hidden="true"
+      style={`clip-path: inset(${initialClipPercentage}% ${initialClipPercentage}% ${initialClipPercentage}% ${initialClipPercentage}%);`}
     >
       <picture class="hero-picture">
         <source
@@ -151,16 +150,9 @@ const [
       </picture>
     </div>
 
-    <div class="hero-mask hero-mask--top bg-background" aria-hidden="true"></div>
-    <div class="hero-mask hero-mask--bottom bg-background" aria-hidden="true"></div>
-    <div class="hero-mask hero-mask--left bg-background" aria-hidden="true"></div>
-    <div class="hero-mask hero-mask--right bg-background" aria-hidden="true"></div>
-
     <!-- ── 2. Gradient overlay ───────────────────────────────────────────────
          Forest-green toned (not black) per constraint §6.
          opacity starts at 0 and is driven to 1 by the scroll callback.
-         Positioned OUTSIDE the clip so the gradient always covers the
-         bottom edge as the image expands — critical for text legibility.
     ──────────────────────────────────────────────────────────────────────── -->
     <div
       id="hero-overlay"
@@ -265,49 +257,6 @@ const [
     will-change: transform;
   }
 
-  .hero-mask {
-    position: absolute;
-    z-index: 2;
-    pointer-events: none;
-    will-change: transform;
-  }
-
-  .hero-mask--top,
-  .hero-mask--bottom {
-    left: 0;
-    width: 100%;
-    height: 50%;
-    transform: scaleY(var(--hero-mask-scale, 0.5));
-  }
-
-  .hero-mask--top {
-    top: 0;
-    transform-origin: top center;
-  }
-
-  .hero-mask--bottom {
-    bottom: 0;
-    transform-origin: bottom center;
-  }
-
-  .hero-mask--left,
-  .hero-mask--right {
-    top: 0;
-    width: 50%;
-    height: 100%;
-    transform: scaleX(var(--hero-mask-scale, 0.5));
-  }
-
-  .hero-mask--left {
-    left: 0;
-    transform-origin: left center;
-  }
-
-  .hero-mask--right {
-    right: 0;
-    transform-origin: right center;
-  }
-
   /* ── Entrance: all hero-el elements start invisible ────────────────── */
   /* JS adds the transition and animated values after the stagger delay. */
   .hero-el {
@@ -342,14 +291,14 @@ const [
 
 <script>
   import { debounce } from '../utils/debounce';
-  import { registerScrollFrame, scheduleScrollFrame } from '../utils/scrollFrame';
+  import { registerScrollFrame } from '../utils/scrollFrame';
 
   /**
    * HeroSection animation driver
    *
    * Two independent systems:
    *   A. Entrance  — staggered fade-up on page load (setTimeout + CSS transition)
-   *   B. Scroll    — Lenis-aware scroll driver updates mask transforms, image scale,
+   *   B. Scroll    — Lenis-aware scroll driver updates clip-path, image scale,
    *                  overlay opacity, and text colour in a single rAF callback.
    *                  Falls back to native scroll when Lenis is not mounted.
    */
@@ -431,7 +380,7 @@ const [
                                       = scrollHeight px  ✓
 
        Four values are updated per frame:
-         1. mask scale  — window opens from initialClip% inset to finalClip%
+         1. clip-path   — window opens from initialClip% inset to finalClip%
          2. image scale — image zooms out from 1.7 to 1 as window opens
          3. overlay     — dark gradient fades in for text legibility
          4. text colour — forest-green fades to cream
@@ -444,12 +393,24 @@ const [
       scrollDistance = Math.max(1, wrapper.offsetHeight - window.innerHeight);
     }
 
+    function afterLenisReadyFrame(callback: () => void): void {
+      if ('__leoLenis' in window) {
+        requestAnimationFrame(callback);
+        return;
+      }
+
+      window.addEventListener('leo:lenis-ready', () => {
+        requestAnimationFrame(callback);
+      }, { once: true });
+    }
+
     function updateProgress(progress: number): void {
       const p = clamp(progress, 0, 1);
 
-      /* 1. Transform masks — the core window-reveal effect */
+      /* 1. Clip-path reveal — the core window-reveal effect */
       const clip = lerp(initialClip, finalClip, p);
-      wrapper.style.setProperty('--hero-mask-scale', String(clamp(clip / 50, 0, 1).toFixed(4)));
+      const inset = clamp(clip, 0, 50).toFixed(4);
+      bg.style.clipPath = `inset(${inset}% ${inset}% ${inset}% ${inset}%)`;
 
       /* 2. Image scale — subtle zoom-out accompanies the clip opening */
       const size = lerp(170, 100, p);
@@ -475,16 +436,12 @@ const [
 
     window.addEventListener('load', () => {
       measureHeroScroll();
-      scheduleScrollFrame();
     }, { once: true });
 
-    requestAnimationFrame(() => {
-      scheduleScrollFrame();
-    });
+    afterLenisReadyFrame(measureHeroScroll);
 
     window.addEventListener('resize', debounce(() => {
       measureHeroScroll();
-      scheduleScrollFrame();
     }), { passive: true });
 
   } /* end null-guard */
